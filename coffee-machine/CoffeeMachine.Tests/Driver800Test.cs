@@ -46,5 +46,13 @@ namespace CoffeeMachine.Tests
 
             drinkMaker.Received().Execute("H:1:0");
         }
+
+        [Test]
+        public void Serve_Chocolate_whit_two_spoon_of_sugar()
+        {
+            driver800.Send(Chocolate().WithSpoonsOfSugar(2).Build());
+
+            drinkMaker.Received().Execute("H:2:0");
+        }
     }
 }
