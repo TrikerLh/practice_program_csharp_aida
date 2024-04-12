@@ -61,5 +61,17 @@ namespace CoffeeMachine.Tests
 
             drinkMakerDriver.Received().Send(Chocolate().WithSpoonsOfSugar(2).Build());
         }
+
+        [Test]
+        public void Make_Chocolate_whit_more_than_two_spoon_of_sugar()
+        {
+            coffeeMachine.SelectChocolate();
+            coffeeMachine.AddOneSpoonOfSugar();
+            coffeeMachine.AddOneSpoonOfSugar();
+            coffeeMachine.AddOneSpoonOfSugar();
+            coffeeMachine.MakeDrink();
+
+            drinkMakerDriver.Received().Send(Chocolate().WithSpoonsOfSugar(2).Build());
+        }
     }
 }

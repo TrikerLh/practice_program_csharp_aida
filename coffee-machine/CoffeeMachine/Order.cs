@@ -25,7 +25,10 @@ public class Order
 
     public void AddSpoonOfSugar()
     {
-        _spoonOfSugar += 1;
+        if (_spoonOfSugar < 2)
+        {
+            _spoonOfSugar += 1;
+        }
     }
 
     public int GetSpoonsOfSugar()
