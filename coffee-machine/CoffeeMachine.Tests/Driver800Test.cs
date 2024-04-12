@@ -22,7 +22,7 @@ namespace CoffeeMachine.Tests
 
             driver800.Send(order);
 
-            drinkMaker.Received().Execute("C::");
+            drinkMaker.Received().Execute("H::");
         }
 
         [Test]

@@ -21,9 +21,13 @@ public class CoffeeMachine
         order = new Order(DrinkType.Tea);
     }
 
+    public void SelectCoffee()
+    {
+        order = new Order(DrinkType.Coffee);
+    }
+
     public void MakeDrink()
     {
         drinkMakerDriver.Send(order);
     }
-
 }

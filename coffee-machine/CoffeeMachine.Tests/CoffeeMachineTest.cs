@@ -31,5 +31,13 @@ namespace CoffeeMachine.Tests
 
             drinkMakerDriver.Received().Send(new Order(DrinkType.Tea));
         }
+
+        [Test]
+        public void Make_Coffee() {
+            coffeeMachine.SelectCoffee();
+            coffeeMachine.MakeDrink();
+
+            drinkMakerDriver.Received().Send(new Order(DrinkType.Coffee));
+        }
     }
 }

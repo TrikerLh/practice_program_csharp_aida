@@ -2,6 +2,7 @@ namespace CoffeeMachine;
 
 public enum DrinkType
 {
-    Chocolate = 'C',
-    Tea = 'T'
+    Chocolate = 'H',
+    Tea = 'T',
+    Coffee = 'C'
 }
