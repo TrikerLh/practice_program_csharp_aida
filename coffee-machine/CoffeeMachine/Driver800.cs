@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CoffeeMachine
+﻿namespace CoffeeMachine
 {
     public class Driver800 : DrinkMakerDriver
     {
         private DrinkMaker drinkMaker;
+        private string command;
 
         public Driver800(DrinkMaker drinkMaker)
         {
@@ -17,7 +12,12 @@ namespace CoffeeMachine
 
         public void Send(Order order)
         {
-            drinkMaker.Execute("C::");
+            command = ToCommand(order);
+            drinkMaker.Execute(command);
+        }
+        private string ToCommand(Order order)
+        {
+            return $"{(char)order.GetDrinkType()}::";
         }
     }
 }
