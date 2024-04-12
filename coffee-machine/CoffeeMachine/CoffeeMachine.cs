@@ -30,4 +30,9 @@ public class CoffeeMachine
     {
         drinkMakerDriver.Send(order);
     }
+
+    public void AddOneSpoonOfSugar()
+    {
+        order.AddSpoonOfSugar();
+    }
 }

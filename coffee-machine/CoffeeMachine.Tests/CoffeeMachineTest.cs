@@ -39,5 +39,18 @@ namespace CoffeeMachine.Tests
 
             drinkMakerDriver.Received().Send(new Order(DrinkType.Coffee));
         }
+
+        [Test]
+        public void Make_Chocolate_whit_one_spoon_of_sugar()
+        {
+            var expectedOrder = new Order(DrinkType.Chocolate);
+            expectedOrder.AddSpoonOfSugar();
+
+            coffeeMachine.SelectChocolate();
+            coffeeMachine.AddOneSpoonOfSugar();
+            coffeeMachine.MakeDrink();
+
+            drinkMakerDriver.Received().Send(expectedOrder);
+        }
     }
 }
