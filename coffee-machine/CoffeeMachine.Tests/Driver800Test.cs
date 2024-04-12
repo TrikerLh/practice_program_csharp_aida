@@ -33,26 +33,21 @@ namespace CoffeeMachine.Tests
         }
 
         [Test]
-        public void Serve_Coffee() {
+        public void Serve_Coffee()
+        {
             driver800.Send(Coffee().Build());
 
             drinkMaker.Received().Execute("C::");
         }
 
-        [Test]
-        public void Serve_Drink_whit_one_spoon_of_sugar()
+        [TestCase(1, "H:1:0")]
+        [TestCase(2, "H:2:0")]
+        public void Serve_drink_with_different_spoons_of_sugar(int spoonsOfSugar, string expectedCommand)
         {
-            driver800.Send(Chocolate().WithSpoonsOfSugar(1).Build());
+            driver800.Send(Chocolate().WithSpoonsOfSugar(spoonsOfSugar).Build());
 
-            drinkMaker.Received().Execute("H:1:0");
+            drinkMaker.Received().Execute(expectedCommand);
         }
 
-        [Test]
-        public void Serve_Drink_whit_two_spoon_of_sugar()
-        {
-            driver800.Send(Chocolate().WithSpoonsOfSugar(2).Build());
-
-            drinkMaker.Received().Execute("H:2:0");
-        }
     }
 }
