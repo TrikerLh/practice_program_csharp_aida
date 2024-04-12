@@ -9,21 +9,22 @@ public class CoffeeMachine
     public CoffeeMachine(DrinkMakerDriver drinkMakerDriver)
     {
         this.drinkMakerDriver = drinkMakerDriver;
+        this.order = new Order();
     }
 
     public void SelectChocolate()
     {
-        order = new Order(DrinkType.Chocolate);
+        order.SelectDrink(DrinkType.Chocolate);
     }
 
     public void SelectTea()
     {
-        order = new Order(DrinkType.Tea);
+        order.SelectDrink(DrinkType.Tea);
     }
 
     public void SelectCoffee()
     {
-        order = new Order(DrinkType.Coffee);
+        order.SelectDrink(DrinkType.Coffee);
     }
 
     public void MakeDrink()

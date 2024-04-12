@@ -4,19 +4,18 @@ namespace CoffeeMachine;
 
 public class Order
 {
-    private readonly DrinkType _drinkType;
+    private DrinkType _drinkType;
     private int _spoonOfSugar;
 
-
-    public Order(DrinkType drinkType) {
-        _drinkType = drinkType;
-        _spoonOfSugar = 0;
-    }
 
     public Order(DrinkType drinkType, int spoonsOfSugar)
     {
         _drinkType = drinkType;
         _spoonOfSugar = spoonsOfSugar;
+    }
+
+    public Order() : this(DrinkType.None, 0)
+    {
     }
 
     public DrinkType GetDrinkType()
@@ -32,6 +31,11 @@ public class Order
     public int GetSpoonsOfSugar()
     {
         return _spoonOfSugar;
+    }
+
+    public void SelectDrink(DrinkType drinkType)
+    {
+        _drinkType = drinkType;
     }
 
     protected bool Equals(Order other)
