@@ -10,11 +10,23 @@ namespace CoffeeMachine.Tests
         {
             DrinkMakerDriver drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
             CoffeeMachine coffeeMachine = new CoffeeMachine(drinkMakerDriver);
-            
+
             coffeeMachine.SelectChocolate();
             coffeeMachine.MakeDrink();
 
             drinkMakerDriver.Received().Send(new Order(DrinkType.Chocolate));
+        }
+
+        [Test]
+        public void Make_Tea()
+        {
+            DrinkMakerDriver drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
+            CoffeeMachine coffeeMachine = new CoffeeMachine(drinkMakerDriver);
+
+            coffeeMachine.SelectTea();
+            coffeeMachine.MakeDrink();
+
+            drinkMakerDriver.Received().Send(new Order(DrinkType.Tea));
         }
     }
 }
