@@ -13,6 +13,12 @@ public class Order
         _spoonOfSugar = 0;
     }
 
+    public Order(DrinkType drinkType, int spoonsOfSugar)
+    {
+        _drinkType = drinkType;
+        _spoonOfSugar = spoonsOfSugar;
+    }
+
     public DrinkType GetDrinkType()
     {
         return _drinkType;
@@ -21,6 +27,11 @@ public class Order
     public void AddSpoonOfSugar()
     {
         _spoonOfSugar += 1;
+    }
+
+    public int GetSpoonsOfSugar()
+    {
+        return _spoonOfSugar;
     }
 
     protected bool Equals(Order other)
@@ -44,5 +55,4 @@ public class Order
     public override string ToString() {
         return $"{nameof(_drinkType)}: {_drinkType}, {nameof(_spoonOfSugar)}: {_spoonOfSugar}";
     }
-
 }

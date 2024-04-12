@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
+using static CoffeeMachine.Tests.OrderBuilder;
 
 namespace CoffeeMachine.Tests
 {
@@ -18,9 +19,7 @@ namespace CoffeeMachine.Tests
         [Test]
         public void Serve_Chocolate()
         {
-            Order order = new Order(DrinkType.Chocolate);
-
-            driver800.Send(order);
+            driver800.Send(Chocolate().Build());
 
             drinkMaker.Received().Execute("H::");
         }
@@ -28,20 +27,24 @@ namespace CoffeeMachine.Tests
         [Test]
         public void Serve_Tea()
         {
-            Order order = new Order(DrinkType.Tea);
-
-            driver800.Send(order);
+            driver800.Send(Tea().Build());
 
             drinkMaker.Received().Execute("T::");
         }
 
         [Test]
         public void Serve_Coffee() {
-            Order order = new Order(DrinkType.Coffee);
-
-            driver800.Send(order);
+            driver800.Send(Coffee().Build());
 
             drinkMaker.Received().Execute("C::");
+        }
+
+        [Test]
+        public void Serve_Chocolate_whit_one_spoon_of_sugar()
+        {
+            driver800.Send(Chocolate().WithSpoonsOfSugar(1).Build());
+
+            drinkMaker.Received().Execute("H:1:0");
         }
     }
 }

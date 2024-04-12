@@ -4,5 +4,6 @@ public enum DrinkType
 {
     Chocolate = 'H',
     Tea = 'T',
-    Coffee = 'C'
+    Coffee = 'C',
+    None = 'N'
 }
