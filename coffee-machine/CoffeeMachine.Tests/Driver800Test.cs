@@ -40,7 +40,7 @@ namespace CoffeeMachine.Tests
         }
 
         [Test]
-        public void Serve_Chocolate_whit_one_spoon_of_sugar()
+        public void Serve_Drink_whit_one_spoon_of_sugar()
         {
             driver800.Send(Chocolate().WithSpoonsOfSugar(1).Build());
 
@@ -48,7 +48,7 @@ namespace CoffeeMachine.Tests
         }
 
         [Test]
-        public void Serve_Chocolate_whit_two_spoon_of_sugar()
+        public void Serve_Drink_whit_two_spoon_of_sugar()
         {
             driver800.Send(Chocolate().WithSpoonsOfSugar(2).Build());
 
