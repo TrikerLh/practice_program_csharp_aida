@@ -43,7 +43,7 @@ namespace CoffeeMachine.Tests
         }
 
         [Test]
-        public void Make_drink_whit_one_spoon_of_sugar()
+        public void Make_drink_with_one_spoon_of_sugar()
         {
             coffeeMachine.SelectChocolate();
             coffeeMachine.AddOneSpoonOfSugar();
@@ -53,7 +53,7 @@ namespace CoffeeMachine.Tests
         }
 
         [Test]
-        public void Make_drink_whit_two_spoon_of_sugar()
+        public void Make_drink_with_two_spoon_of_sugar()
         {
             coffeeMachine.SelectChocolate();
             coffeeMachine.AddOneSpoonOfSugar();
@@ -64,7 +64,7 @@ namespace CoffeeMachine.Tests
         }
 
         [Test]
-        public void Make_drink_whit_more_than_two_spoon_of_sugar()
+        public void Make_drink_with_more_than_two_spoon_of_sugar()
         {
             coffeeMachine.SelectChocolate();
             coffeeMachine.AddOneSpoonOfSugar();
