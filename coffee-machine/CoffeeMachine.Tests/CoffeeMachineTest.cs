@@ -34,7 +34,8 @@ namespace CoffeeMachine.Tests
         }
 
         [Test]
-        public void Make_Coffee() {
+        public void Make_Coffee()
+        {
             coffeeMachine.SelectCoffee();
             coffeeMachine.MakeDrink();
 

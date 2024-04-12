@@ -15,12 +15,25 @@
         }
         private string ComposeCommand(Order order)
         {
-            return ComposeDrinkSection(order) + ":" + ComposeSugarSection(order);
+            return ComposeDrinkSection(order.GetDrinkType()) + ":" + ComposeSugarSection(order);
         }
 
-        private static string ComposeDrinkSection(Order order)
+        private static string ComposeDrinkSection(DrinkType drink)
         {
-            return $"{(char)order.GetDrinkType()}";
+            return $"{GetDriverDrinkType(drink)}";
+        }
+
+        private static string GetDriverDrinkType(DrinkType drinkTypeEnum)
+        {
+            var drinkType = drinkTypeEnum switch
+            {
+                DrinkType.Chocolate => "H",
+                DrinkType.Tea => "T",
+                DrinkType.Coffee => "C",
+                _ => "N"
+            };
+
+            return drinkType;
         }
 
         private string ComposeSugarSection(Order order)
