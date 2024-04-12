@@ -1,3 +1,4 @@
+using NSubstitute;
 using NUnit.Framework;
 
 namespace CoffeeMachine.Tests
@@ -5,9 +6,15 @@ namespace CoffeeMachine.Tests
     public class CoffeeMachineTest
     {
         [Test]
-        public void Fix_Me_And_Rename_Me()
+        public void Make_Chocolate()
         {
-            Assert.That(false, Is.True);
+            DrinkMakerDriver drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
+            CoffeeMachine coffeeMachine = new CoffeeMachine(drinkMakerDriver);
+            
+            coffeeMachine.SelectChocolate();
+            coffeeMachine.MakeDrink();
+
+            drinkMakerDriver.Received().Send(new Order(DrinkType.Chocolate));
         }
     }
 }
