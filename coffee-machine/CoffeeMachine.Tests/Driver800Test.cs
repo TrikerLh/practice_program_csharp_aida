@@ -34,5 +34,14 @@ namespace CoffeeMachine.Tests
 
             drinkMaker.Received().Execute("T::");
         }
+
+        [Test]
+        public void Serve_Coffee() {
+            Order order = new Order(DrinkType.Coffee);
+
+            driver800.Send(order);
+
+            drinkMaker.Received().Execute("C::");
+        }
     }
 }
