@@ -5,12 +5,20 @@ namespace CoffeeMachine.Tests
 {
     public class Driver800Test
     {
+        private DrinkMaker drinkMaker;
+        private Driver800 driver800;
+
+        [SetUp]
+        public void SetUp()
+        {
+            drinkMaker = Substitute.For<DrinkMaker>();
+            driver800 = new Driver800(drinkMaker);
+        }
+
         [Test]
         public void Serve_Chocolate()
         {
-            DrinkMaker drinkMaker = Substitute.For<DrinkMaker>();
             Order order = new Order(DrinkType.Chocolate);
-            Driver800 driver800 = new Driver800(drinkMaker);
 
             driver800.Send(order);
 
@@ -20,9 +28,7 @@ namespace CoffeeMachine.Tests
         [Test]
         public void Serve_Tea()
         {
-            DrinkMaker drinkMaker = Substitute.For<DrinkMaker>();
             Order order = new Order(DrinkType.Tea);
-            Driver800 driver800 = new Driver800(drinkMaker);
 
             driver800.Send(order);
 

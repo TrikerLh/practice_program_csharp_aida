@@ -3,7 +3,6 @@
     public class Driver800 : DrinkMakerDriver
     {
         private DrinkMaker drinkMaker;
-        private string command;
 
         public Driver800(DrinkMaker drinkMaker)
         {
@@ -12,8 +11,7 @@
 
         public void Send(Order order)
         {
-            command = ToCommand(order);
-            drinkMaker.Execute(command);
+            drinkMaker.Execute(ToCommand(order));
         }
         private string ToCommand(Order order)
         {

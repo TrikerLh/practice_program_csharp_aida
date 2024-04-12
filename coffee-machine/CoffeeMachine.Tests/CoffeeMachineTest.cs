@@ -5,12 +5,18 @@ namespace CoffeeMachine.Tests
 {
     public class CoffeeMachineTest
     {
+        private DrinkMakerDriver drinkMakerDriver;
+        private CoffeeMachine coffeeMachine;
+
+        [SetUp]
+        public void SetUp()
+        {
+            drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
+            coffeeMachine = new CoffeeMachine(drinkMakerDriver);
+        }
         [Test]
         public void Make_Chocolate()
         {
-            DrinkMakerDriver drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
-            CoffeeMachine coffeeMachine = new CoffeeMachine(drinkMakerDriver);
-
             coffeeMachine.SelectChocolate();
             coffeeMachine.MakeDrink();
 
@@ -20,9 +26,6 @@ namespace CoffeeMachine.Tests
         [Test]
         public void Make_Tea()
         {
-            DrinkMakerDriver drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
-            CoffeeMachine coffeeMachine = new CoffeeMachine(drinkMakerDriver);
-
             coffeeMachine.SelectTea();
             coffeeMachine.MakeDrink();
 
