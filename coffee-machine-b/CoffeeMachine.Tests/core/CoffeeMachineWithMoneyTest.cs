@@ -10,14 +10,18 @@ using static CoffeeMachine.Tests.helpers.OrderBuilder;
 
 namespace CoffeeMachine.Tests.core {
     public class CoffeeMachineWithMoneyTest {
-        //private const string SelectDrinkMessage = "Please, select a drink!";
         private CoffeeMachine.core.CoffeeMachine _coffeeMachine;
         private DrinkMakerDriver _drinkMakerDriver;
 
         [SetUp]
         public void SetUp() {
             _drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
-            _coffeeMachine = new CoffeeMachine.core.CoffeeMachine(_drinkMakerDriver);
+            _coffeeMachine = new CoffeeMachine.core.CoffeeMachine(_drinkMakerDriver, new Dictionary<DrinkType, decimal>
+            {
+                { DrinkType.Tea, 0.4m },
+                { DrinkType.Chocolate , 0.5m },
+                { DrinkType.Coffee , 0.6m }
+            });
         }
 
         [Test]

@@ -18,8 +18,12 @@ public class CoffeeMachineTest
     public void SetUp()
     {
         _drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
-        _coffeeMachine = new CoffeeMachine.core.CoffeeMachine(_drinkMakerDriver);
-        _coffeeMachine.AddMoney(1000);
+        _coffeeMachine = new CoffeeMachine.core.CoffeeMachine(_drinkMakerDriver, new Dictionary<DrinkType, decimal>
+        {
+            { DrinkType.Tea, 0m },
+            { DrinkType.Chocolate , 0m },
+            { DrinkType.Coffee , 0m }
+        });
     }
 
     [Test]

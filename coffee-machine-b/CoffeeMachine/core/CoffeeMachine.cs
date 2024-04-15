@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace CoffeeMachine.core;
 
 public class CoffeeMachine
@@ -5,12 +7,14 @@ public class CoffeeMachine
     private readonly DrinkMakerDriver _drinkMakerDriver;
     private Order _order;
     private decimal _amount;
+    private Dictionary<DrinkType, decimal> _priceList;
 
-    public CoffeeMachine(DrinkMakerDriver drinkMakerDriver)
+    public CoffeeMachine(DrinkMakerDriver drinkMakerDriver, Dictionary<DrinkType, decimal> priceList)
     {
         _drinkMakerDriver = drinkMakerDriver;
         _order = new Order();
         _amount = 0;
+        _priceList = priceList;
     }
 
     public void SelectChocolate()
@@ -57,22 +61,7 @@ public class CoffeeMachine
 
     private decimal GetDrinkPrice()
     {
-        decimal drinkPrice;
-
-        if (_order.GetDrinkType() == DrinkType.Chocolate)
-        {
-            drinkPrice = (decimal)0.5;
-        }
-        else if (_order.GetDrinkType() == DrinkType.Tea)
-        {
-            drinkPrice = (decimal)0.4;
-        }
-        else
-        {
-            drinkPrice = (decimal)0.6;
-        }
-
-        return drinkPrice;
+        return _priceList[_order.GetDrinkType()];
     }
 
     private bool NoDrinkWasSelected()
