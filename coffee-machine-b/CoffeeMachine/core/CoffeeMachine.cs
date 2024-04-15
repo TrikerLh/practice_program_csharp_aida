@@ -41,13 +41,34 @@ public class CoffeeMachine
             return;
         }
 
-        if (_amount < (decimal)0.5)
+        var drinkPrice = GetDrinkPrice();
+
+        var diff = drinkPrice - _amount;
+
+        if (diff > 0)
         {
-            _drinkMakerDriver.Notify(Message.Create("You must add 0,5 euros to make this drink"));
+            _drinkMakerDriver.Notify(Message.Create($"You must add {diff} euros to make this drink"));
+            return;
         }
 
         _drinkMakerDriver.Send(_order);
         _order = new Order();
+    }
+
+    private decimal GetDrinkPrice()
+    {
+        decimal drinkPrice;
+
+        if (_order.GetDrinkType() == DrinkType.Chocolate)
+        {
+            drinkPrice = (decimal)0.5;
+        }
+        else
+        {
+            drinkPrice = (decimal)0.4;
+        }
+
+        return drinkPrice;
     }
 
     private bool NoDrinkWasSelected()
@@ -63,5 +84,6 @@ public class CoffeeMachine
 
     public void AddMoney(decimal amount)
     {
+        _amount = amount;
     }
 }
