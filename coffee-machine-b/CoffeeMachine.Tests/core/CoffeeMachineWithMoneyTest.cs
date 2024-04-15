@@ -26,7 +26,7 @@ namespace CoffeeMachine.Tests.core {
             _coffeeMachine.AddMoney((decimal)0.2);
             _coffeeMachine.MakeDrink();
 
-            _drinkMakerDriver.Received().Notify(Message.Create("You must add 0.3 euros to make this drink"));
+            _drinkMakerDriver.Received().Notify(Message.Create("You must add 0,3 euros to make this drink"));
             _drinkMakerDriver.Received(0).Send(Arg.Any<Order>());
         }
 
@@ -37,7 +37,17 @@ namespace CoffeeMachine.Tests.core {
             _coffeeMachine.AddMoney((decimal)0.2);
             _coffeeMachine.MakeDrink();
 
-            _drinkMakerDriver.Received().Notify(Message.Create("You must add 0.2 euros to make this drink"));
+            _drinkMakerDriver.Received().Notify(Message.Create("You must add 0,2 euros to make this drink"));
+            _drinkMakerDriver.Received(0).Send(Arg.Any<Order>());
+        }
+
+        [Test]
+        public void Make_Coffee_without_enough_money() {
+            _coffeeMachine.SelectCoffee();
+            _coffeeMachine.AddMoney((decimal)0.2);
+            _coffeeMachine.MakeDrink();
+
+            _drinkMakerDriver.Received().Notify(Message.Create("You must add 0,4 euros to make this drink"));
             _drinkMakerDriver.Received(0).Send(Arg.Any<Order>());
         }
 

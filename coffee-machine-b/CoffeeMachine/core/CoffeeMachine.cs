@@ -63,9 +63,13 @@ public class CoffeeMachine
         {
             drinkPrice = (decimal)0.5;
         }
-        else
+        else if (_order.GetDrinkType() == DrinkType.Tea)
         {
             drinkPrice = (decimal)0.4;
+        }
+        else
+        {
+            drinkPrice = (decimal)0.6;
         }
 
         return drinkPrice;
