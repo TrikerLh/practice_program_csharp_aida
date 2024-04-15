@@ -19,6 +19,7 @@ public class CoffeeMachineTest
     {
         _drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
         _coffeeMachine = new CoffeeMachine.core.CoffeeMachine(_drinkMakerDriver);
+        _coffeeMachine.AddMoney(1000);
     }
 
     [Test]
