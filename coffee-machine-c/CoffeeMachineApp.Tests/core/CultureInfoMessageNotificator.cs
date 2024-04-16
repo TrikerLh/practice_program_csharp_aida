@@ -20,6 +20,18 @@ public class CultureInfoMessageNotificator : MessageNotificator
 
     public void NotifySelectDrink()
     {
-        _drinkMakerDriver.Notify(Message.Create("Please, select a drink!"));
+        _drinkMakerDriver.Notify(CreateMessage());
+    }
+
+    private Message CreateMessage()
+    {
+        var messageContent = _messageCulture.Name switch
+        {
+            "en-GB" => "Please, select a drink!",
+            "es-ES" => "Por favor, ¡selecciona una bebida!",
+            _ => string.Empty
+        };
+
+        return Message.Create(messageContent);
     }
 }
