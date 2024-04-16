@@ -24,9 +24,9 @@ public class CultureInfoMessageNotificatorTest
     {
         var expectedMessage = Message.Create("Please, select a drink!");
 
-        messageNotificator.NotifySelectDrink();
+        WhenNotifySelectDrink();
 
-        drinkMakerDriver.Received(1).Notify(expectedMessage);
+        ThenDrinkMakerDriverReceiveNotification(expectedMessage);
     }
 
     [Test]
@@ -35,9 +35,9 @@ public class CultureInfoMessageNotificatorTest
         var expectedMessage = Message.Create("Por favor, ¡selecciona una bebida!");
 
         messageNotificator = NotificatorSpain();
-        messageNotificator.NotifySelectDrink();
-        
-        drinkMakerDriver.Received(1).Notify(expectedMessage);
+        WhenNotifySelectDrink();
+
+        ThenDrinkMakerDriverReceiveNotification(expectedMessage);
     }
 
     [Test]
@@ -46,12 +46,22 @@ public class CultureInfoMessageNotificatorTest
         var expectedMessage = Message.Create("Por favor, ¡selecciona una bebida!");
 
         messageNotificator = NotificatorPuertoRico();
-        messageNotificator.NotifySelectDrink();
+        WhenNotifySelectDrink();
 
-        drinkMakerDriver.Received(1).Notify(expectedMessage);
+        ThenDrinkMakerDriverReceiveNotification(expectedMessage);
     }
 
     private CultureInfoMessageNotificator NotificatorSpain() => new(new CultureInfo("es-ES"), drinkMakerDriver);
 
     private CultureInfoMessageNotificator NotificatorPuertoRico() => new(new CultureInfo("es-PR"), drinkMakerDriver);
+
+    private void WhenNotifySelectDrink()
+    {
+        messageNotificator.NotifySelectDrink();
+    }
+
+    private void ThenDrinkMakerDriverReceiveNotification(Message expectedMessage)
+    {
+        drinkMakerDriver.Received(1).Notify(expectedMessage);
+    }
 }
