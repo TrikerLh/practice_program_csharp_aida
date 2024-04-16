@@ -51,6 +51,17 @@ public class CultureInfoMessageNotificatorTest
         ThenDrinkMakerDriverReceiveNotification(expectedMessage);
     }
 
+    [Test]
+    public void Send_Missing_Price()
+    {
+        var givenMissingPrice = 0.2m;
+        var expectedMessage = Message.Create("You missing 0.2");
+
+        messageNotificator.NotifyMissingPrice(givenMissingPrice);
+
+        ThenDrinkMakerDriverReceiveNotification(expectedMessage);
+    }
+
     private CultureInfoMessageNotificator NotificatorSpain() => new(new CultureInfo("es-ES"), drinkMakerDriver);
 
     private CultureInfoMessageNotificator NotificatorPuertoRico() => new(new CultureInfo("es-PR"), drinkMakerDriver);

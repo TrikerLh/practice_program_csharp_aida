@@ -16,14 +16,15 @@ public class CultureInfoMessageNotificator : MessageNotificator
 
     public void NotifyMissingPrice(decimal missingPrice)
     {
+        _drinkMakerDriver.Notify(CreateMissingPriceMessage(missingPrice));
     }
 
     public void NotifySelectDrink()
     {
-        _drinkMakerDriver.Notify(CreateMessage());
+        _drinkMakerDriver.Notify(CreateSelectDrinkMessage());
     }
 
-    private Message CreateMessage()
+    private Message CreateSelectDrinkMessage()
     {
         var messageContent = _messageCulture.Name switch
         {
@@ -34,5 +35,10 @@ public class CultureInfoMessageNotificator : MessageNotificator
         };
 
         return Message.Create(messageContent);
+    }
+
+    private Message CreateMissingPriceMessage(decimal missingPrice)
+    {
+        return Message.Create($"You missing {missingPrice.ToString(_messageCulture)}");
     }
 }
