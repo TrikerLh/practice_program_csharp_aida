@@ -24,28 +24,28 @@ public class CultureInfoMessageNotificator : MessageNotificator
         _drinkMakerDriver.Notify(CreateSelectDrinkMessage());
     }
 
-    private Message CreateSelectDrinkMessage()
-    {
-        var messageContent = _messageCulture.Name switch
+    private Message CreateSelectDrinkMessage() => GenerateMessage(GetSelectDrinkMessageContent());
+
+    private string GetSelectDrinkMessageContent() =>
+        _messageCulture.TwoLetterISOLanguageName switch
         {
-            "en-GB" => "Please, select a drink!",
-            "es-ES" or "es-PR" => "Por favor, ¡selecciona una bebida!",
+            "en" => "Please, select a drink!",
+            "es" => "Por favor, ¡selecciona una bebida!",
             _ => string.Empty
         };
 
-        return Message.Create(messageContent);
-    }
+    private Message CreateMissingPriceMessage(decimal missingPrice) => GenerateMessage(string.Format(GetMissingPriceMessageContent(), GetMissingPriceFormatted(missingPrice)));
 
-    private Message CreateMissingPriceMessage(decimal missingPrice)
-    {
-        var missingPriceString = missingPrice.ToString(_messageCulture);
-        var messageContent = _messageCulture.Name switch
+    private string GetMissingPriceMessageContent() =>
+        _messageCulture.TwoLetterISOLanguageName switch
         {
-            "en-GB" => "You missing {0}",
-            "es-ES" or "es-PR" => "Te faltan {0}",
+            "en" => "You missing {0}",
+            "es" => "Te faltan {0}",
             _ => string.Empty
         };
 
-        return Message.Create(string.Format(messageContent, missingPriceString));
-    }
+    private string GetMissingPriceFormatted(decimal missingPrice) =>
+        missingPrice.ToString(_messageCulture);
+
+    private static Message GenerateMessage(string messageContent) => Message.Create(messageContent);
 }
