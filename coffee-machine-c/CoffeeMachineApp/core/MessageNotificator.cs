@@ -1,4 +1,4 @@
-﻿namespace CoffeeMachineApp.infrastructure;
+﻿namespace CoffeeMachineApp.core;
 
 public interface MessageNotificator
 {

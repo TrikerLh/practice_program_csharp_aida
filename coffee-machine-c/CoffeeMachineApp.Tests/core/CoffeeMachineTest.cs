@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using CoffeeMachineApp.core;
-using CoffeeMachineApp.infrastructure;
 using NSubstitute;
 using NUnit.Framework;
 using static CoffeeMachineApp.Tests.helpers.OrderBuilder;
