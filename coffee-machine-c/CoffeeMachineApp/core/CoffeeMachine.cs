@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CoffeeMachineApp.infrastructure;
 
 namespace CoffeeMachineApp.core;
 
@@ -6,13 +7,16 @@ public class CoffeeMachine
 {
     private readonly DrinkMakerDriver _drinkMakerDriver;
     private readonly Dictionary<DrinkType, decimal> _prices;
+    private readonly MessageNotificator _messageNotificator;
     private Order _order;
     private decimal _totalMoney;
 
-    public CoffeeMachine(DrinkMakerDriver drinkMakerDriver, Dictionary<DrinkType, decimal> prices)
+    public CoffeeMachine(DrinkMakerDriver drinkMakerDriver, Dictionary<DrinkType, decimal> prices,
+        MessageNotificator messageNotificator)
     {
         _drinkMakerDriver = drinkMakerDriver;
         _prices = prices;
+        _messageNotificator = messageNotificator;
         InitializeState();
     }
 
@@ -56,7 +60,7 @@ public class CoffeeMachine
         }
         else
         {
-            _drinkMakerDriver.Notify(Message.Create($"You are missing {ComputeMissingMoney()}"));
+            _messageNotificator.NotifyMissingPrice(ComputeMissingMoney());
         }
     }
 

@@ -16,12 +16,14 @@ public class CoffeeMachineTest
     private const decimal ChocolatePrice = 0.5m;
     private CoffeeMachine _coffeeMachine;
     private DrinkMakerDriver _drinkMakerDriver;
+    private MessageNotificator _messageNotificator;
     private Dictionary<DrinkType, decimal> _pricesByDrinkType;
 
     [SetUp]
     public void SetUp()
     {
         _drinkMakerDriver = Substitute.For<DrinkMakerDriver>();
+        _messageNotificator = Substitute.For<MessageNotificator>();
         _pricesByDrinkType = new Dictionary<DrinkType, decimal>()
         {
             { DrinkType.Chocolate, ChocolatePrice },
@@ -214,12 +216,12 @@ public class CoffeeMachineTest
             { DrinkType.Coffee, 0 },
             { DrinkType.Tea, 0 }
         };
-         return new CoffeeMachine(_drinkMakerDriver, prices);
+        return new CoffeeMachine(_drinkMakerDriver, prices, _messageNotificator);
     }
     private CoffeeMachine PaidCoffeeMachine()
     {
         var prices = _pricesByDrinkType;
-        return new CoffeeMachine(_drinkMakerDriver, prices);
+        return new CoffeeMachine(_drinkMakerDriver, prices, _messageNotificator);
     }
 
     private List<Order> CaptureSentOrders()
@@ -246,7 +248,7 @@ public class CoffeeMachineTest
 
     private void ThenNotifyMissingMoney(decimal originalPrice, decimal missingPrice)
     {
-        _drinkMakerDriver.Received().Notify(Message.Create($"You are missing {originalPrice - missingPrice}"));
+        _messageNotificator.Received(1).NotifyMissingPrice(originalPrice - missingPrice);
     }
 
     private void ThenNotifySelectDrink()
