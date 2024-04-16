@@ -109,7 +109,7 @@ public class CoffeeMachineTest
 
         _coffeeMachine.MakeDrink();
 
-        _drinkMakerDriver.Received().Notify(Message.Create(SelectDrinkMessage));
+        ThenNotifySelectDrink();
     }
 
     [Test]
@@ -120,7 +120,7 @@ public class CoffeeMachineTest
         _coffeeMachine.MakeDrink();
 
         _drinkMakerDriver.Received(1).Send(Arg.Any<Order>());
-        _drinkMakerDriver.Received().Notify(Message.Create(SelectDrinkMessage));
+        ThenNotifySelectDrink();
     }
 
     [Test]
@@ -247,5 +247,10 @@ public class CoffeeMachineTest
     private void ThenNotifyMissingMoney(decimal originalPrice, decimal missingPrice)
     {
         _drinkMakerDriver.Received().Notify(Message.Create($"You are missing {originalPrice - missingPrice}"));
+    }
+
+    private void ThenNotifySelectDrink()
+    {
+        _drinkMakerDriver.Received().Notify(Message.Create(SelectDrinkMessage));
     }
 }
