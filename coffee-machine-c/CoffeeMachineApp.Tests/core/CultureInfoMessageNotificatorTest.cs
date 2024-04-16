@@ -62,6 +62,30 @@ public class CultureInfoMessageNotificatorTest
         ThenDrinkMakerDriverReceiveNotification(expectedMessage);
     }
 
+    [Test]
+    public void Send_Missing_Price_Spain()
+    {
+        var givenMissingPrice = 0.2m;
+        var expectedMessage = Message.Create("Te faltan 0,2");
+
+        messageNotificator = NotificatorSpain();
+        messageNotificator.NotifyMissingPrice(givenMissingPrice);
+
+        ThenDrinkMakerDriverReceiveNotification(expectedMessage);
+    }
+
+    [Test]
+    public void Send_Missing_Price_Puerto_Rico()
+    {
+        var givenMissingPrice = 0.2m;
+        var expectedMessage = Message.Create("Te faltan 0.2");
+
+        messageNotificator = NotificatorPuertoRico();
+        messageNotificator.NotifyMissingPrice(givenMissingPrice);
+
+        ThenDrinkMakerDriverReceiveNotification(expectedMessage);
+    }
+
     private CultureInfoMessageNotificator NotificatorSpain() => new(new CultureInfo("es-ES"), drinkMakerDriver);
 
     private CultureInfoMessageNotificator NotificatorPuertoRico() => new(new CultureInfo("es-PR"), drinkMakerDriver);

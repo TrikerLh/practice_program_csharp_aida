@@ -29,8 +29,7 @@ public class CultureInfoMessageNotificator : MessageNotificator
         var messageContent = _messageCulture.Name switch
         {
             "en-GB" => "Please, select a drink!",
-            "es-ES" => "Por favor, ¡selecciona una bebida!",
-            "es-PR" => "Por favor, ¡selecciona una bebida!",
+            "es-ES" or "es-PR" => "Por favor, ¡selecciona una bebida!",
             _ => string.Empty
         };
 
@@ -39,6 +38,14 @@ public class CultureInfoMessageNotificator : MessageNotificator
 
     private Message CreateMissingPriceMessage(decimal missingPrice)
     {
-        return Message.Create($"You missing {missingPrice.ToString(_messageCulture)}");
+        var missingPriceString = missingPrice.ToString(_messageCulture);
+        var messageContent = _messageCulture.Name switch
+        {
+            "en-GB" => "You missing {0}",
+            "es-ES" or "es-PR" => "Te faltan {0}",
+            _ => string.Empty
+        };
+
+        return Message.Create(string.Format(messageContent, missingPriceString));
     }
 }
