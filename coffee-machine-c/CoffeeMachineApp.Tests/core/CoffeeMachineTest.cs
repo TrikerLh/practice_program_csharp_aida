@@ -10,7 +10,6 @@ namespace CoffeeMachineApp.Tests.core;
 
 public class CoffeeMachineTest
 {
-    private const string SelectDrinkMessage = "Please, select a drink!";
     private const decimal TeaPrice = 0.4m;
     private const decimal CoffeePrice = 0.6m;
     private const decimal ChocolatePrice = 0.5m;
@@ -253,6 +252,6 @@ public class CoffeeMachineTest
 
     private void ThenNotifySelectDrink()
     {
-        _drinkMakerDriver.Received().Notify(Message.Create(SelectDrinkMessage));
+        _messageNotificator.Received(1).NotifySelectDrink();
     }
 }

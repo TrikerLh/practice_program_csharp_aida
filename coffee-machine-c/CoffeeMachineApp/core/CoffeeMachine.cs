@@ -49,7 +49,7 @@ public class CoffeeMachine
     {
         if (NoDrinkWasSelected())
         {
-            _drinkMakerDriver.Notify(ComposeSelectDrinkMessage());
+            _messageNotificator.NotifySelectDrink();
             return;
         }
 
@@ -83,11 +83,5 @@ public class CoffeeMachine
     private bool NoDrinkWasSelected()
     {
         return _order.GetDrinkType() == DrinkType.None;
-    }
-
-    private Message ComposeSelectDrinkMessage()
-    {
-        const string message = "Please, select a drink!";
-        return Message.Create(message);
     }
 }
