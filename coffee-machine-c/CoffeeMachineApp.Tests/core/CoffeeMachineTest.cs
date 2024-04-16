@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CoffeeMachineApp.core;
+using CoffeeMachineApp.infrastructure;
 using NSubstitute;
 using NUnit.Framework;
 using static CoffeeMachineApp.Tests.helpers.OrderBuilder;
@@ -144,7 +145,7 @@ public class CoffeeMachineTest
         _coffeeMachine.AddMoney(amount);
         _coffeeMachine.MakeDrink();
 
-        _drinkMakerDriver.Received().Notify(Message.Create($"You are missing {TeaPrice - amount}"));
+        ThenNotifyMissingMoney(TeaPrice, amount);
     }
 
     [Test]
@@ -157,7 +158,7 @@ public class CoffeeMachineTest
         _coffeeMachine.AddMoney(amount);
         _coffeeMachine.MakeDrink();
 
-        _drinkMakerDriver.Received().Notify(Message.Create($"You are missing {CoffeePrice - amount}"));
+        ThenNotifyMissingMoney(CoffeePrice, amount);
     }
 
     [Test]
@@ -170,9 +171,9 @@ public class CoffeeMachineTest
         _coffeeMachine.AddMoney(amount);
         _coffeeMachine.MakeDrink();
 
-        _drinkMakerDriver.Received().Notify(Message.Create($"You are missing {ChocolatePrice - amount}"));
+        ThenNotifyMissingMoney(ChocolatePrice, amount);
     }
-    
+
     [Test]
     public void Make_Tea_With_Enough_Money()
     {
@@ -194,7 +195,7 @@ public class CoffeeMachineTest
         _coffeeMachine.SelectTea();
         _coffeeMachine.MakeDrink();
 
-        _drinkMakerDriver.Received().Notify(Message.Create($"You are missing {TeaPrice}"));
+        ThenNotifyMissingMoney(TeaPrice, 0m);
     }
 
     private void AfterPayingAndMakingDrink()
@@ -241,5 +242,10 @@ public class CoffeeMachineTest
         _coffeeMachine.SelectTea();
         _coffeeMachine.AddOneSpoonOfSugar();
         _coffeeMachine.MakeDrink();
+    }
+
+    private void ThenNotifyMissingMoney(decimal originalPrice, decimal missingPrice)
+    {
+        _drinkMakerDriver.Received().Notify(Message.Create($"You are missing {originalPrice - missingPrice}"));
     }
 }
