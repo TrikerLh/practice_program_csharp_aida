@@ -29,6 +29,7 @@ public class CultureInfoMessageNotificator : MessageNotificator
         {
             "en-GB" => "Please, select a drink!",
             "es-ES" => "Por favor, ¡selecciona una bebida!",
+            "es-PR" => "Por favor, ¡selecciona una bebida!",
             _ => string.Empty
         };
 

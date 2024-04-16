@@ -40,5 +40,18 @@ public class CultureInfoMessageNotificatorTest
         drinkMakerDriver.Received(1).Notify(expectedMessage);
     }
 
+    [Test]
+    public void Send_Select_Drink_In_Puerto_Rico()
+    {
+        var expectedMessage = Message.Create("Por favor, ¡selecciona una bebida!");
+
+        messageNotificator = NotificatorPuertoRico();
+        messageNotificator.NotifySelectDrink();
+
+        drinkMakerDriver.Received(1).Notify(expectedMessage);
+    }
+
     private CultureInfoMessageNotificator NotificatorSpain() => new(new CultureInfo("es-ES"), drinkMakerDriver);
+
+    private CultureInfoMessageNotificator NotificatorPuertoRico() => new(new CultureInfo("es-PR"), drinkMakerDriver);
 }
