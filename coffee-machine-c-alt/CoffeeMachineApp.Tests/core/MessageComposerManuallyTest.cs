@@ -45,4 +45,15 @@ public class MessageComposerManuallyTest
 
         result.Should().Be(Message.Create($"You are missing 0.4"));
     }
+
+    [Test]
+    public void Get_Missing_Money_In_Spain()
+    {
+        _messageComposer = new MessageComposerManually(new CultureInfo("es-ES"));
+        var givenMissingAmount = 0.4m;
+
+        var result = _messageComposer.ComposeMissingMoneyMessage(givenMissingAmount);
+
+        result.Should().Be(Message.Create($"Moroso, paga lo que falta: 0,4 Primer aviso"));
+    }
 }

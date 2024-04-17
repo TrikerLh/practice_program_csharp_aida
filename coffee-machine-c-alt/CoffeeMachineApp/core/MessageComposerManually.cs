@@ -11,6 +11,12 @@ public class MessageComposerManually : MessageComposer
         , { "en", "Please, select drink!"}
     };
 
+    private IDictionary<string, string> _missingPriceMessages = new Dictionary<string, string>()
+    {
+        { "es", "Moroso, paga lo que falta: {0} Primer aviso"}
+        , { "en", "You are missing {0}"}
+    };
+
     private readonly CultureInfo _currentCultureInfo;
 
     public MessageComposerManually(CultureInfo currentCultureInfo)
@@ -20,7 +26,7 @@ public class MessageComposerManually : MessageComposer
 
     public Message ComposeMissingMoneyMessage(decimal missingPrice)
     {
-        return Message.Create($"You are missing {missingPrice.ToString(_currentCultureInfo)}");
+        return Message.Create(string.Format(_missingPriceMessages[_currentCultureInfo.TwoLetterISOLanguageName], missingPrice.ToString(_currentCultureInfo)));
     }
 
     public Message ComposeSelectDrinkMessage()
