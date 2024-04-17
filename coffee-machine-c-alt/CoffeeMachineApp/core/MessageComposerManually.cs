@@ -5,10 +5,10 @@ namespace CoffeeMachineApp.core;
 
 public class MessageComposerManually : MessageComposer
 {
-    private IDictionary<CultureInfo, string> _selectDrinkMessages = new Dictionary<CultureInfo, string>()
+    private IDictionary<string, string> _selectDrinkMessages = new Dictionary<string, string>()
     {
-        { new CultureInfo("es-ES"), "¡Por favor, seleccione bebida!"}
-        , { new CultureInfo("en-GB"), "Please, select drink!"}
+        { "es", "¡Por favor, seleccione bebida!"}
+        , { "en", "Please, select drink!"}
     };
 
     private readonly CultureInfo _currentCultureInfo;
@@ -20,11 +20,11 @@ public class MessageComposerManually : MessageComposer
 
     public Message ComposeMissingMoneyMessage(decimal missingPrice)
     {
-       return Message.Create($"You are missing {missingPrice}");
+        return Message.Create($"You are missing {missingPrice}");
     }
 
     public Message ComposeSelectDrinkMessage()
     {
-        return Message.Create(_selectDrinkMessages[_currentCultureInfo]);
+        return Message.Create(_selectDrinkMessages[_currentCultureInfo.TwoLetterISOLanguageName]);
     }
 }

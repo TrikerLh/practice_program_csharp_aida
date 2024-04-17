@@ -16,7 +16,7 @@ public class MessageComposerManuallyTest
     }
 
     [Test]
-    public void Get_Select_Drink_Message_In_Spain()
+    public void Get_Select_Drink_Message_In_Spanish()
     {
         _messageComposer = new MessageComposerManually(new CultureInfo("es-ES"));
 
@@ -26,7 +26,7 @@ public class MessageComposerManuallyTest
     }
 
     [Test]
-    public void Get_Select_Drink_Message_In_England()
+    public void Get_Select_Drink_Message_In_English()
     {
         _messageComposer = new MessageComposerManually(new CultureInfo("en-GB"));
 
