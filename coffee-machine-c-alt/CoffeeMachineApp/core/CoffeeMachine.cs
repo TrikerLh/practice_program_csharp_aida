@@ -6,33 +6,16 @@ public class CoffeeMachine
 {
     private readonly DrinkMakerDriver _drinkMakerDriver;
     private readonly Dictionary<DrinkType, decimal> _prices;
-    private readonly MessageComposerManually _messageComposer;
+    private readonly MessageComposer _messageComposer;
     private Order _order;
     private decimal _totalMoney;
 
-    public CoffeeMachine(DrinkMakerDriver drinkMakerDriver, Dictionary<DrinkType, decimal> prices)
+    public CoffeeMachine(DrinkMakerDriver drinkMakerDriver, Dictionary<DrinkType, decimal> prices, MessageComposer messageComposer)
     {
-        _messageComposer = new MessageComposerManually();
+        _messageComposer = messageComposer;
         _drinkMakerDriver = drinkMakerDriver;
         _prices = prices;
         InitializeState();
-    }
-
-    public Dictionary<DrinkType, decimal> Prices
-    {
-        get { return _prices; }
-    }
-
-    public Order Order
-    {
-        set { _order = value; }
-        get { return _order; }
-    }
-
-    public decimal TotalMoney
-    {
-        set { _totalMoney = value; }
-        get { return _totalMoney; }
     }
 
     public void SelectChocolate()
@@ -75,7 +58,7 @@ public class CoffeeMachine
         }
         else
         {
-            _drinkMakerDriver.Notify(_messageComposer.ComposeMissingMoneyMessage(_prices[_order.GetDrinkType()]-TotalMoney));
+            _drinkMakerDriver.Notify(_messageComposer.ComposeMissingMoneyMessage(_prices[_order.GetDrinkType()]-_totalMoney));
         }
     }
 
