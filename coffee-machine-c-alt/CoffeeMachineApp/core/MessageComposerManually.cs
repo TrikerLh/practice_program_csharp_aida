@@ -4,12 +4,11 @@ public class MessageComposerManually : MessageComposer
 {
     public Message ComposeMissingMoneyMessage(decimal missingPrice)
     {
-        return Message.Create($"You are missing {missingPrice}");
+        return default;
     }
 
     public Message ComposeSelectDrinkMessage()
     {
-        const string message = "Please, select a drink!";
-        return Message.Create(message);
+        return Message.Create("¡Por favor, seleccione bebida!");
     }
 }
