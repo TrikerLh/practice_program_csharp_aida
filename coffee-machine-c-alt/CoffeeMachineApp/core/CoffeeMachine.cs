@@ -56,8 +56,13 @@ public class CoffeeMachine
         }
         else
         {
-            _drinkMakerDriver.Notify(Message.Create($"You are missing {ComputeMissingMoney()}"));
+            _drinkMakerDriver.Notify(ComposeMissingMoneyMessage());
         }
+    }
+
+    private Message ComposeMissingMoneyMessage()
+    {
+        return Message.Create($"You are missing {ComputeMissingMoney()}");
     }
 
     private void InitializeState()
