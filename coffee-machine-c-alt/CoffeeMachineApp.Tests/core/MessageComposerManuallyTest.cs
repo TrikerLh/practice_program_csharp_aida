@@ -34,4 +34,15 @@ public class MessageComposerManuallyTest
 
         result.Should().Be(Message.Create("Please, select drink!"));
     }
+
+    [Test]
+    public void Get_Missing_Money_In_England()
+    {
+        _messageComposer = new MessageComposerManually(new CultureInfo("en-GB"));
+        var givenMissingAmount = 0.4m;
+
+        var result = _messageComposer.ComposeMissingMoneyMessage(givenMissingAmount);
+
+        result.Should().Be(Message.Create($"You are missing {givenMissingAmount}"));
+    }
 }
