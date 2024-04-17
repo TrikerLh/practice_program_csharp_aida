@@ -5,9 +5,9 @@ using NUnit.Framework;
 
 namespace CoffeeMachineApp.Tests.core;
 
-public class MessageComposerManuallyTest
+public class MessageComposerCultureInfoTest
 {
-    private MessageComposerManually _messageComposer;
+    private MessageComposerCultureInfo _messageComposer;
 
     [SetUp]
     public void Setup()
@@ -18,7 +18,7 @@ public class MessageComposerManuallyTest
     [Test]
     public void Get_Select_Drink_Message_In_Spanish()
     {
-        _messageComposer = new MessageComposerManually(new CultureInfo("es-ES"));
+        _messageComposer = new MessageComposerCultureInfo(new CultureInfo("es-ES"));
 
         var result = _messageComposer.ComposeSelectDrinkMessage();
 
@@ -28,7 +28,7 @@ public class MessageComposerManuallyTest
     [Test]
     public void Get_Select_Drink_Message_In_English()
     {
-        _messageComposer = new MessageComposerManually(new CultureInfo("en-GB"));
+        _messageComposer = new MessageComposerCultureInfo(new CultureInfo("en-GB"));
 
         var result = _messageComposer.ComposeSelectDrinkMessage();
 
@@ -38,7 +38,7 @@ public class MessageComposerManuallyTest
     [Test]
     public void Get_Missing_Money_In_England()
     {
-        _messageComposer = new MessageComposerManually(new CultureInfo("en-GB"));
+        _messageComposer = new MessageComposerCultureInfo(new CultureInfo("en-GB"));
         var givenMissingAmount = 0.4m;
 
         var result = _messageComposer.ComposeMissingMoneyMessage(givenMissingAmount);
@@ -49,7 +49,7 @@ public class MessageComposerManuallyTest
     [Test]
     public void Get_Missing_Money_In_Spain()
     {
-        _messageComposer = new MessageComposerManually(new CultureInfo("es-ES"));
+        _messageComposer = new MessageComposerCultureInfo(new CultureInfo("es-ES"));
         var givenMissingAmount = 0.4m;
 
         var result = _messageComposer.ComposeMissingMoneyMessage(givenMissingAmount);
@@ -60,7 +60,7 @@ public class MessageComposerManuallyTest
     [Test]
     public void Get_Missing_Money_In_Puerto_Rico()
     {
-        _messageComposer = new MessageComposerManually(new CultureInfo("es-PR"));
+        _messageComposer = new MessageComposerCultureInfo(new CultureInfo("es-PR"));
         var givenMissingAmount = 0.4m;
 
         var result = _messageComposer.ComposeMissingMoneyMessage(givenMissingAmount);

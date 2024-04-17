@@ -3,15 +3,15 @@ using System.Globalization;
 
 namespace CoffeeMachineApp.core;
 
-public class MessageComposerManually : MessageComposer
+public class MessageComposerCultureInfo : MessageComposer
 {
-    private IDictionary<string, string> _selectDrinkMessages = new Dictionary<string, string>()
+    private readonly IDictionary<string, string> _selectDrinkMessages = new Dictionary<string, string>()
     {
         { "es", "¡Por favor, seleccione bebida!"}
         , { "en", "Please, select drink!"}
     };
 
-    private IDictionary<string, string> _missingPriceMessages = new Dictionary<string, string>()
+    private readonly IDictionary<string, string> _missingPriceMessages = new Dictionary<string, string>()
     {
         { "es", "Moroso, paga lo que falta: {0} Primer aviso"}
         , { "en", "You are missing {0}"}
@@ -20,7 +20,7 @@ public class MessageComposerManually : MessageComposer
     private readonly CultureInfo _currentCultureInfo;
     private string LanguageCode => _currentCultureInfo.TwoLetterISOLanguageName;
 
-    public MessageComposerManually(CultureInfo currentCultureInfo)
+    public MessageComposerCultureInfo(CultureInfo currentCultureInfo)
     {
         _currentCultureInfo = currentCultureInfo;
     }
