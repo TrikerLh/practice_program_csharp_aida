@@ -56,4 +56,15 @@ public class MessageComposerManuallyTest
 
         result.Should().Be(Message.Create($"Moroso, paga lo que falta: 0,4 Primer aviso"));
     }
+
+    [Test]
+    public void Get_Missing_Money_In_Puerto_Rico()
+    {
+        _messageComposer = new MessageComposerManually(new CultureInfo("es-PR"));
+        var givenMissingAmount = 0.4m;
+
+        var result = _messageComposer.ComposeMissingMoneyMessage(givenMissingAmount);
+
+        result.Should().Be(Message.Create($"Moroso, paga lo que falta: 0.4 Primer aviso"));
+    }
 }
