@@ -1,24 +1,27 @@
 ﻿using System.Globalization;
 using CoffeeMachineApp.core;
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace CoffeeMachineApp.Tests.core;
 
 public class MessageComposerManuallyTest
 {
+    private MessageConfiguration _configuration;
     private MessageComposerManually _messageComposer;
 
     [SetUp]
     public void Setup()
     {
-       
+        _configuration = Substitute.For<MessageConfiguration>();
+        _messageComposer = new MessageComposerManually(_configuration);
     }
 
     [Test]
     public void Get_Select_Drink_Message_In_Spain()
     {
-        _messageComposer = new MessageComposerManually(new CultureInfo("es-ES"));
+        _configuration.GetCultureInfo().Returns(new CultureInfo("es-ES"));
 
         var result = _messageComposer.ComposeSelectDrinkMessage();
 
@@ -28,7 +31,7 @@ public class MessageComposerManuallyTest
     [Test]
     public void Get_Select_Drink_Message_In_England()
     {
-        _messageComposer = new MessageComposerManually(new CultureInfo("en-GB"));
+        _configuration.GetCultureInfo().Returns(new CultureInfo("en-GB"));
 
         var result = _messageComposer.ComposeSelectDrinkMessage();
 
