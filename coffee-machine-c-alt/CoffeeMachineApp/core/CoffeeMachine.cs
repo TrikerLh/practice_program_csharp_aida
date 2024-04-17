@@ -6,14 +6,33 @@ public class CoffeeMachine
 {
     private readonly DrinkMakerDriver _drinkMakerDriver;
     private readonly Dictionary<DrinkType, decimal> _prices;
+    private readonly MessageComposer _messageComposer;
     private Order _order;
     private decimal _totalMoney;
 
     public CoffeeMachine(DrinkMakerDriver drinkMakerDriver, Dictionary<DrinkType, decimal> prices)
     {
+        _messageComposer = new MessageComposer();
         _drinkMakerDriver = drinkMakerDriver;
         _prices = prices;
         InitializeState();
+    }
+
+    public Dictionary<DrinkType, decimal> Prices
+    {
+        get { return _prices; }
+    }
+
+    public Order Order
+    {
+        set { _order = value; }
+        get { return _order; }
+    }
+
+    public decimal TotalMoney
+    {
+        set { _totalMoney = value; }
+        get { return _totalMoney; }
     }
 
     public void SelectChocolate()
@@ -56,24 +75,14 @@ public class CoffeeMachine
         }
         else
         {
-            _drinkMakerDriver.Notify(ComposeMissingMoneyMessage());
+            _drinkMakerDriver.Notify(_messageComposer.ComposeMissingMoneyMessage(_prices[_order.GetDrinkType()]-TotalMoney));
         }
-    }
-
-    private Message ComposeMissingMoneyMessage()
-    {
-        return Message.Create($"You are missing {ComputeMissingMoney()}");
     }
 
     private void InitializeState()
     {
         _totalMoney = 0;
         _order = new Order();
-    }
-
-    private decimal ComputeMissingMoney()
-    {
-        return _prices[_order.GetDrinkType()] - _totalMoney;
     }
 
     private bool IsThereEnoughMoney()

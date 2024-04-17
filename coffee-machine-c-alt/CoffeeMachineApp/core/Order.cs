@@ -59,4 +59,9 @@ public class Order
     {
         return $"{nameof(_drinkType)}: {_drinkType}, {nameof(_spoonOfSugar)}: {_spoonOfSugar}";
     }
+
+    private decimal ComputeMissingMoney(CoffeeMachine coffeeMachine)
+    {
+        return coffeeMachine.Prices[this.GetDrinkType()] - coffeeMachine.TotalMoney;
+    }
 }
