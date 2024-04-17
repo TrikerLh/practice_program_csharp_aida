@@ -13,9 +13,9 @@ public class MessageComposerManually : MessageComposer
 
     private readonly CultureInfo _currentCultureInfo;
 
-    public MessageComposerManually(MessageConfiguration messageConfiguration)
+    public MessageComposerManually(CultureInfo currentCultureInfo)
     {
-        _currentCultureInfo = messageConfiguration.GetCultureInfo();
+        _currentCultureInfo = currentCultureInfo;
     }
 
     public Message ComposeMissingMoneyMessage(decimal missingPrice)
