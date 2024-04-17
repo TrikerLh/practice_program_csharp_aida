@@ -20,7 +20,7 @@ public class MessageComposerManually : MessageComposer
 
     public Message ComposeMissingMoneyMessage(decimal missingPrice)
     {
-        return Message.Create($"You are missing {missingPrice}");
+        return Message.Create($"You are missing {missingPrice.ToString(_currentCultureInfo)}");
     }
 
     public Message ComposeSelectDrinkMessage()

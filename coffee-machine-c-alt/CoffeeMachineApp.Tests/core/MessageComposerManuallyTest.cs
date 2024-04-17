@@ -43,6 +43,6 @@ public class MessageComposerManuallyTest
 
         var result = _messageComposer.ComposeMissingMoneyMessage(givenMissingAmount);
 
-        result.Should().Be(Message.Create($"You are missing {givenMissingAmount}"));
+        result.Should().Be(Message.Create($"You are missing 0.4"));
     }
 }
