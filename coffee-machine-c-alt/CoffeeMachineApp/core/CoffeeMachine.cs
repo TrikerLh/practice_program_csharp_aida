@@ -6,13 +6,13 @@ public class CoffeeMachine
 {
     private readonly DrinkMakerDriver _drinkMakerDriver;
     private readonly Dictionary<DrinkType, decimal> _prices;
-    private readonly MessageComposer _messageComposer;
+    private readonly MessageComposerManually _messageComposer;
     private Order _order;
     private decimal _totalMoney;
 
     public CoffeeMachine(DrinkMakerDriver drinkMakerDriver, Dictionary<DrinkType, decimal> prices)
     {
-        _messageComposer = new MessageComposer();
+        _messageComposer = new MessageComposerManually();
         _drinkMakerDriver = drinkMakerDriver;
         _prices = prices;
         InitializeState();

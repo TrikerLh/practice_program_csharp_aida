@@ -1,6 +1,6 @@
 ﻿namespace CoffeeMachineApp.core;
 
-public class MessageComposer
+public class MessageComposerManually
 {
     public Message ComposeMissingMoneyMessage(decimal missingPrice)
     {
