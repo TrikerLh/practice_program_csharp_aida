@@ -18,6 +18,7 @@ public class MessageComposerManually : MessageComposer
     };
 
     private readonly CultureInfo _currentCultureInfo;
+    private string LanguageCode => _currentCultureInfo.TwoLetterISOLanguageName;
 
     public MessageComposerManually(CultureInfo currentCultureInfo)
     {
@@ -26,11 +27,11 @@ public class MessageComposerManually : MessageComposer
 
     public Message ComposeMissingMoneyMessage(decimal missingPrice)
     {
-        return Message.Create(string.Format(_missingPriceMessages[_currentCultureInfo.TwoLetterISOLanguageName], missingPrice.ToString(_currentCultureInfo)));
+        return Message.Create(string.Format(_missingPriceMessages[LanguageCode], missingPrice.ToString(_currentCultureInfo)));
     }
 
     public Message ComposeSelectDrinkMessage()
     {
-        return Message.Create(_selectDrinkMessages[_currentCultureInfo.TwoLetterISOLanguageName]);
+        return Message.Create(_selectDrinkMessages[LanguageCode]);
     }
 }
