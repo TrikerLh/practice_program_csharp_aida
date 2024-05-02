@@ -1,27 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace MarsRover
 {
     public class Rover
     {
         private const int Displacement = 1;
-        private Direction _direction;
-        private Coordinates _coordinates;
-
         private RoverVector _vector;
+        private readonly CommandInterpreter _commandInterpreter;
 
         public Rover(int x, int y, string direction)
         {
-            _direction = DirectionMapper.Create(direction);
-            SetCoordinates(x, y);
-            _vector = new(_direction, _coordinates);
-        }
-
-        private void SetCoordinates(int x, int y)
-        {
-            _coordinates = new Coordinates(x, y);
+            _vector = new(DirectionMapper.Create(direction), new Coordinates(x, y));
+            _commandInterpreter = new CommandInterpreter();
         }
 
         //Extract command to a new abstraction 
@@ -40,65 +33,55 @@ namespace MarsRover
         {
             if (command.Equals("l"))
             {
-                _direction = _direction.RotateLeft();
-                _vector = RotateVectorToLeft();
+                _vector = _vector.RotateToLeft();
             }
             else if (command.Equals("r"))
             {
-                _direction = _direction.RotateRight();
-                _vector = RotateVectorToRight();
+                _vector = _vector.RotateToRight();
             }
             else if (command.Equals("f"))
             {
-                _coordinates = _direction.Move(_coordinates, Displacement);
-                _vector = SetCoordinatesVector(_coordinates, Displacement);
+                _vector = _vector.Move(Displacement);
             }
             else
             {
-                _coordinates = _direction.Move(_coordinates, -Displacement);
-                _vector = SetCoordinatesVector(_coordinates, -Displacement);
+                _vector = _vector.Move(-Displacement);
             }
-        }
-
-        private RoverVector SetCoordinatesVector(Coordinates coordinates, int displacement)
-        {
-            var newCoordinates = _direction.Move(coordinates, displacement);
-            return new RoverVector(_direction, newCoordinates);
-        }
-
-        private RoverVector RotateVectorToRight()
-        {
-            var direction = _direction.RotateRight();
-            return new RoverVector(direction, _coordinates);
-        }
-
-        private RoverVector RotateVectorToLeft()
-        {
-            var direction = _direction.RotateLeft();
-            return new RoverVector(direction, _coordinates);
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (obj.GetType() != this.GetType()) return false;
             return Equals((Rover)obj);
         }
 
         protected bool Equals(Rover other)
         {
-            return Equals(_direction, other._direction) && Equals(_coordinates, other._coordinates);
+            return Equals(_vector, other._vector);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_direction, _coordinates);
+            return (_vector != null ? _vector.GetHashCode() : 0);
         }
 
         public override string ToString()
         {
-            return $"{nameof(_direction)}: {_direction}, {nameof(_coordinates)}: {_coordinates}";
+            return $"{nameof(_vector)}: {_vector}";
         }
+    }
+
+    public class CommandInterpreter
+    {
+        public List<Command> Extract(string commandSequence)
+        {
+            return new List<Command>();
+        }
+    }
+
+    public class Command
+    {
     }
 }
