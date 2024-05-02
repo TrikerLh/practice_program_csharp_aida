@@ -10,10 +10,13 @@ namespace MarsRover
         private Direction _direction;
         private Coordinates _coordinates;
 
+        private RoverVector _vector;
+
         public Rover(int x, int y, string direction)
         {
             _direction = DirectionMapper.Create(direction);
             SetCoordinates(x, y);
+            _vector = new(_direction, _coordinates);
         }
 
         private void SetCoordinates(int x, int y)
@@ -21,6 +24,7 @@ namespace MarsRover
             _coordinates = new Coordinates(x, y);
         }
 
+        //Extract command to a new abstraction 
         public void Receive(string commandsSequence)
         {
             var commands = ExtractCommands(commandsSequence);
