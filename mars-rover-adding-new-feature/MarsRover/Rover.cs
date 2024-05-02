@@ -41,19 +41,41 @@ namespace MarsRover
             if (command.Equals("l"))
             {
                 _direction = _direction.RotateLeft();
+                _vector = RotateVectorToLeft();
             }
             else if (command.Equals("r"))
             {
                 _direction = _direction.RotateRight();
+                _vector = RotateVectorToRight();
             }
             else if (command.Equals("f"))
             {
                 _coordinates = _direction.Move(_coordinates, Displacement);
+                _vector = SetCoordinatesVector(_coordinates, Displacement);
             }
             else
             {
                 _coordinates = _direction.Move(_coordinates, -Displacement);
+                _vector = SetCoordinatesVector(_coordinates, -Displacement);
             }
+        }
+
+        private RoverVector SetCoordinatesVector(Coordinates coordinates, int displacement)
+        {
+            var newCoordinates = _direction.Move(coordinates, displacement);
+            return new RoverVector(_direction, newCoordinates);
+        }
+
+        private RoverVector RotateVectorToRight()
+        {
+            var direction = _direction.RotateRight();
+            return new RoverVector(direction, _coordinates);
+        }
+
+        private RoverVector RotateVectorToLeft()
+        {
+            var direction = _direction.RotateLeft();
+            return new RoverVector(direction, _coordinates);
         }
 
         public override bool Equals(object obj)
