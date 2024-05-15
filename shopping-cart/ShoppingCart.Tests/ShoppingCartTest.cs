@@ -95,17 +95,20 @@ namespace ShoppingCart.Tests
             _display.Received(1).Show("Descuento no disponible.");
         }
 
-        //[Test]
-        //public void checkout_a_product_with_discount() {
-        //    _productRepository.Get(AnyProduct).Returns(new Product(Name: AnyProduct, Cost: 100.0, Revenue: 0.0, Tax: 0.0));
-        //    _shoppingCart.AddItem(AnyProduct);
-        //    _discountRepository.Get("PROMO_10").Return()
+        [Test]
+        public void checkout_a_product_with_the_last_discount() {
+            _productRepository.Get(AnyProduct).Returns(new Product(Name: AnyProduct, Cost: 100.0, Revenue: 0.0, Tax: 0.0));
+            _shoppingCart.AddItem(AnyProduct);
+            var discountCode = "PROMO_10";
+            _discountRepository.Get(discountCode).Returns(new Discount(discountCode, 10.0));
+            _shoppingCart.ApplyDiscount(discountCode);
+            _shoppingCart.ApplyDiscount(discountCode);
 
-        //    _shoppingCart.Checkout();
+            _shoppingCart.Checkout();
 
-        //    var lines = new List<LineDto>() { new(ProductName: AnyProduct, Cost: 110.0, Qty: 1) };
-        //    _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 0.0, 110.0))));
-        //}
+            var lines = new List<LineDto>() { new(ProductName: AnyProduct, Cost: 100.0, Qty: 1) };
+            _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 10.0, 90.0))));
+        }
 
         private bool validate(ShoppingCartDto shoppingCartDto, ShoppingCartDto shoppingCartDto1)
         {
