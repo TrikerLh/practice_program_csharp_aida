@@ -34,29 +34,21 @@ public class ShoppingCart
 
     public void Checkout()
     {
-        //var lines = new List<LineDto>();
-        //foreach (var product in products) {
-        //    if (!lines.Any(a => a.ProductName.Equals(product.Name))){
-        //        lines.Add(CreateLine(product));
-        //    }
-        //    else
-        //    {
-        //        //var line = lines.Find(x => x.ProductName == product.Name);
-        //        //lines.Add(new LineDto(product.Name, product.Cost, 1));
+        var shoppingCartDto = CreateShoppingCartDto(out var lines);
+        _checkoutService.Checkout(shoppingCartDto);
+    }
 
-                
-        //    }
-        //}
+    private ShoppingCartDto CreateShoppingCartDto(out List<LineDto> lines)
+    {
+        lines = products.Distinct().Select(product => CreateLine(product, products.Count(p => p == product))).ToList();
 
-        var lines = from product in products.Distinct()
-            select new LineDto(product.Name, product.Cost, products.Count(p => p == product));
-
-        _checkoutService.Checkout(new ShoppingCartDto(lines.ToList(), 0, lines.Sum(p => p.Cost*p.Qty)));
+        var shoppingCartDto = new ShoppingCartDto(lines, 0, lines.Sum(p => p.Cost*p.Qty));
+        return shoppingCartDto;
     }
 
 
-    private static LineDto CreateLine(Product product)
+    private static LineDto CreateLine(Product product, int qty)
     {
-        return new LineDto(product.Name, product.Cost, 1);
+        return new LineDto(product.Name, product.Cost, qty);
     }
 }
