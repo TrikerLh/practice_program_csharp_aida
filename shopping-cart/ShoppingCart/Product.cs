@@ -1,5 +1,3 @@
 namespace ShoppingCart;
 
-public class Product
-{
-}
+public record Product(double Cost, string Name, double Revenue, double Tax);
