@@ -63,6 +63,19 @@ namespace ShoppingCart.Tests
             _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 0.0, 2.0))));
         }
 
+        [Test]
+        public void checkout_a_product_with_revenue()
+        {
+            var aProduct = "Iceberg";
+            _productRepository.Get(aProduct).Returns(new Product(Name: aProduct, Cost: 100.0, Revenue: 10.0, Tax: 0.0));
+            _shoppingCart.AddItem(aProduct);
+
+            _shoppingCart.Checkout();
+
+            var lines = new List<LineDto>() { new(ProductName: aProduct, Cost: 110.0, Qty: 1) };
+            _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 0.0, 110.0))));
+        }
+
         private bool validate(ShoppingCartDto shoppingCartDto, ShoppingCartDto shoppingCartDto1)
         {
             Assert.That(shoppingCartDto.Lines, Is.EquivalentTo(shoppingCartDto1.Lines));

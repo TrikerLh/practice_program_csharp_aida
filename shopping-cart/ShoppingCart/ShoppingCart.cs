@@ -42,13 +42,13 @@ public class ShoppingCart
     {
         lines = products.Distinct().Select(product => CreateLine(product, products.Count(p => p == product))).ToList();
 
-        var shoppingCartDto = new ShoppingCartDto(lines, 0, lines.Sum(p => p.Cost*p.Qty));
+        var shoppingCartDto = new ShoppingCartDto(lines, 0, lines.Sum(line => line.Cost*line.Qty));
         return shoppingCartDto;
     }
 
 
     private static LineDto CreateLine(Product product, int qty)
     {
-        return new LineDto(product.Name, product.Cost, qty);
+        return new LineDto(product.Name, product.FinalCost(), qty);
     }
 }
