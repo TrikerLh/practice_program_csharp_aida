@@ -85,6 +85,28 @@ namespace ShoppingCart.Tests
             _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 0.0, 110.0))));
         }
 
+        [Test]
+        public void Display_error_when_discount_not_available() {
+            var discountNoAvailable = "PROMO_NAVIDAD";
+            _discountRepository.Get(discountNoAvailable).ReturnsNull();
+
+            _shoppingCart.ApplyDiscount(discountNoAvailable);
+
+            _display.Received(1).Show("Descuento no disponible.");
+        }
+
+        //[Test]
+        //public void checkout_a_product_with_discount() {
+        //    _productRepository.Get(AnyProduct).Returns(new Product(Name: AnyProduct, Cost: 100.0, Revenue: 0.0, Tax: 0.0));
+        //    _shoppingCart.AddItem(AnyProduct);
+        //    _discountRepository.Get("PROMO_10").Return()
+
+        //    _shoppingCart.Checkout();
+
+        //    var lines = new List<LineDto>() { new(ProductName: AnyProduct, Cost: 110.0, Qty: 1) };
+        //    _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 0.0, 110.0))));
+        //}
+
         private bool validate(ShoppingCartDto shoppingCartDto, ShoppingCartDto shoppingCartDto1)
         {
             Assert.That(shoppingCartDto.Lines, Is.EquivalentTo(shoppingCartDto1.Lines));

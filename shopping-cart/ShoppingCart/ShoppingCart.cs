@@ -51,4 +51,9 @@ public class ShoppingCart
     {
         return new LineDto(product.Name, product.FinalCost(), qty);
     }
+
+    public void ApplyDiscount(string discount)
+    {
+        _display.Show("Descuento no disponible.");
+    }
 }
