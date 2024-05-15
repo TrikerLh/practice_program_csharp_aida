@@ -11,6 +11,7 @@ namespace ShoppingCart.Tests
         private CheckoutService _checkoutService;
         private Display _display;
         private ShoppingCart _shoppingCart;
+        private const string AnyProduct = "Iceberg";
 
         [SetUp]
         public void Setup()
@@ -36,43 +37,51 @@ namespace ShoppingCart.Tests
         [Test]
         public void checkout_a_product_should_calculate_total_amount()
         {
-            var aProduct = "Iceberg";
             var otherProduct = "Tomatoe";
-            _productRepository.Get(aProduct).Returns(new Product(Name: aProduct, Cost: 1.0, Revenue: 0.0, Tax:0.0 ));
+            _productRepository.Get(AnyProduct).Returns(new Product(Name: AnyProduct, Cost: 1.0, Revenue: 0.0, Tax:0.0 ));
             _productRepository.Get(otherProduct).Returns(new Product(Name: otherProduct, Cost: 2.0, Revenue: 0.0, Tax:0.0 ));
-            _shoppingCart.AddItem(aProduct);
+            _shoppingCart.AddItem(AnyProduct);
             _shoppingCart.AddItem(otherProduct);
 
             _shoppingCart.Checkout();
 
-            var lines = new List<LineDto>() { new(ProductName: aProduct, Cost: 1.0, Qty: 1), new(ProductName: otherProduct, Cost: 2.0, Qty: 1) };
+            var lines = new List<LineDto>() { new(ProductName: AnyProduct, Cost: 1.0, Qty: 1), new(ProductName: otherProduct, Cost: 2.0, Qty: 1) };
             _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 0.0, 3.0))) );
         }
 
         [Test]
         public void checkout_a_product_should_calculate_quantity_of_products()
         {
-            var aProduct = "Iceberg";
-            _productRepository.Get(aProduct).Returns(new Product(Name: aProduct, Cost: 1.0, Revenue: 0.0, Tax: 0.0));
-            _shoppingCart.AddItem(aProduct);
-            _shoppingCart.AddItem(aProduct);
+            _productRepository.Get(AnyProduct).Returns(new Product(Name: AnyProduct, Cost: 1.0, Revenue: 0.0, Tax: 0.0));
+            _shoppingCart.AddItem(AnyProduct);
+            _shoppingCart.AddItem(AnyProduct);
 
             _shoppingCart.Checkout();
 
-            var lines = new List<LineDto>() { new(ProductName: aProduct, Cost: 1.0, Qty: 2)};
+            var lines = new List<LineDto>() { new(ProductName: AnyProduct, Cost: 1.0, Qty: 2)};
             _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 0.0, 2.0))));
         }
 
         [Test]
         public void checkout_a_product_with_revenue()
         {
-            var aProduct = "Iceberg";
-            _productRepository.Get(aProduct).Returns(new Product(Name: aProduct, Cost: 100.0, Revenue: 10.0, Tax: 0.0));
-            _shoppingCart.AddItem(aProduct);
+            _productRepository.Get(AnyProduct).Returns(new Product(Name: AnyProduct, Cost: 100.0, Revenue: 10.0, Tax: 0.0));
+            _shoppingCart.AddItem(AnyProduct);
 
             _shoppingCart.Checkout();
 
-            var lines = new List<LineDto>() { new(ProductName: aProduct, Cost: 110.0, Qty: 1) };
+            var lines = new List<LineDto>() { new(ProductName: AnyProduct, Cost: 110.0, Qty: 1) };
+            _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 0.0, 110.0))));
+        }
+
+        [Test]
+        public void checkout_a_product_with_tax() {
+            _productRepository.Get(AnyProduct).Returns(new Product(Name: AnyProduct, Cost: 100.0, Revenue: 0.0, Tax: 10.0));
+            _shoppingCart.AddItem(AnyProduct);
+
+            _shoppingCart.Checkout();
+
+            var lines = new List<LineDto>() { new(ProductName: AnyProduct, Cost: 110.0, Qty: 1) };
             _checkoutService.Received(1).Checkout(Arg.Is<ShoppingCartDto>(s => validate(s, new ShoppingCartDto(lines, 0.0, 110.0))));
         }
 
