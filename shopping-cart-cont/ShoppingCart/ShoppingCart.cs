@@ -89,4 +89,8 @@ public class ShoppingCart
     {
         return _productList.Sum(p => p.ComputeCost());
     }
+
+    public void Display() {
+        _notifier.Show("Product name, Price with VAT, Quantity\nTotal products: 0\nTotal price: 0€");
+    }
 }
