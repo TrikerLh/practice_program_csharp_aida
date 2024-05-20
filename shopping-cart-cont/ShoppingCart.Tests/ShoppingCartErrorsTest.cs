@@ -12,7 +12,7 @@ namespace ShoppingCart.Tests
             const string notAvailableProductName = "some_item";
             _productsRepository.Get(notAvailableProductName).ReturnsNull();
 
-            _shoppingCartCheckout.AddItem(notAvailableProductName);
+            _shoppingCart.AddItem(notAvailableProductName);
 
             _errorNotifier.Received(1).ShowError("Product is not available");
         }
@@ -23,7 +23,7 @@ namespace ShoppingCart.Tests
             var notAvailableDiscount = DiscountCode.PROMO_20;
             _discountsRepository.Get(notAvailableDiscount).ReturnsNull();
 
-            _shoppingCartCheckout.ApplyDiscount(notAvailableDiscount);
+            _shoppingCart.ApplyDiscount(notAvailableDiscount);
 
             _errorNotifier.Received(1).ShowError("Discount is not available");
         }

@@ -7,7 +7,7 @@ public class ShoppingCartTest
 {
     protected ProductsRepository _productsRepository;
     protected ErrorNotifier _errorNotifier;
-    protected ShoppingCartCheckout _shoppingCartCheckout;
+    protected ShoppingCart _shoppingCart;
     protected CheckoutService _checkoutService;
     protected DiscountsRepository _discountsRepository;
     protected Display _display;
@@ -20,6 +20,6 @@ public class ShoppingCartTest
         _checkoutService = Substitute.For<CheckoutService>();
         _discountsRepository = Substitute.For<DiscountsRepository>();
         _display = Substitute.For<Display>();
-        _shoppingCartCheckout = new ShoppingCartCheckout(_productsRepository, _errorNotifier, _checkoutService, _discountsRepository, _display);
+        _shoppingCart = new ShoppingCart(_productsRepository, _errorNotifier, _checkoutService, _discountsRepository, _display);
     }
 }

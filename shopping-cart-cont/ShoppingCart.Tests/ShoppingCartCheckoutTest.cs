@@ -8,16 +8,14 @@ public class ShoppingCartCheckoutTest : ShoppingCartTest
 {
     private const string Iceberg = "Iceberg";
 
-
-
     [Test]
     public void add_available_product()
     {
         _productsRepository.Get(Iceberg).Returns(
             TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(1.55m).Build());
 
-        _shoppingCartCheckout.AddItem(Iceberg);
-        _shoppingCartCheckout.Checkout();
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(1.55m));
     }
@@ -32,9 +30,9 @@ public class ShoppingCartCheckoutTest : ShoppingCartTest
         _productsRepository.Get(tomato).Returns(
             TaxFreeWithNoRevenueProduct().Named(tomato).Costing(1m).Build());
 
-        _shoppingCartCheckout.AddItem(Iceberg);
-        _shoppingCartCheckout.AddItem(tomato);
-        _shoppingCartCheckout.Checkout();
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.AddItem(tomato);
+        _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(2.55m));
     }
@@ -49,8 +47,8 @@ public class ShoppingCartCheckoutTest : ShoppingCartTest
                 .Costing(1m)
                 .Build());
 
-        _shoppingCartCheckout.AddItem(Iceberg);
-        _shoppingCartCheckout.Checkout();
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(1.10m));
     }
@@ -65,8 +63,8 @@ public class ShoppingCartCheckoutTest : ShoppingCartTest
                 .Costing(2m)
                 .Build());
 
-        _shoppingCartCheckout.AddItem(Iceberg);
-        _shoppingCartCheckout.Checkout();
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(2.10m));
     }
@@ -82,8 +80,8 @@ public class ShoppingCartCheckoutTest : ShoppingCartTest
                 .Costing(2m)
                 .Build());
 
-        _shoppingCartCheckout.AddItem(Iceberg);
-        _shoppingCartCheckout.Checkout();
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(2.31m));
     }
@@ -95,9 +93,9 @@ public class ShoppingCartCheckoutTest : ShoppingCartTest
             TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(1.50m).Build());
         _discountsRepository.Get(DiscountCode.PROMO_5).Returns(new Discount(DiscountCode.PROMO_5, 0.5m));
 
-        _shoppingCartCheckout.AddItem(Iceberg);
-        _shoppingCartCheckout.ApplyDiscount(DiscountCode.PROMO_5);
-        _shoppingCartCheckout.Checkout();
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.ApplyDiscount(DiscountCode.PROMO_5);
+        _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(0.75m));
     }
@@ -110,10 +108,10 @@ public class ShoppingCartCheckoutTest : ShoppingCartTest
         _discountsRepository.Get(DiscountCode.PROMO_5).Returns(new Discount(DiscountCode.PROMO_5, 0.5m));
         _discountsRepository.Get(DiscountCode.PROMO_10).Returns(new Discount(DiscountCode.PROMO_10, 0.01m));
 
-        _shoppingCartCheckout.AddItem(Iceberg);
-        _shoppingCartCheckout.ApplyDiscount(DiscountCode.PROMO_5);
-        _shoppingCartCheckout.ApplyDiscount(DiscountCode.PROMO_10);
-        _shoppingCartCheckout.Checkout();
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.ApplyDiscount(DiscountCode.PROMO_5);
+        _shoppingCart.ApplyDiscount(DiscountCode.PROMO_10);
+        _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(0.99m));
     }
@@ -121,7 +119,7 @@ public class ShoppingCartCheckoutTest : ShoppingCartTest
     [Test]
     public void checkout_without_products()
     {
-        _shoppingCartCheckout.Checkout();
+        _shoppingCart.Checkout();
 
         _errorNotifier.Received(1).ShowError("No product selected, please select a product");
     }
@@ -132,9 +130,9 @@ public class ShoppingCartCheckoutTest : ShoppingCartTest
         _productsRepository.Get(Iceberg).Returns(
             TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(1m).Build());
 
-        _shoppingCartCheckout.AddItem(Iceberg);
-        _shoppingCartCheckout.Checkout();
-        _shoppingCartCheckout.Checkout();
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.Checkout();
+        _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(1));
         _errorNotifier.Received(1).ShowError("No product selected, please select a product");
