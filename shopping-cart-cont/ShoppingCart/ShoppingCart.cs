@@ -5,18 +5,18 @@ namespace ShoppingCart;
 
 public class ShoppingCart
 {
+    private readonly Display _display;
     private readonly ProductsRepository _productsRepository;
-    private readonly Notifier _notifier;
+    private readonly ErrorNotifier _errorNotifier;
     private readonly CheckoutService _checkoutService;
     private readonly DiscountsRepository _discountsRepository;
     private List<Product> _productList;
     private Discount _discount;
 
-    public ShoppingCart(ProductsRepository productsRepository, Notifier notifier, 
-        CheckoutService checkoutService, DiscountsRepository discountsRepository)
-    {
+    public ShoppingCart(ProductsRepository productsRepository, ErrorNotifier errorNotifier, CheckoutService checkoutService, DiscountsRepository discountsRepository, Display display) {
+        _display = display;
         _productsRepository = productsRepository;
-        _notifier = notifier;
+        _errorNotifier = errorNotifier;
         _checkoutService = checkoutService;
         _discountsRepository = discountsRepository;
         InitializeState();
@@ -27,7 +27,7 @@ public class ShoppingCart
         var product = _productsRepository.Get(productName);
         if (product is null)
         {
-            _notifier.ShowError("Product is not available");
+            _errorNotifier.ShowError("Product is not available");
             return;
         }
         _productList.Add(product);
@@ -39,7 +39,7 @@ public class ShoppingCart
         var discount = _discountsRepository.Get(discountCode);
         if (discount is null)
         {
-            _notifier.ShowError("Discount is not available");
+            _errorNotifier.ShowError("Discount is not available");
             return;
         }
         _discount = discount;
@@ -64,7 +64,7 @@ public class ShoppingCart
 
     private void NotifyEmptyShoppingCart()
     {
-        _notifier.ShowError("No product selected, please select a product");
+        _errorNotifier.ShowError("No product selected, please select a product");
     }
 
     private void PerformCheckout()
@@ -91,6 +91,6 @@ public class ShoppingCart
     }
 
     public void Display() {
-        _notifier.Show("Product name, Price with VAT, Quantity\nTotal products: 0\nTotal price: 0€");
+        _display.Show("Product name, Price with VAT, Quantity\nTotal products: 0\nTotal price: 0€");
     }
 }

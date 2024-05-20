@@ -18,18 +18,20 @@ namespace ShoppingCart.Tests {
         //Dos productos con varias unidad (sumatorio)
 
         private ProductsRepository _productsRepository;
-        private Notifier _notifier;
+        private ErrorNotifier _errorNotifier;
         private ShoppingCart _shoppingCart;
         private CheckoutService _checkoutService;
         private DiscountsRepository _discountsRepository;
+        private Display _display;
 
         [SetUp]
         public void SetUp() {
             _productsRepository = Substitute.For<ProductsRepository>();
-            _notifier = Substitute.For<Notifier>();
+            _errorNotifier = Substitute.For<ErrorNotifier>();
             _checkoutService = Substitute.For<CheckoutService>();
             _discountsRepository = Substitute.For<DiscountsRepository>();
-            _shoppingCart = new ShoppingCart(_productsRepository, _notifier, _checkoutService, _discountsRepository);
+            _display = Substitute.For<Display>();
+            _shoppingCart = new ShoppingCart(_productsRepository, _errorNotifier, _checkoutService, _discountsRepository, _display);
         }
 
         [Test]
@@ -37,7 +39,7 @@ namespace ShoppingCart.Tests {
 
             _shoppingCart.Display();
 
-            _notifier.Received(1).Show("Product name, Price with VAT, Quantity\nTotal products: 0\nTotal price: 0€");
+            _display.Received(1).Show("Product name, Price with VAT, Quantity\nTotal products: 0\nTotal price: 0€");
 
         }
     }

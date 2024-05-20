@@ -9,19 +9,21 @@ public class ShoppingCartTest
 {
     private const string Iceberg = "Iceberg";
     private ProductsRepository _productsRepository;
-    private Notifier _notifier;
+    private ErrorNotifier _errorNotifier;
     private ShoppingCart _shoppingCart;
     private CheckoutService _checkoutService;
     private DiscountsRepository _discountsRepository;
+    private Display _display;
 
     [SetUp]
     public void SetUp()
     {
         _productsRepository = Substitute.For<ProductsRepository>();
-        _notifier = Substitute.For<Notifier>();
+        _errorNotifier = Substitute.For<ErrorNotifier>();
         _checkoutService = Substitute.For<CheckoutService>();
         _discountsRepository = Substitute.For<DiscountsRepository>();
-        _shoppingCart = new ShoppingCart(_productsRepository, _notifier, _checkoutService, _discountsRepository);
+        _display = Substitute.For<Display>();
+        _shoppingCart = new ShoppingCart(_productsRepository, _errorNotifier, _checkoutService, _discountsRepository, _display);
     }
 
     [Test]
@@ -32,7 +34,7 @@ public class ShoppingCartTest
 
         _shoppingCart.AddItem(notAvailableProductName);
 
-        _notifier.Received(1).ShowError("Product is not available");
+        _errorNotifier.Received(1).ShowError("Product is not available");
     }
 
     [Test]
@@ -121,7 +123,7 @@ public class ShoppingCartTest
 
         _shoppingCart.ApplyDiscount(notAvailableDiscount);
 
-        _notifier.Received(1).ShowError("Discount is not available");
+        _errorNotifier.Received(1).ShowError("Discount is not available");
     }
 
     [Test]
@@ -159,7 +161,7 @@ public class ShoppingCartTest
     {
         _shoppingCart.Checkout();
 
-        _notifier.Received(1).ShowError("No product selected, please select a product");
+        _errorNotifier.Received(1).ShowError("No product selected, please select a product");
     }
 
     [Test]
@@ -173,7 +175,7 @@ public class ShoppingCartTest
         _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(1));
-        _notifier.Received(1).ShowError("No product selected, please select a product");
+        _errorNotifier.Received(1).ShowError("No product selected, please select a product");
     }
 
 

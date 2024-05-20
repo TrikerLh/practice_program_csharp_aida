@@ -1,6 +1,6 @@
 namespace ShoppingCart;
 
-public interface Notifier
+public interface ErrorNotifier
 {
     void ShowError(string message);
     void Show(string message);
