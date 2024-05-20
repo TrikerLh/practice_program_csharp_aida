@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ShoppingCart;
 
-public class ShoppingCart
+public class ShoppingCartCheckout
 {
     private readonly Display _display;
     private readonly ProductsRepository _productsRepository;
@@ -13,7 +13,7 @@ public class ShoppingCart
     private List<Product> _productList;
     private Discount _discount;
 
-    public ShoppingCart(ProductsRepository productsRepository, ErrorNotifier errorNotifier, CheckoutService checkoutService, DiscountsRepository discountsRepository, Display display) {
+    public ShoppingCartCheckout(ProductsRepository productsRepository, ErrorNotifier errorNotifier, CheckoutService checkoutService, DiscountsRepository discountsRepository, Display display) {
         _display = display;
         _productsRepository = productsRepository;
         _errorNotifier = errorNotifier;
