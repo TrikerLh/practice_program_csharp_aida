@@ -38,6 +38,17 @@ public class ShoppingCartTest
     }
 
     [Test]
+    public void apply_not_available_discount()
+    {
+        var notAvailableDiscount = DiscountCode.PROMO_20;
+        _discountsRepository.Get(notAvailableDiscount).ReturnsNull();
+
+        _shoppingCart.ApplyDiscount(notAvailableDiscount);
+
+        _errorNotifier.Received(1).ShowError("Discount is not available");
+    }
+
+    [Test]
     public void add_available_product()
     {
         _productsRepository.Get(Iceberg).Returns(
@@ -113,17 +124,6 @@ public class ShoppingCartTest
         _shoppingCart.Checkout();
 
         _checkoutService.Received(1).Checkout(CreateShoppingCartDto(2.31m));
-    }
-
-    [Test]
-    public void apply_not_available_discount()
-    {
-        var notAvailableDiscount = DiscountCode.PROMO_20;
-        _discountsRepository.Get(notAvailableDiscount).ReturnsNull();
-
-        _shoppingCart.ApplyDiscount(notAvailableDiscount);
-
-        _errorNotifier.Received(1).ShowError("Discount is not available");
     }
 
     [Test]
