@@ -91,6 +91,6 @@ public class ShoppingCart
     }
 
     public void Display() {
-        _display.Show(ShoppingCartSummary.Summary());
+        _display.Show(ShoppingCartSummary.Summary(ComputeTotalCost(), _productList));
     }
 }

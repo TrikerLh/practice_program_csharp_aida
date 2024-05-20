@@ -20,5 +20,17 @@ namespace ShoppingCart.Tests {
 
             _display.Received(1).Show("Product name, Price with VAT, Quantity\nTotal products: 0\nTotal price: 0€");
         }
+
+        [Test]
+        public void with_product_with_discount()
+        {
+            _productsRepository.Get(Iceberg).Returns(
+                TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(1.55m).Build());
+            _shoppingCart.AddItem(Iceberg);
+
+            _shoppingCart.Display();
+
+            _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 1.55€, 1\nTotal products: 1\nTotal price: 1.55€");
+        }
     }
 }
