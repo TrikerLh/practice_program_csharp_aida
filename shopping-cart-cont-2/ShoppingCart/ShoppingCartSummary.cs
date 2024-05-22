@@ -2,7 +2,7 @@
 
 namespace ShoppingCart;
 
-internal class ShoppingCartSummary {
+internal partial class ShoppingCartSummary {
     private readonly List<Product> _products;
     private readonly decimal _totalPrice;
 
