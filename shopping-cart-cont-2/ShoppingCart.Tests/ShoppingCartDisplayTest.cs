@@ -45,4 +45,17 @@ public class ShoppingCartDisplayTest
 
         _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 1€, 1\nTotal products: 1\nTotal price: 1€");
     }
+
+    [Test]
+    public void with_two_products_of_the_same() {
+        _productsRepository.Get(Iceberg).Returns(
+            TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(1m).Build());
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.AddItem(Iceberg);
+
+        _shoppingCart.Display();
+
+        _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 2€, 2\nTotal products: 2\nTotal price: 2€");
+    }
+
 }

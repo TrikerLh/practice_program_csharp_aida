@@ -97,9 +97,6 @@ public class ShoppingCart
 
     public void Display()
     {
-        var totalProducts = _productList.Count;
-        var totalPrice = ComputeTotalCost();
-        var summary = ShoppingCartSummary.CreateSummary(_productList, totalProducts, totalPrice);
-        _display.Show(summary);
+        _display.Show(ShoppingCartSummary.CreateSummary(_productList, ComputeTotalCost()));
     }
 }
