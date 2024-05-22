@@ -97,6 +97,9 @@ public class ShoppingCart
 
     public void Display()
     {
-        _display.Show("Product name, Price with VAT, Quantity\nTotal products: 0\nTotal price: 0€");
+        var totalProducts = _productList.Count;
+        var totalPrice = ComputeTotalCost();
+        var summary = ShoppingCartSummary.CreateSummary(_productList, totalProducts, totalPrice);
+        _display.Show(summary);
     }
 }

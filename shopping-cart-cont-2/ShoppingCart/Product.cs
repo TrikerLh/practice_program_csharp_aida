@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace ShoppingCart;
 
 public class Product
@@ -16,6 +18,8 @@ public class Product
         _revenue = revenue;
         _tax = tax;
     }
+
+    public string ProductName => _productName;
 
     public decimal ComputeCost()
     {
