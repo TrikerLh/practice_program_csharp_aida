@@ -8,6 +8,7 @@ namespace ShoppingCart.Tests;
 public class ShoppingCartDisplayTest
 {
     private const string Iceberg = "Iceberg";
+    private const string Tomato = "Tomato";
     private ProductsRepository _productsRepository;
     private Notifier _notifier;
     private DiscountsRepository _discountsRepository;
@@ -58,4 +59,17 @@ public class ShoppingCartDisplayTest
         _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 2€, 2\nTotal products: 2\nTotal price: 2€");
     }
 
+    [Test]
+    public void with_two_different_products() {
+        _productsRepository.Get(Iceberg).Returns(
+            TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(1m).Build());
+        _productsRepository.Get(Tomato).Returns(
+            TaxFreeWithNoRevenueProduct().Named(Tomato).Costing(2m).Build());
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.AddItem(Tomato);
+
+        _shoppingCart.Display();
+
+        _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 1€, 1\nTomato, 2€, 1\nTotal products: 2\nTotal price: 3€");
+    }
 }

@@ -1,34 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace ShoppingCart {
-    internal class ShoppingCartSummary {
-        private const string Header = "Product name, Price with VAT, Quantity\n";
+namespace ShoppingCart;
 
-        public static string CreateSummary(List<Product> products, decimal totalPrice)
-        {
-            return $"{Header}" +
-                   $"{CreateBody(products)}" +
-                   $"{CreateFooter(products, totalPrice)}";
-        }
+internal class ShoppingCartSummary {
+    private readonly List<Product> _products;
+    private readonly decimal _totalPrice;
 
-        private static string CreateFooter(List<Product> products, decimal totalPrice) {
-            return $"Total products: {products.Count}\nTotal price: {totalPrice}\u20ac";
-        }
+    public ShoppingCartSummary(List<Product> products, decimal totalPrice) {
+        _products = products;
+        _totalPrice = totalPrice;
+    }
 
-        private static string CreateBody(List<Product> products)
-        {
-            if (!products.Any())
-            {
-                return "";
-            }
+    public int TotalProducts() {
+        return _products.Count;
+    }
 
-            var productQuantity = products.Count;
-            var productTotalCost = products[0].ComputeCost()*productQuantity;
-            return $"{products[0].ProductName}, {productTotalCost}€, {productQuantity}\n";
-        }
+    public decimal TotalPrice() {
+        return _totalPrice;
+    }
+
+    public decimal ProductsTotalCost() {
+        return _products[0].ComputeCost() * TotalProducts();
+    }
+
+    public string ProductName() {
+        return _products[0].ProductName;
     }
 }
