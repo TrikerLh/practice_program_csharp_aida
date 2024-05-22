@@ -7,16 +7,21 @@ public class ShoppingCart
 {
     private readonly ProductsRepository _productsRepository;
     private readonly Notifier _notifier;
+    private readonly Display _display;
     private readonly CheckoutService _checkoutService;
     private readonly DiscountsRepository _discountsRepository;
     private List<Product> _productList;
     private Discount _discount;
 
-    public ShoppingCart(ProductsRepository productsRepository, Notifier notifier, 
-        CheckoutService checkoutService, DiscountsRepository discountsRepository)
+    public ShoppingCart(ProductsRepository productsRepository,
+        Notifier notifier,
+        Display display,
+        CheckoutService checkoutService,
+        DiscountsRepository discountsRepository)
     {
         _productsRepository = productsRepository;
         _notifier = notifier;
+        _display = display;
         _checkoutService = checkoutService;
         _discountsRepository = discountsRepository;
         InitializeState();
@@ -88,5 +93,10 @@ public class ShoppingCart
     private decimal ComputeAllProductsCost()
     {
         return _productList.Sum(p => p.ComputeCost());
+    }
+
+    public void Display()
+    {
+        _display.Show("Product name, Price with VAT, Quantity\nTotal products: 0\nTotal price: 0€");
     }
 }
