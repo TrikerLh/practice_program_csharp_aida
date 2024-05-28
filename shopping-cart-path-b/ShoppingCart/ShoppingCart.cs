@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ShoppingCart;
 
@@ -12,6 +11,7 @@ public class ShoppingCart
     private readonly DiscountsRepository _discountsRepository;
     private List<Product> _productList;
     private Discount _discount;
+    private ProductList _productListRefactor;
 
     public ShoppingCart(ProductsRepository productsRepository,
         Notifier notifier,
@@ -35,7 +35,8 @@ public class ShoppingCart
             _notifier.ShowError("Product is not available");
             return;
         }
-        _productList.Add(product);
+
+        _productListRefactor.AddProduct(product);
 
     }
 
@@ -48,11 +49,12 @@ public class ShoppingCart
             return;
         }
         _discount = discount;
+        _productListRefactor.AddDiscount(discount);
     }
 
     public void Checkout()
     {
-        if (ThereAreNoProducts())
+        if (_productListRefactor.ThereAreNoProducts())
         {
             NotifyEmptyShoppingCart();
             return;
@@ -64,7 +66,7 @@ public class ShoppingCart
     private void InitializeState()
     {
         _productList = new List<Product>();
-        _discount = new Discount(DiscountCode.None, 0);
+        _productListRefactor = new ProductList(_productList);
     }
 
     private void NotifyEmptyShoppingCart()
@@ -74,30 +76,14 @@ public class ShoppingCart
 
     private void PerformCheckout()
     {
-        var totalCost = ComputeTotalCost();
+        var totalCost = _productListRefactor.ComputeTotalCost();
         var shoppingCartDto = new ShoppingCartDto(totalCost);
         _checkoutService.Checkout(shoppingCartDto);
     }
 
-    private bool ThereAreNoProducts()
-    {
-        return !_productList.Any();
-    }
-
-    private decimal ComputeTotalCost()
-    {
-        var totalCost = ComputeAllProductsCost();
-        return _discount.Apply(totalCost);
-    }
-
-    private decimal ComputeAllProductsCost()
-    {
-        return _productList.Sum(p => p.ComputeCost());
-    }
-
     public void Display()
     {
-        var formatter = new ShoppingCartSummaryFormatter(_productList, ComputeTotalCost());
+        var formatter = new ShoppingCartSummaryFormatter(_productList, _productListRefactor.ComputeTotalCost());
         _display.Show(formatter.Format());
     }
 }
