@@ -81,7 +81,7 @@ public class ShoppingCart
 
     public void Display()
     {
-        var formatter = new ShoppingCartSummaryFormatter(_productList);
+        var formatter = new ShoppingCartSummaryTextFormatter(_productList);
         _display.Show(formatter.Format());
     }
 }

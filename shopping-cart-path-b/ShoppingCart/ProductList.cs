@@ -40,22 +40,20 @@ public class ProductList
         _discount = discount;
     }
 
-    public int TotalQuantity() {
+    public int TotalQuantity()
+    {
         return _productList.Count;
     }
 
-    private ShoppingCartSummaryItem CreateItem(IGrouping<string, Product> productGrouping)
+    private ShoppingCartSummaryItem CreateItem(Product product)
     {
-        var name = productGrouping.Key;
-        var quantity = productGrouping.Count();
-        var totalCost = productGrouping.First().ComputeCost() * quantity;
-        return new ShoppingCartSummaryItem(name, quantity, totalCost);
+        return new ShoppingCartSummaryItem(product.ProductName, 1, product.ComputeCost());
     }
 
     public IEnumerable<ShoppingCartSummaryItem> CreateItems()
     {
         return _productList
-            .GroupBy(p => p.ProductName)
             .Select(CreateItem);
     }
+
 }
