@@ -12,7 +12,7 @@ public class ShoppingCartReport
         _productList = productList;
     }
 
-    public IEnumerable<ShoppingCartSummaryItem> GetItems()
+    public IEnumerable<ShoppingCartReportItem> GetItems()
     {
         return _productList
             .CreateItems()
@@ -20,12 +20,12 @@ public class ShoppingCartReport
             .Select(CreateItem);
     }
 
-    private ShoppingCartSummaryItem CreateItem(IGrouping<string, ShoppingCartSummaryItem> productGrouping)
+    private ShoppingCartReportItem CreateItem(IGrouping<string, ShoppingCartReportItem> productGrouping)
     {
         var name = productGrouping.Key;
         var quantity = productGrouping.Count();
         var totalCost = productGrouping.First().TotalCost * quantity;
-        return new ShoppingCartSummaryItem(name, quantity, totalCost);
+        return new ShoppingCartReportItem(name, quantity, totalCost);
     }
 
     public decimal GetTotalPrice()
