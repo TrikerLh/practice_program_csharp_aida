@@ -1,23 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace ShoppingCart
 {
     public class ShoppingCartSummaryFormatter
     {
         private const string Header = "Product name, Price with VAT, Quantity\n";
-        private readonly List<Product> _productList;
-        private readonly decimal _computeTotalCost;
+        private readonly ProductList _productList;
 
-        public ShoppingCartSummaryFormatter(List<Product> productList, decimal computeTotalCost)
+        public ShoppingCartSummaryFormatter(ProductList productList)
         {
             _productList = productList;
-            _computeTotalCost = computeTotalCost;
         }
 
         public string Format()
         {
-            var summary = new ShoppingCartSummary(_productList, _computeTotalCost);
+            var summary = new ShoppingCartSummary(_productList);
             return $"{Header}" +
                    $"{CreateBody(summary)}" +
                    $"{CreateFooter(summary)}";
@@ -30,7 +27,7 @@ namespace ShoppingCart
 
         private string CreateBody(ShoppingCartSummary summary)
         {
-            if (summary.TotalProducts() == 0)
+            if (_productList.ThereAreNoProducts())
             {
                 return "";
             }

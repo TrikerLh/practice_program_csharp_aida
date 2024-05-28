@@ -9,9 +9,7 @@ public class ShoppingCart
     private readonly Display _display;
     private readonly CheckoutService _checkoutService;
     private readonly DiscountsRepository _discountsRepository;
-    private List<Product> _productList;
-    private Discount _discount;
-    private ProductList _productListRefactor;
+    private ProductList _productList;
 
     public ShoppingCart(ProductsRepository productsRepository,
         Notifier notifier,
@@ -36,7 +34,7 @@ public class ShoppingCart
             return;
         }
 
-        _productListRefactor.AddProduct(product);
+        _productList.AddProduct(product);
 
     }
 
@@ -48,13 +46,13 @@ public class ShoppingCart
             _notifier.ShowError("Discount is not available");
             return;
         }
-        _discount = discount;
-        _productListRefactor.AddDiscount(discount);
+
+        _productList.AddDiscount(discount);
     }
 
     public void Checkout()
     {
-        if (_productListRefactor.ThereAreNoProducts())
+        if (_productList.ThereAreNoProducts())
         {
             NotifyEmptyShoppingCart();
             return;
@@ -65,8 +63,8 @@ public class ShoppingCart
 
     private void InitializeState()
     {
-        _productList = new List<Product>();
-        _productListRefactor = new ProductList(_productList);
+        new List<Product>();
+        _productList = new ProductList();
     }
 
     private void NotifyEmptyShoppingCart()
@@ -76,14 +74,14 @@ public class ShoppingCart
 
     private void PerformCheckout()
     {
-        var totalCost = _productListRefactor.ComputeTotalCost();
+        var totalCost = _productList.ComputeTotalCost();
         var shoppingCartDto = new ShoppingCartDto(totalCost);
         _checkoutService.Checkout(shoppingCartDto);
     }
 
     public void Display()
     {
-        var formatter = new ShoppingCartSummaryFormatter(_productList, _productListRefactor.ComputeTotalCost());
+        var formatter = new ShoppingCartSummaryFormatter(_productList);
         _display.Show(formatter.Format());
     }
 }

@@ -5,35 +5,18 @@ namespace ShoppingCart;
 
 public class ShoppingCartSummary
 {
-    private readonly List<Product> _products;
+    private readonly ProductList _productList;
     public decimal TotalPrice { get; }
     public IEnumerable<ShoppingCartSummaryItem> Items { get; }
 
-    public ShoppingCartSummary(List<Product> products, decimal totalPrice)
+    public ShoppingCartSummary(ProductList productList)
     {
-        _products = products;
-        TotalPrice = totalPrice;
-        Items = CreateItems(products);
+        _productList = productList;
+        TotalPrice = productList.ComputeTotalCost();
+        Items = _productList.CreateItems();
     }
     
-    public int TotalProducts()
-    {
-        return _products.Count;
+    public int TotalProducts() {
+        return _productList.TotalQuantity();
     }
-
-    private IEnumerable<ShoppingCartSummaryItem> CreateItems(List<Product> products)
-    {
-        return products
-            .GroupBy(p => p.ProductName)
-            .Select(CreateItem);
-    }
-
-    private ShoppingCartSummaryItem CreateItem(IGrouping<string, Product> productGrouping)
-    {
-        var name = productGrouping.Key;
-        var quantity = productGrouping.Count();
-        var totalCost = productGrouping.First().ComputeCost() * quantity;
-        return new ShoppingCartSummaryItem(name, quantity, totalCost);
-    }
-
 }
