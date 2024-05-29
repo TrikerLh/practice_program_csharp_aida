@@ -3,16 +3,16 @@ using System.Linq;
 
 namespace ShoppingCart;
 
-public class ShoppingCartReport
+public class GroupedReport
 {
     private readonly ProductList _productList;
 
-    public ShoppingCartReport(ProductList productList)
+    public GroupedReport(ProductList productList)
     {
         _productList = productList;
     }
 
-    public IEnumerable<ShoppingCartReportItem> GetItems()
+    public IEnumerable<ReportLine> GetItems()
     {
         return _productList
             .CreateItems()
@@ -20,12 +20,12 @@ public class ShoppingCartReport
             .Select(CreateItem);
     }
 
-    private ShoppingCartReportItem CreateItem(IGrouping<string, ShoppingCartReportItem> productGrouping)
+    private ReportLine CreateItem(IGrouping<string, ReportLine> productGrouping)
     {
         var name = productGrouping.Key;
         var quantity = productGrouping.Count();
         var totalCost = productGrouping.First().TotalCost * quantity;
-        return new ShoppingCartReportItem(name, quantity, totalCost);
+        return new ReportLine(name, quantity, totalCost);
     }
 
     public decimal GetTotalPrice()

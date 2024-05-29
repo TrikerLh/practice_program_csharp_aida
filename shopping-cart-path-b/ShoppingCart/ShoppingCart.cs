@@ -75,13 +75,13 @@ public class ShoppingCart
     private void PerformCheckout()
     {
         var totalCost = _productList.ComputeTotalCost();
-        var shoppingCartDto = new ShoppingCartDto(totalCost);
+        var shoppingCartDto = new CheckoutDto(totalCost);
         _checkoutService.Checkout(shoppingCartDto);
     }
 
     public void Display()
     {
-        var formatter = new ShoppingCartSummaryTextFormatter(_productList);
+        var formatter = new TextReportFormatter(_productList);
         _display.Show(formatter.Format());
     }
 }

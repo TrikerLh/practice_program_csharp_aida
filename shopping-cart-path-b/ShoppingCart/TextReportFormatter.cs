@@ -2,14 +2,14 @@
 
 namespace ShoppingCart;
 
-public class ShoppingCartSummaryTextFormatter
+public class TextReportFormatter
 {
     private const string Header = "Product name, Price with VAT, Quantity\n";
-    private readonly ShoppingCartReport _report;
+    private readonly GroupedReport _report;
 
-    public ShoppingCartSummaryTextFormatter(ProductList productList)
+    public TextReportFormatter(ProductList productList)
     {
-        _report = new ShoppingCartReport(productList);
+        _report = new GroupedReport(productList);
     }
 
     public string Format()
@@ -19,12 +19,12 @@ public class ShoppingCartSummaryTextFormatter
                $"{CreateFooter(_report)}";
     }
 
-    private string CreateFooter(ShoppingCartReport report)
+    private string CreateFooter(GroupedReport report)
     {
         return $"Total products: {report.TotalProducts()}\nTotal price: {report.GetTotalPrice()}\u20ac";
     }
 
-    private string CreateBody(ShoppingCartReport report)
+    private string CreateBody(GroupedReport report)
     {
         if (_report.ThereAreNoProducts())
         {

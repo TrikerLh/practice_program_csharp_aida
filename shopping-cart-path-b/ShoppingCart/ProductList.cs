@@ -45,12 +45,12 @@ public class ProductList
         return _productList.Count;
     }
 
-    private ShoppingCartReportItem CreateItem(Product product)
+    private ReportLine CreateItem(Product product)
     {
-        return new ShoppingCartReportItem(product.ProductName, 1, product.ComputeCost());
+        return new ReportLine(product.ProductName, 1, product.ComputeCost());
     }
 
-    public IEnumerable<ShoppingCartReportItem> CreateItems()
+    public IEnumerable<ReportLine> CreateItems()
     {
         return _productList
             .Select(CreateItem);

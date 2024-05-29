@@ -2,9 +2,9 @@ namespace ShoppingCart.Tests
 {
     public class ShoppingCartTestHelpers
     {
-        public static ShoppingCartDto CreateShoppingCartDto(decimal cost)
+        public static CheckoutDto CreateShoppingCartDto(decimal cost)
         {
-            return new ShoppingCartDto(cost);
+            return new CheckoutDto(cost);
         }
 
         public static ShoppingCart CreateShoppingCartForCheckout(

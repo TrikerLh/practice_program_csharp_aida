@@ -1,12 +1,12 @@
 ﻿namespace ShoppingCart;
 
-public class ShoppingCartReportItem
+public class ReportLine
 {
     public int Quantity { get; }
     public string Name { get; }
     public decimal TotalCost { get; }
 
-    public ShoppingCartReportItem(string name, int quantity, decimal totalCost)
+    public ReportLine(string name, int quantity, decimal totalCost)
     {
         Name = name;
         Quantity = quantity;
