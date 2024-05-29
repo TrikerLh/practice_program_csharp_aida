@@ -1,23 +1,23 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 
 namespace ShoppingCart;
 
 public class TextReportFormatter
 {
+    private readonly CultureInfo _cultureInfo;
     private const string Header = "Product name, Price with VAT, Quantity\n";
-    private readonly GroupedReport _report;
 
-    public TextReportFormatter(GroupedReport groupedReport)
-    {
-        _report = groupedReport;
+    public TextReportFormatter(CultureInfo cultureInfo) {
+        _cultureInfo = cultureInfo;
     }
 
-    public string Format()
+    public string Format(GroupedReport groupedReport)
     {
         return $"{Header}" +
-               $"{CreateBody(_report)}" +
-               $"{CreatePromotion(_report)}" +
-               $"{CreateFooter(_report)}";
+               $"{CreateBody(groupedReport)}" +
+               $"{CreatePromotion(groupedReport)}" +
+               $"{CreateFooter(groupedReport)}";
     }
 
     private string CreatePromotion(GroupedReport report)
@@ -32,18 +32,18 @@ public class TextReportFormatter
 
     private string CreateFooter(GroupedReport report)
     {
-        return $"Total products: {report.TotalProducts()}\nTotal price: {report.GetTotalPrice()}\u20ac";
+        return $"Total products: {report.TotalProducts()}\nTotal price: {report.GetTotalPrice().ToString(_cultureInfo)}\u20ac";
     }
 
     private string CreateBody(GroupedReport report)
     {
-        if (_report.ThereAreNoProducts())
+        if (report.ThereAreNoProducts())
         {
             return "";
         }
 
         return report.GetItems()
-            .Select(item => $"{item.Name}, {item.TotalCost}€, {item.Quantity}\n")
+            .Select(item => $"{item.Name}, {item.TotalCost.ToString(_cultureInfo)}€, {item.Quantity}\n")
             .Aggregate("", (current, line) => current + line);
     }
 }

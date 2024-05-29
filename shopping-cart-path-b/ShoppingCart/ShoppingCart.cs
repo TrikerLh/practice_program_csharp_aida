@@ -10,18 +10,21 @@ public class ShoppingCart
     private readonly CheckoutService _checkoutService;
     private readonly DiscountsRepository _discountsRepository;
     private ProductList _productList;
+    private TextReportFormatter _textReportFormatter;
 
     public ShoppingCart(ProductsRepository productsRepository,
         Notifier notifier,
         Display display,
         CheckoutService checkoutService,
-        DiscountsRepository discountsRepository)
-    {
+        DiscountsRepository discountsRepository,
+        TextReportFormatter textReportFormatter) {
         _productsRepository = productsRepository;
         _notifier = notifier;
         _display = display;
         _checkoutService = checkoutService;
         _discountsRepository = discountsRepository;
+        _textReportFormatter = textReportFormatter;
+
         InitializeState();
     }
 
@@ -81,7 +84,6 @@ public class ShoppingCart
 
     public void Display()
     {
-        var formatter = new TextReportFormatter(new GroupedReport(_productList));
-        _display.Show(formatter.Format());
+        _display.Show(_textReportFormatter.Format(new GroupedReport(_productList)));
     }
 }

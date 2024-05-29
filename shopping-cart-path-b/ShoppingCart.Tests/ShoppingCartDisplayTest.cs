@@ -1,3 +1,4 @@
+using System.Globalization;
 using NSubstitute;
 using NUnit.Framework;
 using static ShoppingCart.Tests.ProductBuilder;
@@ -23,8 +24,21 @@ public class ShoppingCartDisplayTest
         _notifier = Substitute.For<Notifier>();
         _discountsRepository = Substitute.For<DiscountsRepository>();
         _display = Substitute.For<Display>();
+        _shoppingCart = CreateShoppingCartForGreatBritainDisplay();
+    }
 
-        _shoppingCart = CreateShoppingCartForDisplay(_productsRepository, _notifier, _display, _discountsRepository);
+    private ShoppingCart CreateShoppingCartForGreatBritainDisplay() {
+        var cultureInfo = new CultureInfo("en-GB");
+        return CreateShoppingCartForDisplayWithCultureInfo(cultureInfo);
+    }
+
+    private ShoppingCart CreateShoppingCartForSpainDisplay() {
+        var cultureInfo = new CultureInfo("es-ES");
+        return CreateShoppingCartForDisplayWithCultureInfo(cultureInfo);
+    }
+
+    private ShoppingCart CreateShoppingCartForDisplayWithCultureInfo(CultureInfo cultureInfo) {
+        return CreateShoppingCartForDisplay(_productsRepository, _notifier, _display, _discountsRepository, new TextReportFormatter(cultureInfo));
     }
 
     [Test]
@@ -87,4 +101,30 @@ public class ShoppingCartDisplayTest
 
         _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 10€, 1\nPromotion: 0% off with code PROMO_10\nTotal products: 1\nTotal price: 10€");
     }
+
+    [Test]
+    public void with_decimal_amount_for_great_britain_culture() {
+        _productsRepository.Get(Iceberg).Returns(
+            TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(2.5m).Build());
+        _shoppingCart.AddItem(Iceberg);
+
+        _shoppingCart.Display();
+
+        _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 2.5€, 1\nTotal products: 1\nTotal price: 2.5€");
+
+    }
+
+    [Test]
+    public void with_decimal_amount_for_spanish_culture() {
+        var shoppingCart = CreateShoppingCartForSpainDisplay();
+        _productsRepository.Get(Iceberg).Returns(
+            TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(2.5m).Build());
+        shoppingCart.AddItem(Iceberg);
+
+        shoppingCart.Display();
+
+        _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 2,5€, 1\nTotal products: 1\nTotal price: 2,5€");
+
+    }
+
 }
