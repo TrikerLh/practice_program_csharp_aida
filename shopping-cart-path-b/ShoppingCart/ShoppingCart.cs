@@ -10,14 +10,14 @@ public class ShoppingCart
     private readonly CheckoutService _checkoutService;
     private readonly DiscountsRepository _discountsRepository;
     private ProductList _productList;
-    private ReportFormatter _textReportFormatter;
+    private TextReportFormatter _textReportFormatter;
 
     public ShoppingCart(ProductsRepository productsRepository,
         Notifier notifier,
         Display display,
         CheckoutService checkoutService,
         DiscountsRepository discountsRepository,
-        ReportFormatter textReportFormatter) {
+        TextReportFormatter textReportFormatter) {
         _productsRepository = productsRepository;
         _notifier = notifier;
         _display = display;

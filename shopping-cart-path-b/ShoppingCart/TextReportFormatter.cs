@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ShoppingCart;
 
-public class TextReportFormatter : ReportFormatter {
+public class TextReportFormatter  {
     private readonly CultureInfo _cultureInfo;
     private const string Header = "Product name, Price with VAT, Quantity\n";
 
@@ -11,7 +11,7 @@ public class TextReportFormatter : ReportFormatter {
         _cultureInfo = cultureInfo;
     }
 
-    public string Format(Report report)
+    public string Format(GroupedReport report)
     {
         return $"{Header}" +
                $"{CreateBody(report)}" +
@@ -19,7 +19,7 @@ public class TextReportFormatter : ReportFormatter {
                $"{CreateFooter(report)}";
     }
 
-    private string CreatePromotion(Report report)
+    private string CreatePromotion(GroupedReport report)
     {
         if (report.HasDiscount())
         {
@@ -29,12 +29,12 @@ public class TextReportFormatter : ReportFormatter {
         return "";
     }
 
-    private string CreateFooter(Report report)
+    private string CreateFooter(GroupedReport report)
     {
         return $"Total products: {report.TotalProducts()}\nTotal price: {report.GetTotalPrice().ToString(_cultureInfo)}\u20ac";
     }
 
-    private string CreateBody(Report report)
+    private string CreateBody(GroupedReport report)
     {
         if (report.ThereAreNoProducts())
         {
