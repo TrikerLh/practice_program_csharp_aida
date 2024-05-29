@@ -60,4 +60,12 @@ public class ProductList
     {
         return _discount.HasDiscount();
     }
+
+    public decimal GetDiscountAmount() {
+        return _discount.Amount;
+    }
+
+    public DiscountCode GetDiscountCode() {
+        return _discount.DiscountCode;
+    }
 }

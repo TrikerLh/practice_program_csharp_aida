@@ -74,7 +74,7 @@ public class ShoppingCartDisplayTest
     }
 
     [Test]
-    public void with_one_product_with_promotion()
+    public void with_one_product_with_discount()
     {
         _productsRepository.Get(Iceberg).Returns(
             TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(10m).Build());

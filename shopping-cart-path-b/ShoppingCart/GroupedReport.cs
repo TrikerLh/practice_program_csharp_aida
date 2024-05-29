@@ -47,4 +47,12 @@ public class GroupedReport
     {
         return _productList.HasDiscount();
     }
+
+    public decimal GetDiscount() {
+        return _productList.GetDiscountAmount();
+    }
+
+    public string GetDiscountCode() {
+        return _productList.GetDiscountCode().ToString();
+    }
 }

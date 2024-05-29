@@ -24,7 +24,7 @@ public class TextReportFormatter
     {
         if (report.HasDiscount())
         {
-            return "Promotion: 0% off with code PROMO_10\n";
+            return $"Promotion: {report.GetDiscount()}% off with code {report.GetDiscountCode()}\n";
         }
 
         return "";
