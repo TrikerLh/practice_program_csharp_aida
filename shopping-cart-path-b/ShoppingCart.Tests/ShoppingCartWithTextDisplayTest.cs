@@ -6,7 +6,7 @@ using static ShoppingCart.Tests.ShoppingCartTestHelpers;
 
 namespace ShoppingCart.Tests;
 
-public class ShoppingCartDisplayTest
+public class ShoppingCartWithTextDisplayTest
 {
     private const string Iceberg = "Iceberg";
     private const string Tomato = "Tomato";

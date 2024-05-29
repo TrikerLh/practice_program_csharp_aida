@@ -3,8 +3,7 @@ using System.Linq;
 
 namespace ShoppingCart;
 
-public class GroupedReport
-{
+public class GroupedReport : Report {
     private readonly ProductList _productList;
 
     public GroupedReport(ProductList productList)
