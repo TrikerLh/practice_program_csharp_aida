@@ -11,12 +11,12 @@ public class TextReportFormatter : ReportFormatter {
         _cultureInfo = cultureInfo;
     }
 
-    public string Format(Report groupedReport)
+    public string Format(Report report)
     {
         return $"{Header}" +
-               $"{CreateBody(groupedReport)}" +
-               $"{CreatePromotion(groupedReport)}" +
-               $"{CreateFooter(groupedReport)}";
+               $"{CreateBody(report)}" +
+               $"{CreatePromotion(report)}" +
+               $"{CreateFooter(report)}";
     }
 
     private string CreatePromotion(Report report)

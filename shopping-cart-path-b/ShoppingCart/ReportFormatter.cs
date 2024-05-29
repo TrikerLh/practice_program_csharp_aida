@@ -1,5 +1,5 @@
 ﻿namespace ShoppingCart;
 
 public interface ReportFormatter {
-    string Format(Report groupedReport);
+    string Format(Report report);
 }
