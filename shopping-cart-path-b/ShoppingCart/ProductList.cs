@@ -56,4 +56,8 @@ public class ProductList
             .Select(CreateItem);
     }
 
+    public bool HasDiscount()
+    {
+        return _discount.HasDiscount();
+    }
 }

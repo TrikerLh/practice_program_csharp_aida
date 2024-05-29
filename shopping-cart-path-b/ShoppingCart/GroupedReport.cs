@@ -42,4 +42,9 @@ public class GroupedReport
     {
         return _productList.ThereAreNoProducts();
     }
+
+    public bool HasDiscount()
+    {
+        return _productList.HasDiscount();
+    }
 }

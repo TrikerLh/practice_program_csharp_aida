@@ -81,7 +81,7 @@ public class ShoppingCart
 
     public void Display()
     {
-        var formatter = new TextReportFormatter(_productList);
+        var formatter = new TextReportFormatter(new GroupedReport(_productList));
         _display.Show(formatter.Format());
     }
 }

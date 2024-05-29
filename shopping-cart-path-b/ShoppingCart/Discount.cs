@@ -15,4 +15,9 @@ public class Discount
     {
         return totalCost * (1 - _amount);
     }
+
+    public bool HasDiscount()
+    {
+        return _discountCode != DiscountCode.None;
+    }
 }

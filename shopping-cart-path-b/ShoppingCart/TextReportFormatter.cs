@@ -7,16 +7,27 @@ public class TextReportFormatter
     private const string Header = "Product name, Price with VAT, Quantity\n";
     private readonly GroupedReport _report;
 
-    public TextReportFormatter(ProductList productList)
+    public TextReportFormatter(GroupedReport groupedReport)
     {
-        _report = new GroupedReport(productList);
+        _report = groupedReport;
     }
 
     public string Format()
     {
         return $"{Header}" +
                $"{CreateBody(_report)}" +
+               $"{CreatePromotion(_report)}" +
                $"{CreateFooter(_report)}";
+    }
+
+    private string CreatePromotion(GroupedReport report)
+    {
+        if (report.HasDiscount())
+        {
+            return "Promotion: 0% off with code PROMO_10\n";
+        }
+
+        return "";
     }
 
     private string CreateFooter(GroupedReport report)

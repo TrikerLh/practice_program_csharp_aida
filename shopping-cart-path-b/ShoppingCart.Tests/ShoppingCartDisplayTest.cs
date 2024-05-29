@@ -72,4 +72,19 @@ public class ShoppingCartDisplayTest
             
         _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 1€, 1\nTomato, 2€, 1\nTotal products: 2\nTotal price: 3€");
     }
+
+    [Test]
+    public void with_one_product_with_promotion()
+    {
+        _productsRepository.Get(Iceberg).Returns(
+            TaxFreeWithNoRevenueProduct().Named(Iceberg).Costing(10m).Build());
+        _discountsRepository.Get(DiscountCode.PROMO_10).Returns(
+        new Discount(DiscountCode.PROMO_10, 0));
+        _shoppingCart.AddItem(Iceberg);
+        _shoppingCart.ApplyDiscount(DiscountCode.PROMO_10);
+
+        _shoppingCart.Display();
+
+        _display.Received(1).Show("Product name, Price with VAT, Quantity\nIceberg, 10€, 1\nPromotion: 0% off with code PROMO_10\nTotal products: 1\nTotal price: 10€");
+    }
 }
