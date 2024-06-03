@@ -22,6 +22,22 @@ namespace LegacySecurityManager.Tests
 
             Assert.That(securityManager.messages, Has.Some.EquivalentTo("Password must be at least 8 characters in length"));
         }
+        [Test]
+        public void Create_User() {
+            var securityManager = new SecurityManagerForTesting(new List<string> { "UserName", "Full Name", "Password1", "Password1" });
+
+            securityManager.CreateSecurityUser();
+
+            List<string> expectedMessages = new List<string>
+            {
+                "Enter a username",
+                "Enter your full name",
+                "Enter your password",
+                "Re-enter your password",
+                "Saving Details for User (UserName, Full Name, 1drowssaP)\n"
+            };
+            Assert.That(securityManager.messages, Is.EquivalentTo(expectedMessages));
+        }
 
     }
 
