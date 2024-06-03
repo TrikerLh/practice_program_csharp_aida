@@ -2,17 +2,22 @@ namespace ShoppingCart;
 
 public class Discount
 {
-    private readonly DiscountCode _discountCode;
-    private readonly decimal _amount;
+    public readonly DiscountCode DiscountCode;
+    public readonly decimal Amount;
 
     public Discount(DiscountCode discountCode, decimal amount)
     {
-        _discountCode = discountCode;
-        _amount = amount;
+        DiscountCode = discountCode;
+        Amount = amount;
     }
 
     public decimal Apply(decimal totalCost)
     {
-        return totalCost * (1 - _amount);
+        return totalCost * (1 - Amount);
+    }
+
+    public bool HasDiscount()
+    {
+        return DiscountCode != DiscountCode.None;
     }
 }

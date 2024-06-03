@@ -8,9 +8,9 @@ public class ProductList
     private readonly List<Product> _productList;
     private Discount _discount;
 
-    public ProductList(List<Product> productList)
+    public ProductList()
     {
-        _productList = productList;
+        _productList = new List<Product>();
         _discount = new Discount(DiscountCode.None, 0);
     }
 
@@ -38,5 +38,34 @@ public class ProductList
     public void AddDiscount(Discount discount)
     {
         _discount = discount;
+    }
+
+    public int TotalQuantity()
+    {
+        return _productList.Count;
+    }
+
+    private ReportLine CreateItem(Product product)
+    {
+        return new ReportLine(product.ProductName, 1, product.ComputeCost());
+    }
+
+    public IEnumerable<ReportLine> CreateItems()
+    {
+        return _productList
+            .Select(CreateItem);
+    }
+
+    public bool HasDiscount()
+    {
+        return _discount.HasDiscount();
+    }
+
+    public decimal GetDiscountAmount() {
+        return _discount.Amount;
+    }
+
+    public DiscountCode GetDiscountCode() {
+        return _discount.DiscountCode;
     }
 }

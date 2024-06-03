@@ -2,11 +2,11 @@ using System;
 
 namespace ShoppingCart;
 
-public record ShoppingCartDto
+public record CheckoutDto
 {
     private readonly decimal _totalCost;
 
-    public ShoppingCartDto(decimal totalCost)
+    public CheckoutDto(decimal totalCost)
     {
         _totalCost = Math.Round(totalCost,2,MidpointRounding.ToPositiveInfinity);
     }

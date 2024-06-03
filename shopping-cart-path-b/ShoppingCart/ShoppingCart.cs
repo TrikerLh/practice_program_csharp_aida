@@ -9,21 +9,22 @@ public class ShoppingCart
     private readonly Display _display;
     private readonly CheckoutService _checkoutService;
     private readonly DiscountsRepository _discountsRepository;
-    private List<Product> _productList;
-    private Discount _discount;
-    private ProductList _productListRefactor;
+    private ProductList _productList;
+    private TextReportFormatter _textReportFormatter;
 
     public ShoppingCart(ProductsRepository productsRepository,
         Notifier notifier,
         Display display,
         CheckoutService checkoutService,
-        DiscountsRepository discountsRepository)
-    {
+        DiscountsRepository discountsRepository,
+        TextReportFormatter textReportFormatter) {
         _productsRepository = productsRepository;
         _notifier = notifier;
         _display = display;
         _checkoutService = checkoutService;
         _discountsRepository = discountsRepository;
+        _textReportFormatter = textReportFormatter;
+
         InitializeState();
     }
 
@@ -36,7 +37,7 @@ public class ShoppingCart
             return;
         }
 
-        _productListRefactor.AddProduct(product);
+        _productList.AddProduct(product);
 
     }
 
@@ -48,13 +49,13 @@ public class ShoppingCart
             _notifier.ShowError("Discount is not available");
             return;
         }
-        _discount = discount;
-        _productListRefactor.AddDiscount(discount);
+
+        _productList.AddDiscount(discount);
     }
 
     public void Checkout()
     {
-        if (_productListRefactor.ThereAreNoProducts())
+        if (_productList.ThereAreNoProducts())
         {
             NotifyEmptyShoppingCart();
             return;
@@ -65,8 +66,8 @@ public class ShoppingCart
 
     private void InitializeState()
     {
-        _productList = new List<Product>();
-        _productListRefactor = new ProductList(_productList);
+        new List<Product>();
+        _productList = new ProductList();
     }
 
     private void NotifyEmptyShoppingCart()
@@ -76,14 +77,13 @@ public class ShoppingCart
 
     private void PerformCheckout()
     {
-        var totalCost = _productListRefactor.ComputeTotalCost();
-        var shoppingCartDto = new ShoppingCartDto(totalCost);
+        var totalCost = _productList.ComputeTotalCost();
+        var shoppingCartDto = new CheckoutDto(totalCost);
         _checkoutService.Checkout(shoppingCartDto);
     }
 
     public void Display()
     {
-        var formatter = new ShoppingCartSummaryFormatter(_productList, _productListRefactor.ComputeTotalCost());
-        _display.Show(formatter.Format());
+        _display.Show(_textReportFormatter.Format(new GroupedReport(_productList)));
     }
 }
