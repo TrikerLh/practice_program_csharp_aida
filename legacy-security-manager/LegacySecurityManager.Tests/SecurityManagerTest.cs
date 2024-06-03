@@ -12,8 +12,17 @@ namespace LegacySecurityManager.Tests
             securityManager.CreateSecurityUser();
 
             Assert.That(securityManager.messages, Has.Some.EquivalentTo("The passwords don't match"));
-
         }
+
+        [Test]
+        public void Fail_When_Passwords_Are_Less_Than_Eigth_Characters() {
+            var securityManager = new SecurityManagerForTesting(new List<string> { "UserName", "Full Name", "Pass1", "Pass1" });
+
+            securityManager.CreateSecurityUser();
+
+            Assert.That(securityManager.messages, Has.Some.EquivalentTo("Password must be at least 8 characters in length"));
+        }
+
     }
 
     public class SecurityManagerForTesting : SecurityManager
