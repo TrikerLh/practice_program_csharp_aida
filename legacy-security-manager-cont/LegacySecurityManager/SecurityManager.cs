@@ -95,12 +95,12 @@ public class SecurityManager
         return ReadUserInput();
     }
 
-    protected virtual void Print(string message)
+    private void Print(string message)
     {
         _notifier.Notify(message);
     }
 
-    protected virtual string ReadUserInput()
+    private string ReadUserInput()
     {
         return _inputReader.Read();
     }
