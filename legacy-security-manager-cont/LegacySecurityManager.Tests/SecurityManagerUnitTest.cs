@@ -1,6 +1,5 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
-using System.Reflection.PortableExecutable;
 
 namespace LegacySecurityManager.Tests
 {
@@ -23,7 +22,7 @@ namespace LegacySecurityManager.Tests
         [Test]
         public void do_not_save_user_when_password_and_confirm_password_are_not_equals()
         {
-            _requester.Request().Returns(new UserData(Username, FullName, "Pepe1234", "Pepe1234."));
+            _requester.Request().Returns(CreateUserData("Pepe1234", "Pepe1234."));
 
             _securityManager.CreateValidUser();
 
@@ -33,7 +32,7 @@ namespace LegacySecurityManager.Tests
         [Test]
         public void do_not_save_user_when_password_too_short()
         {
-            _requester.Request().Returns(new UserData(Username, FullName, "Pepe123", "Pepe123"));
+            _requester.Request().Returns(CreateUserData("Pepe123", "Pepe123"));
 
             _securityManager.CreateValidUser();
 
@@ -44,12 +43,17 @@ namespace LegacySecurityManager.Tests
         public void save_user()
         {
             var validPassword = "Pepe1234";
-            _requester.Request().Returns(new UserData(Username, FullName, validPassword, validPassword));
+            _requester.Request().Returns(CreateUserData(validPassword, validPassword));
 
             _securityManager.CreateValidUser();
 
             var reversedPassword = "4321epeP";
             _notifier.Received(1).Notify($"Saving Details for User ({Username}, {FullName}, {reversedPassword})\n");
+        }
+
+        private static UserData CreateUserData(string password, string confirmPassword)
+        {
+            return new UserData(Username, FullName, password, confirmPassword);
         }
     }
 }
