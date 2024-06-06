@@ -1,6 +1,11 @@
 namespace LegacySecurityManager;
 
-public class ConsoleUserDataRequester
+public interface UserDataRequester
+{
+    UserData Request();
+}
+
+public class ConsoleUserDataRequester : UserDataRequester
 {
     private readonly InputReader _inputReader;
     private readonly Notifier _notifier;
@@ -11,14 +16,13 @@ public class ConsoleUserDataRequester
         _notifier = notifier;
     }
 
-    public UserData GetUserData()
+    public UserData Request()
     {
         var username = RequestUserName();
         var fullName = RequestFullName();
         var password = RequestPassword();
         var confirmPassword = RequestPasswordConfirmation();
-        var userData = new UserData(username, fullName, password, confirmPassword);
-        return userData;
+        return new UserData(username, fullName, password, confirmPassword);
     }
 
     private string ReadUserInput()

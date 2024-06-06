@@ -5,17 +5,24 @@ namespace LegacySecurityManager;
 public class SecurityManager
 {
     private readonly Notifier _notifier;
-    private readonly ConsoleUserDataRequester _userDataRequester;
 
-    public SecurityManager(Notifier notifier, InputReader inputReader)
-    {
+    private readonly UserDataRequester _userDataRequester;
+
+    public SecurityManager(Notifier notifier, UserDataRequester userDataRequester) {
         _notifier = notifier;
-        _userDataRequester = new ConsoleUserDataRequester(inputReader, _notifier);
+        _userDataRequester = userDataRequester;
+    }
+
+    public static void CreateUser()
+    {
+        var consoleNotifier = new ConsoleNotifier();
+        UserDataRequester requester = new ConsoleUserDataRequester(new ConsoleInputReader(), consoleNotifier);
+        new SecurityManager(consoleNotifier, requester).CreateValidUser();
     }
 
     public void CreateValidUser()
     {
-        var userData = _userDataRequester.GetUserData();
+        var userData = _userDataRequester.Request();
 
         if (PasswordsDoNotMatch(userData.Password, userData.ConfirmPassword))
         {
@@ -69,10 +76,5 @@ public class SecurityManager
     private void Print(string message)
     {
         _notifier.Notify(message);
-    }
-
-    public static void CreateUser()
-    {
-        new SecurityManager(new ConsoleNotifier(), new ConsoleInputReader()).CreateValidUser();
     }
 }
