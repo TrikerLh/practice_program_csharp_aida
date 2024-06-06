@@ -4,36 +4,33 @@ namespace LegacySecurityManager;
 
 public class SecurityManager
 {
-    private readonly InputReader _inputReader;
     private readonly Notifier _notifier;
+    private readonly ConsoleUserDataRequester _userDataRequester;
 
     public SecurityManager(Notifier notifier, InputReader inputReader)
     {
         _notifier = notifier;
-        _inputReader = inputReader;
+        _userDataRequester = new ConsoleUserDataRequester(inputReader, _notifier);
     }
 
     public void CreateValidUser()
     {
-        var username = RequestUserName();
-        var fullName = RequestFullName();
-        var password = RequestPassword();
-        var confirmPassword = RequestPasswordConfirmation();
+        var userData = _userDataRequester.GetUserData();
 
-        if (PasswordsDoNotMatch(password, confirmPassword))
+        if (PasswordsDoNotMatch(userData.Password, userData.ConfirmPassword))
         {
             NotifyPasswordDoNotMatch();
             return;
         }
 
-        if (IsPasswordToShort(password))
+        if (IsPasswordToShort(userData.Password))
         {
             NotifyPasswordIsToShort();
             return;
         }
 
-        var encryptedPassword = EncryptPassword(password);
-        NotifyUserCreation(username, fullName, encryptedPassword);
+        var encryptedPassword = EncryptPassword(userData.Password);
+        NotifyUserCreation(userData.Username, userData.FullName, encryptedPassword);
     }
 
     private void NotifyPasswordIsToShort()
@@ -69,40 +66,9 @@ public class SecurityManager
         return password != confirmPassword;
     }
 
-    private string RequestPasswordConfirmation()
-    {
-        return RequestUserInput("Re-enter your password");
-    }
-
-    private string RequestPassword()
-    {
-        return RequestUserInput("Enter your password");
-    }
-
-    private string RequestFullName()
-    {
-        return RequestUserInput("Enter your full name");
-    }
-
-    private string RequestUserName()
-    {
-        return RequestUserInput("Enter a username");
-    }
-
-    private string RequestUserInput(string requestMessage)
-    {
-        Print(requestMessage);
-        return ReadUserInput();
-    }
-
     private void Print(string message)
     {
         _notifier.Notify(message);
-    }
-
-    private string ReadUserInput()
-    {
-        return _inputReader.Read();
     }
 
     public static void CreateUser()
