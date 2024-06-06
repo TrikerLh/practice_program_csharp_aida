@@ -1,19 +1,12 @@
 namespace LegacySecurityManager;
 
-public interface UserDataRequester
-{
-    UserData Request();
-}
-
 public class ConsoleUserDataRequester : UserDataRequester
 {
-    private readonly InputReader _inputReader;
-    private readonly Notifier _notifier;
+    private ConsoleInputRequester _consoleInputRequester;
 
     public ConsoleUserDataRequester(InputReader inputReader, Notifier notifier)
     {
-        _inputReader = inputReader;
-        _notifier = notifier;
+        _consoleInputRequester = new ConsoleInputRequester(inputReader, notifier);
     }
 
     public UserData Request()
@@ -25,34 +18,23 @@ public class ConsoleUserDataRequester : UserDataRequester
         return new UserData(username, fullName, password, confirmPassword);
     }
 
-    private string ReadUserInput()
-    {
-        return _inputReader.Read();
-    }
-
-    private string RequestUserInput(string requestMessage)
-    {
-        _notifier.Notify(requestMessage);
-        return ReadUserInput();
-    }
-
     private string RequestUserName()
     {
-        return RequestUserInput("Enter a username");
+        return _consoleInputRequester.RequestInput("Enter a username");
     }
 
     private string RequestFullName()
     {
-        return RequestUserInput("Enter your full name");
+        return _consoleInputRequester.RequestInput("Enter your full name");
     }
 
     private string RequestPassword()
     {
-        return RequestUserInput("Enter your password");
+        return _consoleInputRequester.RequestInput("Enter your password");
     }
 
     private string RequestPasswordConfirmation()
     {
-        return RequestUserInput("Re-enter your password");
+        return _consoleInputRequester.RequestInput("Re-enter your password");
     }
 }
