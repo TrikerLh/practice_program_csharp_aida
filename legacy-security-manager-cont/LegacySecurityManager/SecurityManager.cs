@@ -16,7 +16,8 @@ public class SecurityManager
     public static void CreateUser()
     {
         var consoleNotifier = new ConsoleNotifier();
-        UserDataRequester requester = new ConsoleUserDataRequester(new ConsoleInputReader(), consoleNotifier);
+        InputReader inputReader = new ConsoleInputReader();
+        UserDataRequester requester = new ConsoleUserDataRequester(new ConsoleInputRequester(inputReader, consoleNotifier));
         new SecurityManager(consoleNotifier, requester).CreateValidUser();
     }
 
