@@ -6,7 +6,7 @@ namespace LegacySecurityManager.Tests
     public class ConsoleUserRequesterTest
     {
         [Test]
-        public void Request_User_Data()
+        public void request_user_data()
         {
             var inputRequester = Substitute.For<InputRequester>();
             var consoleUserDataRequester = new ConsoleUserDataRequester(inputRequester);
