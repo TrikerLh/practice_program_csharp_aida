@@ -20,13 +20,13 @@ public class SecurityManager
     {
         var userData = _userDataRequester.Request();
 
-        if (PasswordsDoNotMatch(userData.Password(), userData.ConfirmPassword()))
+        if (userData.PasswordsDoNotMatch())
         {
             NotifyPasswordDoNotMatch();
             return;
         }
 
-        if (IsPasswordToShort(userData.Password()))
+        if (userData.IsPasswordToShort())
         {
             NotifyPasswordIsToShort();
             return;
@@ -57,16 +57,6 @@ public class SecurityManager
         Array.Reverse(array);
         var encryptedPassword = new string(array);
         return encryptedPassword;
-    }
-
-    private static bool IsPasswordToShort(string password)
-    {
-        return password.Length < 8;
-    }
-
-    private static bool PasswordsDoNotMatch(string password, string confirmPassword)
-    {
-        return password != confirmPassword;
     }
 
     private void Print(string message)

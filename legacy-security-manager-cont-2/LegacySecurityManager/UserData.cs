@@ -16,6 +16,16 @@ public class UserData {
         _confirmPassword = confirmPassword;
     }
 
+    public bool PasswordsDoNotMatch()
+    {
+        return Password() != ConfirmPassword();
+    }
+
+    public bool IsPasswordToShort()
+    {
+        return Password().Length < 8;
+    }
+
     public string Password() {
         return _password;
     }
@@ -41,7 +51,7 @@ public class UserData {
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
+        if (obj.GetType() != GetType()) return false;
         return Equals((UserData)obj);
     }
 
