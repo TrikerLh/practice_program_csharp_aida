@@ -16,7 +16,7 @@ public class SecurityManagerTest
     {
         _notifier = Substitute.For<Notifier>();
         _input = Substitute.For<Input>();
-        _securityManager = new SecurityManager(_notifier, new ConsoleUserDataRequester(_input));
+        _securityManager = new SecurityManager(_notifier, _input);
     }
 
     [Test]

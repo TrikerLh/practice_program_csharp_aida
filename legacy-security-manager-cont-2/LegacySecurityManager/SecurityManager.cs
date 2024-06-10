@@ -6,12 +6,12 @@ namespace LegacySecurityManager;
 public class SecurityManager
 {
     private readonly Notifier _notifier;
-    private ConsoleUserDataRequester _userDataRequester;
+    private readonly ConsoleUserDataRequester _userDataRequester;
 
-    public SecurityManager(Notifier notifier, ConsoleUserDataRequester userDataRequester)
+    public SecurityManager(Notifier notifier, Input input)
     {
         _notifier = notifier;
-        _userDataRequester = userDataRequester;
+        _userDataRequester = new ConsoleUserDataRequester(input);
     }
 
     public void CreateValidUser()
@@ -75,6 +75,6 @@ public class SecurityManager
     public static void CreateUser()
     {
         Notifier notifier = new ConsoleNotifier();
-        new SecurityManager(notifier, new ConsoleUserDataRequester(new ConsoleInput())).CreateValidUser();
+        new SecurityManager(notifier, new ConsoleInput()).CreateValidUser();
     }
 }
