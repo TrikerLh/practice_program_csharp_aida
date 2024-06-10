@@ -1,14 +1,14 @@
-using System;
 using LegacySecurityManager.infrastructure;
+using System;
 
 namespace LegacySecurityManager;
 
 public class SecurityManager
 {
     private readonly Notifier _notifier;
-    private UserDataRequester _userDataRequester;
+    private ConsoleUserDataRequester _userDataRequester;
 
-    public SecurityManager(Notifier notifier, UserDataRequester userDataRequester)
+    public SecurityManager(Notifier notifier, ConsoleUserDataRequester userDataRequester)
     {
         _notifier = notifier;
         _userDataRequester = userDataRequester;
@@ -72,7 +72,8 @@ public class SecurityManager
         _notifier.Notify(message);
     }
 
-    public static void CreateUser() {
+    public static void CreateUser()
+    {
         Notifier notifier = new ConsoleNotifier();
         new SecurityManager(notifier, new ConsoleUserDataRequester(new ConsoleInput())).CreateValidUser();
     }
