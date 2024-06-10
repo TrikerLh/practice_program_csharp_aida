@@ -5,22 +5,24 @@ namespace LegacySecurityManager.Tests;
 
 public class SecurityManagerTest
 {
-    private Notifier _notifier;
+    private const string Username = "Pepe";
+    private const string FullName = "Pepe Garcia";
     private SecurityManager _securityManager;
-    private UserDataRequester _userDataRequester;
+    private Input _input;
+    private Notifier _notifier;
 
     [SetUp]
     public void Setup()
     {
         _notifier = Substitute.For<Notifier>();
-        _userDataRequester = Substitute.For<UserDataRequester>();
-        _securityManager = new SecurityManager(_notifier, _userDataRequester);
+        _input = Substitute.For<Input>();
+        _securityManager = new SecurityManager(_notifier, new ConsoleUserDataRequester(_input));
     }
 
     [Test]
     public void do_not_save_user_when_password_and_confirm_password_are_not_equals()
     {
-        _userDataRequester.Request().Returns(new UserData("username", "fullName", "Pepe1234", "Pepe1234."));
+        IntroducingUserDataWithPasswords("Pepe1234", "Pepe1234.");
 
         _securityManager.CreateValidUser();
 
@@ -30,7 +32,7 @@ public class SecurityManagerTest
     [Test]
     public void do_not_save_user_when_password_too_short()
     {
-        _userDataRequester.Request().Returns(new UserData("username", "fullName", "Pepe123", "Pepe123"));
+        IntroducingUserDataWithPasswords("Pepe123", "Pepe123");
 
         _securityManager.CreateValidUser();
 
@@ -40,11 +42,20 @@ public class SecurityManagerTest
     [Test]
     public void save_user()
     {
-        _userDataRequester.Request().Returns(new UserData("username", "fullName", "Pepe1234", "Pepe1234"));
+        var validPassword = "Pepe1234";
+        IntroducingUserDataWithPasswords(validPassword, validPassword);
 
         _securityManager.CreateValidUser();
 
         var reversedPassword = "4321epeP";
-        _notifier.Received(1).Notify($"Saving Details for User (username, fullName, {reversedPassword})\n");
+        _notifier.Received(1).Notify($"Saving Details for User ({Username}, {FullName}, {reversedPassword})\n");
+    }
+
+    private void IntroducingUserDataWithPasswords(string password, string confirmedPassword)
+    {
+        _input.Request("Enter a username").Returns(Username);
+        _input.Request("Enter your full name").Returns(FullName);
+        _input.Request("Enter your password").Returns(password);
+        _input.Request("Re-enter your password").Returns(confirmedPassword);
     }
 }
