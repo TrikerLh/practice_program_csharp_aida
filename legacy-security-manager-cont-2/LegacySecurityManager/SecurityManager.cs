@@ -1,39 +1,36 @@
 using LegacySecurityManager.infrastructure;
-using System;
 
 namespace LegacySecurityManager;
-
-
 
 public class SecurityManager
 {
     private readonly Notifier _notifier;
-    private readonly ConsoleUserDataRequester _userDataRequester;
+    private readonly ConsoleUserInputRequester _userInputRequester;
 
-    public SecurityManager(Notifier notifier, Input input)
+    public SecurityManager(Notifier notifier, InputReader inputReader)
     {
         _notifier = notifier;
-        _userDataRequester = new ConsoleUserDataRequester(input);
+        _userInputRequester = new ConsoleUserInputRequester(inputReader);
     }
 
     public void CreateValidUser()
     {
-        var userData = _userDataRequester.Request();
+        var userInput = _userInputRequester.Request();
 
-        if (userData.PasswordsDoNotMatch())
+        if (userInput.PasswordsDoNotMatch())
         {
             NotifyPasswordDoNotMatch();
             return;
         }
 
-        if (userData.IsPasswordToShort())
+        if (userInput.IsPasswordToShort())
         {
             NotifyPasswordIsToShort();
             return;
         }
 
-        var encryptedPassword = EncryptPassword(userData.Password());
-        NotifyUserCreation(userData.UserName(), userData.FullName(), encryptedPassword);
+        var encryptedPassword = userInput.EncryptPassword();
+        NotifyUserCreation(encryptedPassword, userInput);
     }
 
     private void NotifyPasswordIsToShort()
@@ -46,17 +43,9 @@ public class SecurityManager
         Print("The passwords don't match");
     }
 
-    private void NotifyUserCreation(string username, string fullName, string encryptedPassword)
+    private void NotifyUserCreation(string encryptedPassword, UserInput userInput)
     {
-        Print($"Saving Details for User ({username}, {fullName}, {encryptedPassword})\n");
-    }
-
-    private static string EncryptPassword(string password)
-    {
-        var array = password.ToCharArray();
-        Array.Reverse(array);
-        var encryptedPassword = new string(array);
-        return encryptedPassword;
+        Print($"Saving Details for User ({userInput.UserName()}, {userInput.FullName()}, {encryptedPassword})\n");
     }
 
     private void Print(string message)
@@ -67,34 +56,34 @@ public class SecurityManager
     public static void CreateUser()
     {
         Notifier notifier = new ConsoleNotifier();
-        new SecurityManager(notifier, new ConsoleInput()).CreateValidUser();
+        new SecurityManager(notifier, new ConsoleInputReader()).CreateValidUser();
     }
 
-    internal class ConsoleUserDataRequester {
-        private Input input;
+    internal class ConsoleUserInputRequester {
+        private InputReader inputReader;
 
-        public ConsoleUserDataRequester(Input input) {
-            this.input = input;
+        public ConsoleUserInputRequester(InputReader inputReader) {
+            this.inputReader = inputReader;
         }
-        public UserData Request() {
+        public UserInput Request() {
 
-            return new UserData(RequestUserName(), RequestFullName(), RequestPassword(), RequestPasswordConfirmation());
+            return new UserInput(RequestUserName(), RequestFullName(), RequestPassword(), RequestPasswordConfirmation());
         }
 
         private string RequestPasswordConfirmation() {
-            return input.Request("Re-enter your password");
+            return inputReader.Read("Re-enter your password");
         }
 
         private string RequestPassword() {
-            return input.Request("Enter your password");
+            return inputReader.Read("Enter your password");
         }
 
         private string RequestFullName() {
-            return input.Request("Enter your full name");
+            return inputReader.Read("Enter your full name");
         }
 
         private string RequestUserName() {
-            return input.Request("Enter a username");
+            return inputReader.Read("Enter a username");
         }
 
     }

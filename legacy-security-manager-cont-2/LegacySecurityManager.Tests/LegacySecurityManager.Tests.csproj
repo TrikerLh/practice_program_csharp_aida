@@ -6,6 +6,7 @@
         <RootNamespace>LegacySecurityManager.Tests</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RunSettingsFilePath>C:\Users\rgayoso\Documents\Git\Curso Aida\Raul Corchero\practice_program_csharp_aida\legacy-security-manager-cont-2\LegacySecurityManager.Tests\bin\Debug\net6.0\fine-code-coverage\coverage-tool-output\LegacySecurityManager.Tests-fcc-mscodecoverage-generated.runsettings</RunSettingsFilePath>
     </PropertyGroup>
 
     <ItemGroup>
