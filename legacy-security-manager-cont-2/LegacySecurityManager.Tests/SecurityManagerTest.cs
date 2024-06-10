@@ -26,7 +26,7 @@ public class SecurityManagerTest
 
         _securityManager.CreateValidUser();
 
-        _notifier.Received(1).Notify("The passwords don't match");
+        ThenNotified("The passwords don't match");
     }
 
     [Test]
@@ -36,7 +36,7 @@ public class SecurityManagerTest
 
         _securityManager.CreateValidUser();
 
-        _notifier.Received(1).Notify("Password must be at least 8 characters in length");
+        ThenNotified("Password must be at least 8 characters in length");
     }
 
     [Test]
@@ -48,7 +48,7 @@ public class SecurityManagerTest
         _securityManager.CreateValidUser();
 
         var reversedPassword = "4321epeP";
-        _notifier.Received(1).Notify($"Saving Details for User ({Username}, {FullName}, {reversedPassword})\n");
+        ThenNotified($"Saving Details for User ({Username}, {FullName}, {reversedPassword})\n");
     }
 
     private void IntroducingUserDataWithPasswords(string password, string confirmedPassword)
@@ -57,5 +57,11 @@ public class SecurityManagerTest
         _input.Request("Enter your full name").Returns(FullName);
         _input.Request("Enter your password").Returns(password);
         _input.Request("Re-enter your password").Returns(confirmedPassword);
+    }
+
+    private void ThenNotified(string message)
+    {
+        _notifier.Received(1).Notify(message);
+        _notifier.Received(1).Notify(Arg.Any<string>());
     }
 }
