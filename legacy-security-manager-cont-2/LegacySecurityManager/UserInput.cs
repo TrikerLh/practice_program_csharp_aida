@@ -1,5 +1,3 @@
-using System;
-
 namespace LegacySecurityManager;
 
 public record UserInput
@@ -27,12 +25,9 @@ public record UserInput
         return _password.Length < 8;
     }
 
-    public string EncryptPassword()
+    public string EncryptPassword(Cipher cipher)
     {
-        var array = _password.ToCharArray();
-        Array.Reverse((Array)array);
-        var encryptedPassword = new string(array);
-        return encryptedPassword;
+        return cipher.Encrypt(_password);
     }
 
     public string UserName()

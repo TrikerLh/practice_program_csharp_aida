@@ -1,3 +1,4 @@
+using LegacySecurityManager.Ciphers;
 using LegacySecurityManager.infrastructure;
 
 namespace LegacySecurityManager;
@@ -6,11 +7,13 @@ public class SecurityManager
 {
     private readonly Notifier _notifier;
     private readonly ConsoleUserInputRequester _userInputRequester;
+    private Cipher _cipher;
 
-    public SecurityManager(Notifier notifier, InputReader inputReader)
+    public SecurityManager(Notifier notifier, InputReader inputReader, Cipher cipher)
     {
         _notifier = notifier;
         _userInputRequester = new ConsoleUserInputRequester(inputReader);
+        _cipher = cipher;
     }
 
     public void CreateValidUser()
@@ -29,7 +32,7 @@ public class SecurityManager
             return;
         }
 
-        var encryptedPassword = userInput.EncryptPassword();
+        var encryptedPassword = userInput.EncryptPassword(_cipher);
         NotifyUserCreation(encryptedPassword, userInput);
     }
 
@@ -56,7 +59,7 @@ public class SecurityManager
     public static void CreateUser()
     {
         Notifier notifier = new ConsoleNotifier();
-        new SecurityManager(notifier, new ConsoleInputReader()).CreateValidUser();
+        new SecurityManager(notifier, new ConsoleInputReader(), new ReverseCipher()).CreateValidUser();
     }
 
     internal class ConsoleUserInputRequester {

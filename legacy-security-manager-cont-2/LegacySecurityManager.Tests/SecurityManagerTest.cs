@@ -1,3 +1,4 @@
+using LegacySecurityManager.Ciphers;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -16,7 +17,7 @@ public class SecurityManagerTest
     {
         _notifier = Substitute.For<Notifier>();
         _input = Substitute.For<InputReader>();
-        _securityManager = new SecurityManager(_notifier, _input);
+        _securityManager = new SecurityManager(_notifier, _input, new ReverseCipher());
     }
 
     [Test]
