@@ -20,12 +20,15 @@ public class HelloService
         {
             _outputService.Write("Buenos dias!");
         }
-
-        if (IsBetween(time, new TimeOnly(12, 0),new TimeOnly(19, 59)))
+        else if (IsBetween(time, new TimeOnly(12, 0),new TimeOnly(19, 59)))
         {
             _outputService.Write("Buenas tardes!");
         }
-        _outputService.Write("Buenas noches!");
+        else 
+        {
+            _outputService.Write("Buenas noches!");
+        }
+        
 
     }
 

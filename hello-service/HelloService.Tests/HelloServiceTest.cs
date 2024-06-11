@@ -18,9 +18,18 @@ namespace Hello.Tests
         }
 
         [Test]
-        public void Say_Buenos_dias_between_6AM_to_11_59_AM()
+        public void Say_Buenos_dias_at_6AM()
         {
             Get(new TimeOnly(6, 00));
+
+            _helloService.Hello();
+
+            Assert("Buenos dias!");
+        }
+
+        [Test]
+        public void Say_Buenos_dias_at_11_59_AM() {
+            Get(new TimeOnly(11, 59));
 
             _helloService.Hello();
 
@@ -52,7 +61,7 @@ namespace Hello.Tests
 
         private void Assert(string message)
         {
-            _outputService.Received().Write(message);
+            _outputService.Received(1).Write(message);
         }
     }
 }
