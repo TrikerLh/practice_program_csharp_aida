@@ -19,17 +19,15 @@ public class HelloService
         if (IsBetween(time, new TimeOnly(6, 0), new TimeOnly(11, 59)))
         {
             _outputService.Write("Buenos dias!");
+            return;
         }
-        else if (IsBetween(time, new TimeOnly(12, 0),new TimeOnly(19, 59)))
+        if (IsBetween(time, new TimeOnly(12, 0),new TimeOnly(19, 59)))
         {
             _outputService.Write("Buenas tardes!");
-        }
-        else 
-        {
-            _outputService.Write("Buenas noches!");
+            return;
         }
         
-
+        _outputService.Write("Buenas noches!");
     }
 
     private static bool IsBetween(TimeOnly time, TimeOnly since, TimeOnly until)

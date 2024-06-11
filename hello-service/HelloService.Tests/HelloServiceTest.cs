@@ -62,6 +62,7 @@ namespace Hello.Tests
         private void Assert(string message)
         {
             _outputService.Received(1).Write(message);
+            _outputService.Received(1).Write(Arg.Any<string>());
         }
     }
 }
