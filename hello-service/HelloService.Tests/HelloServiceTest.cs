@@ -6,8 +6,8 @@ namespace Hello.Tests
     public class HelloServiceTest
     {
         private HelloService _helloService;
-        private OutputService? _outputService;
-        private DateTimeProvider? _dateTimeProvider;
+        private OutputService _outputService;
+        private DateTimeProvider _dateTimeProvider;
 
         [SetUp]
         public void SetUp()
