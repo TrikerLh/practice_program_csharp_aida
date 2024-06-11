@@ -20,7 +20,12 @@ public class HelloService
         {
             _outputService.Write("Buenos dias!");
         }
-        _outputService.Write("Buenas tardes!");
+
+        if (time.CompareTo(new TimeOnly(12, 0)) >= 0 && time.CompareTo(new TimeOnly(19, 59)) <= 0)
+        {
+            _outputService.Write("Buenas tardes!");
+        }
+        _outputService.Write("Buenas noches!");
 
     }
 }

@@ -36,6 +36,15 @@ namespace Hello.Tests
            Assert("Buenas tardes!");
         }
 
+        [Test]
+        public void Say_Buenas_noches_between_08PM_to_05_59_AM() {
+            Get(new TimeOnly(20, 00));
+
+            _helloService.Hello();
+
+            Assert("Buenas noches!");
+        }
+
         private void Get(TimeOnly time)
         {
             _dateTimeProvider.Get().Returns(time);
@@ -51,6 +60,6 @@ namespace Hello.Tests
 
 /* Lista de Test
  * Te saluda con "Buenos días!" desde las 6:00 AM hasta las 11:59AM OK
- * Te saluda con "Buenas tardes!" desde las 12:00 PM hasta las 07:59 PM
+ * Te saluda con "Buenas tardes!" desde las 12:00 PM hasta las 07:59 PM OK
  * Te saluda con "Buenas noches!" desde las 08:00 PM hasta las 5:59 AM
  * */
