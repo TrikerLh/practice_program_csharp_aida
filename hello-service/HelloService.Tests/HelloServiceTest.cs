@@ -14,27 +14,36 @@ namespace Hello.Tests
         {
             _outputService = Substitute.For<OutputService>();
             _dateTimeProvider = Substitute.For<DateTimeProvider>();
+            _helloService = new HelloService(_outputService, _dateTimeProvider);
         }
 
         [Test]
         public void Say_Buenos_dias_between_6AM_to_11_59_AM()
         {
-            _dateTimeProvider.Get().Returns(new TimeOnly(6, 00));
-            _helloService = new HelloService(_outputService, _dateTimeProvider);
+            Get(new TimeOnly(6, 00));
 
             _helloService.Hello();
 
-            _outputService.Received().Write("Buenos dias!");
+            Assert("Buenos dias!");
         }
 
         [Test]
         public void Say_Buenas_tardes_between_12AM_to_07_59_PM() {
-            _dateTimeProvider.Get().Returns(new TimeOnly(12, 00));
-            HelloService helloService = new HelloService(_outputService, _dateTimeProvider);
+           Get(new TimeOnly(12, 00));
 
-            helloService.Hello();
+           _helloService.Hello();
 
-            _outputService.Received().Write("Buenas tardes!");
+           Assert("Buenas tardes!");
+        }
+
+        private void Get(TimeOnly time)
+        {
+            _dateTimeProvider.Get().Returns(time);
+        }
+
+        private void Assert(string message)
+        {
+            _outputService.Received().Write(message);
         }
     }
 }
