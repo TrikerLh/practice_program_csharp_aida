@@ -7,14 +7,14 @@ namespace Hello.Tests
     {
         private HelloService _helloService;
         private OutputService _outputService;
-        private DateTimeProvider _dateTimeProvider;
+        private TimeProvider _timeProvider;
 
         [SetUp]
         public void SetUp()
         {
             _outputService = Substitute.For<OutputService>();
-            _dateTimeProvider = Substitute.For<DateTimeProvider>();
-            _helloService = new HelloService(_outputService, _dateTimeProvider);
+            _timeProvider = Substitute.For<TimeProvider>();
+            _helloService = new HelloService(_outputService, _timeProvider);
         }
 
         [TestCase(6,0,"Buenos dias!")]
@@ -31,7 +31,7 @@ namespace Hello.Tests
 
         private void GetTime(int hour, int minute)
         {
-            _dateTimeProvider.Get().Returns(new TimeOnly(hour, minute));
+            _timeProvider.Get().Returns(new TimeOnly(hour, minute));
         }
 
         private void VerifyReceivedOnlyThis(string message)
