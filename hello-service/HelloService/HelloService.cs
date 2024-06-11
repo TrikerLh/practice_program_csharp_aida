@@ -16,16 +16,21 @@ public class HelloService
     public void Hello()
     {
         var time = _dateTimeProvider.Get();
-        if (time.CompareTo(new TimeOnly(6, 0)) >= 0 && time.CompareTo(new TimeOnly(11, 59)) <= 0)
+        if (IsBetween(time, new TimeOnly(6, 0), new TimeOnly(11, 59)))
         {
             _outputService.Write("Buenos dias!");
         }
 
-        if (time.CompareTo(new TimeOnly(12, 0)) >= 0 && time.CompareTo(new TimeOnly(19, 59)) <= 0)
+        if (IsBetween(time, new TimeOnly(12, 0),new TimeOnly(19, 59)))
         {
             _outputService.Write("Buenas tardes!");
         }
         _outputService.Write("Buenas noches!");
 
+    }
+
+    private static bool IsBetween(TimeOnly time, TimeOnly since, TimeOnly until)
+    {
+        return time.CompareTo(since) >= 0 && time.CompareTo(until) <= 0;
     }
 }
