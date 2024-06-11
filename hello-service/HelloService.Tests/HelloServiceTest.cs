@@ -5,29 +5,36 @@ namespace Hello.Tests
 {
     public class HelloServiceTest
     {
+        private HelloService _helloService;
+        private OutputService? _outputService;
+        private DateTimeProvider? _dateTimeProvider;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _outputService = Substitute.For<OutputService>();
+            _dateTimeProvider = Substitute.For<DateTimeProvider>();
+        }
+
         [Test]
         public void Say_Buenos_dias_between_6AM_to_11_59_AM()
         {
-            var outputService = Substitute.For<OutputService>();
-            DateTimeProvider dateTimeProvider = Substitute.For<DateTimeProvider>();
-            dateTimeProvider.Get().Returns(new TimeOnly(6, 00));
-            HelloService helloService = new HelloService(outputService, dateTimeProvider);
+            _dateTimeProvider.Get().Returns(new TimeOnly(6, 00));
+            _helloService = new HelloService(_outputService, _dateTimeProvider);
 
-            helloService.Hello();
+            _helloService.Hello();
 
-            outputService.Received().Write("Buenos dias!");
+            _outputService.Received().Write("Buenos dias!");
         }
 
         [Test]
         public void Say_Buenas_tardes_between_12AM_to_07_59_PM() {
-            var outputService = Substitute.For<OutputService>();
-            DateTimeProvider dateTimeProvider = Substitute.For<DateTimeProvider>();
-            dateTimeProvider.Get().Returns(new TimeOnly(12, 00));
-            HelloService helloService = new HelloService(outputService, dateTimeProvider);
+            _dateTimeProvider.Get().Returns(new TimeOnly(12, 00));
+            HelloService helloService = new HelloService(_outputService, _dateTimeProvider);
 
             helloService.Hello();
 
-            outputService.Received().Write("Buenas tardes!");
+            _outputService.Received().Write("Buenas tardes!");
         }
     }
 }
