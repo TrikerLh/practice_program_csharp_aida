@@ -17,12 +17,24 @@ namespace Hello.Tests
 
             outputService.Received().Write("Buenos dias!");
         }
+
+        [Test]
+        public void Say_Buenas_tardes_between_12AM_to_07_59_PM() {
+            var outputService = Substitute.For<OutputService>();
+            DateTimeProvider dateTimeProvider = Substitute.For<DateTimeProvider>();
+            dateTimeProvider.Get().Returns(new TimeOnly(12, 00));
+            HelloService helloService = new HelloService(outputService, dateTimeProvider);
+
+            helloService.Hello();
+
+            outputService.Received().Write("Buenas tardes!");
+        }
     }
 }
 
 
 /* Lista de Test
- * Te saluda con "Buenos días!" desde las 6:00 AM hasta las 11:59AM
+ * Te saluda con "Buenos días!" desde las 6:00 AM hasta las 11:59AM OK
  * Te saluda con "Buenas tardes!" desde las 12:00 PM hasta las 07:59 PM
  * Te saluda con "Buenas noches!" desde las 08:00 PM hasta las 5:59 AM
  * */

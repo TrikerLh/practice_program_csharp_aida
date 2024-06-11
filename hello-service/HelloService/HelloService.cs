@@ -1,3 +1,5 @@
+using System;
+
 namespace Hello;
 
 public class HelloService
@@ -13,6 +15,12 @@ public class HelloService
 
     public void Hello()
     {
-        _outputService.Write("Buenos dias!");
+        var time = _dateTimeProvider.Get();
+        if (time.CompareTo(new TimeOnly(6, 0)) >= 0 && time.CompareTo(new TimeOnly(11, 59)) <= 0)
+        {
+            _outputService.Write("Buenos dias!");
+        }
+        _outputService.Write("Buenas tardes!");
+
     }
 }
