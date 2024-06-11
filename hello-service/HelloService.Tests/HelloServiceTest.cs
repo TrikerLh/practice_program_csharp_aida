@@ -66,10 +66,3 @@ namespace Hello.Tests
         }
     }
 }
-
-
-/* Lista de Test
- * Te saluda con "Buenos días!" desde las 6:00 AM hasta las 11:59AM OK
- * Te saluda con "Buenas tardes!" desde las 12:00 PM hasta las 07:59 PM OK
- * Te saluda con "Buenas noches!" desde las 08:00 PM hasta las 5:59 AM
- * */
