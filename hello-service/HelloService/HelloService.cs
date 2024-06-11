@@ -30,7 +30,7 @@ public class HelloService
         _outputService.Write("Buenas noches!");
     }
 
-    private static bool IsBetween(TimeOnly time, TimeOnly since, TimeOnly until)
+    private bool IsBetween(TimeOnly time, TimeOnly since, TimeOnly until)
     {
         return time.CompareTo(since) >= 0 && time.CompareTo(until) <= 0;
     }

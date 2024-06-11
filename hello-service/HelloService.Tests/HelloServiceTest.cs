@@ -17,49 +17,24 @@ namespace Hello.Tests
             _helloService = new HelloService(_outputService, _dateTimeProvider);
         }
 
-        [Test]
-        public void Say_Buenos_dias_at_6AM()
+        [TestCase(6,0,"Buenos dias!")]
+        [TestCase(11, 59, "Buenos dias!")]
+        [TestCase(12, 00, "Buenas tardes!")]
+        [TestCase(20, 00, "Buenas noches!")]
+        public void Say_Hello(int hour, int minute, string message) {
+            GetTime(hour, minute);
+
+            _helloService.Hello();
+
+            VerifyReceivedOnlyThis(message);
+        }
+
+        private void GetTime(int hour, int minute)
         {
-            Get(new TimeOnly(6, 00));
-
-            _helloService.Hello();
-
-            Assert("Buenos dias!");
+            _dateTimeProvider.Get().Returns(new TimeOnly(hour, minute));
         }
 
-        [Test]
-        public void Say_Buenos_dias_at_11_59_AM() {
-            Get(new TimeOnly(11, 59));
-
-            _helloService.Hello();
-
-            Assert("Buenos dias!");
-        }
-
-        [Test]
-        public void Say_Buenas_tardes_between_12AM_to_07_59_PM() {
-           Get(new TimeOnly(12, 00));
-
-           _helloService.Hello();
-
-           Assert("Buenas tardes!");
-        }
-
-        [Test]
-        public void Say_Buenas_noches_between_08PM_to_05_59_AM() {
-            Get(new TimeOnly(20, 00));
-
-            _helloService.Hello();
-
-            Assert("Buenas noches!");
-        }
-
-        private void Get(TimeOnly time)
-        {
-            _dateTimeProvider.Get().Returns(time);
-        }
-
-        private void Assert(string message)
+        private void VerifyReceivedOnlyThis(string message)
         {
             _outputService.Received(1).Write(message);
             _outputService.Received(1).Write(Arg.Any<string>());
