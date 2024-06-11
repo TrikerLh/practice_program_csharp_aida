@@ -19,13 +19,18 @@ public class StockBrokerClient
     public void PlaceOrder(string orderSequence)
     {
         var time = _dateTimeProvider.GetDateTime();
-        var summary = GetFormatSummary(time);
+        var summary = GetFormatSummary(time, orderSequence);
         _notifier.Notify(summary);
     }
 
-    //TODO: es static, podría ir en una clase formater?º
-    private static string GetFormatSummary(DateTime time)
+    //TODO: es static, podría ir en una clase formater?
+    private static string GetFormatSummary(DateTime time, string orderSequence)
     {
-        return time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 0.00, Sell: \u20ac 0.00";
+        
+        if (string.IsNullOrEmpty(orderSequence))
+        {
+            return time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 0.00, Sell: \u20ac 0.00";
+        }
+        return time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 10.00, Sell: \u20ac 0.00";
     }
 }

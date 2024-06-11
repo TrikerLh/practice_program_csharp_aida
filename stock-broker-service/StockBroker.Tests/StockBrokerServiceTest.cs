@@ -10,6 +10,7 @@ namespace StockBroker.Tests
         private Notifier _notifier;
         private StockBrokerService _stockBrokerService;
         private StockBrokerClient _stockBrokerClient;
+        private string _orderSequence;
 
         [SetUp]
         public void Setup()
@@ -23,12 +24,25 @@ namespace StockBroker.Tests
         public void With_a_empty_order()
         {
             _dateTimeProvider.GetDateTime().Returns(new DateTime(2024, 06, 11, 12, 20, 00));
-            var orderSequence = "";
+            _orderSequence = "";
 
-            _stockBrokerClient.PlaceOrder(orderSequence);
+            _stockBrokerClient.PlaceOrder(_orderSequence);
 
             var time = new DateTime(2024, 06, 11, 12, 20, 00);
             var summary = time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 0.00, Sell: \u20ac 0.00";
+            _notifier.Received(1).Notify(summary);
+        }
+
+        [Test]
+        public void With_a_Buy_order_with_one_quantity()
+        {
+            _dateTimeProvider.GetDateTime().Returns(new DateTime(2022, 05, 14, 13, 54, 00));
+            _orderSequence = "GOOG 1 10.00 B";
+
+            _stockBrokerClient.PlaceOrder(_orderSequence);
+
+            var time = new DateTime(2022, 05, 14, 13, 54, 00);
+            var summary = time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 10.00, Sell: \u20ac 0.00";
             _notifier.Received(1).Notify(summary);
         }
     }
