@@ -6,6 +6,8 @@ public class HelloService
 {
     private readonly OutputService _outputService;
     private readonly DateTimeProvider _dateTimeProvider;
+    private readonly TimeSlot morning = new(new TimeOnly(6, 0), new TimeOnly(11, 59));
+    private readonly TimeSlot afternoon = new(new TimeOnly(12, 0), new TimeOnly(19, 59));
 
     public HelloService(OutputService outputService, DateTimeProvider dateTimeProvider)
     {
@@ -16,22 +18,16 @@ public class HelloService
     public void Hello()
     {
         var time = _dateTimeProvider.Get();
-        if (IsBetween(time, new TimeOnly(6, 0), new TimeOnly(11, 59)))
-        {
+        if (morning.IsInTime(time)) {
             _outputService.Write("Buenos dias!");
             return;
         }
-        if (IsBetween(time, new TimeOnly(12, 0),new TimeOnly(19, 59)))
+        if (afternoon.IsInTime(time))
         {
             _outputService.Write("Buenas tardes!");
             return;
         }
         
         _outputService.Write("Buenas noches!");
-    }
-
-    private bool IsBetween(TimeOnly time, TimeOnly since, TimeOnly until)
-    {
-        return time.CompareTo(since) >= 0 && time.CompareTo(until) <= 0;
     }
 }
