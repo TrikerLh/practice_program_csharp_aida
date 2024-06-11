@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 
 namespace StockBroker;
@@ -18,7 +19,13 @@ public class StockBrokerClient
     public void PlaceOrder(string orderSequence)
     {
         var time = _dateTimeProvider.GetDateTime();
-        var summary = time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 0.00, Sell: \u20ac 0.00";
+        var summary = GetFormatSummary(time);
         _notifier.Notify(summary);
+    }
+
+    //TODO: es static, podría ir en una clase formater?º
+    private static string GetFormatSummary(DateTime time)
+    {
+        return time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 0.00, Sell: \u20ac 0.00";
     }
 }
