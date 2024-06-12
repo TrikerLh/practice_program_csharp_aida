@@ -34,13 +34,23 @@ public class StockBrokerClient
             return timeFormated + " Buy: € 0.00, Sell: € 0.00";
         }
 
-        var price = decimal.Parse(orderSequence.Split(" ")[2], _cultureInfo);
         var quantity = int.Parse(orderSequence.Split(" ")[1]);
-        return timeFormated + $" Buy: {FormatAmount(price, quantity)}, Sell: € 0.00";
+        var price = double.Parse(orderSequence.Split(" ")[2], _cultureInfo);
+        var type = orderSequence.Split(" ")[3];
+        var buyAmount = 0.0;
+        var sellAmount = 0.0;
+        if (type == "B")
+        {
+            buyAmount = price * quantity;
+        }
+        else
+        {
+            sellAmount = price * quantity;
+        }
+        return timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}";
     }
 
-    private static string FormatAmount(decimal price, int quantity) {
-        var amount = price * quantity;
+    private static string FormatAmount(double amount) {
         return "€ " + amount.ToString("F2", _cultureInfo);
     }
 }

@@ -53,14 +53,13 @@ namespace StockBroker.Tests
             _notifier.Received(1).Notify(summary);
         }
 
-        [Ignore("")]
         [Test]
-        public void Place_a_Sell_order_for_one_stock() {
+        public void Place_a_Sell_order_for_four_stock() {
             GetDateTimeForOrder(2023, 12, 31, 23, 54);
 
-            PlaceOrdersSequence("AAPL 1 10.00 S");
+            PlaceOrdersSequence("AAPL 4 10.00 S");
 
-            var summary = "12/31/2023 11:54 PM Buy: € 0.00, Sell: € 10.00";
+            var summary = "12/31/2023 11:54 PM Buy: € 0.00, Sell: € 40.00";
             _notifier.Received(1).Notify(summary);
         }
 
