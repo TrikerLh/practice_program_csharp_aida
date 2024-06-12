@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using NSubstitute;
 using NUnit.Framework;
@@ -23,12 +24,12 @@ namespace StockBroker.Tests
         [Test]
         public void With_a_empty_order()
         {
-            _dateTimeProvider.GetDateTime().Returns(new DateTime(2024, 06, 11, 12, 20, 00));
+            GetDateTimeForOrder(GetDateTime(2024, 06, 11, 12, 20));
             _orderSequence = "";
 
-            _stockBrokerClient.PlaceOrder(_orderSequence);
+            CallStockBrokerClient();
 
-            var time = new DateTime(2024, 06, 11, 12, 20, 00);
+            var time = GetDateTime(2024, 06, 11, 12, 20);
             var summary = time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 0.00, Sell: \u20ac 0.00";
             _notifier.Received(1).Notify(summary);
         }
@@ -36,14 +37,29 @@ namespace StockBroker.Tests
         [Test]
         public void With_a_Buy_order_with_one_quantity()
         {
-            _dateTimeProvider.GetDateTime().Returns(new DateTime(2022, 05, 14, 13, 54, 00));
+            GetDateTimeForOrder(GetDateTime(2022, 05, 14, 13, 54));
             _orderSequence = "GOOG 1 10.00 B";
 
-            _stockBrokerClient.PlaceOrder(_orderSequence);
+            CallStockBrokerClient();
 
-            var time = new DateTime(2022, 05, 14, 13, 54, 00);
+            var time = GetDateTime(2022, 05, 14, 13, 54);
             var summary = time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 10.00, Sell: \u20ac 0.00";
             _notifier.Received(1).Notify(summary);
+        }
+
+        private void GetDateTimeForOrder(DateTime time)
+        {
+            _dateTimeProvider.GetDateTime().Returns(time);
+        }
+
+        private DateTime GetDateTime(int year, int month, int day, int hour, int minute)
+        {
+            return new DateTime(year, month, day, hour, minute, 00);
+        }
+
+        private void CallStockBrokerClient()
+        {
+            _stockBrokerClient.PlaceOrder(_orderSequence);
         }
     }
 }

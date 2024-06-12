@@ -26,11 +26,11 @@ public class StockBrokerClient
     //TODO: es static, podría ir en una clase formater?
     private static string GetFormatSummary(DateTime time, string orderSequence)
     {
-        
+        var timeFormated = time.ToString("g", new CultureInfo("en-US"));
         if (string.IsNullOrEmpty(orderSequence))
         {
-            return time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 0.00, Sell: \u20ac 0.00";
+            return timeFormated + " Buy: \u20ac 0.00, Sell: \u20ac 0.00";
         }
-        return time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 10.00, Sell: \u20ac 0.00";
+        return timeFormated + " Buy: \u20ac 10.00, Sell: \u20ac 0.00";
     }
 }
