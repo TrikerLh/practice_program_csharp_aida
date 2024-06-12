@@ -24,32 +24,30 @@ namespace StockBroker.Tests
         [Test]
         public void With_a_empty_order()
         {
-            GetDateTimeForOrder(GetDateTime(2024, 06, 11, 12, 20));
+            GetDateTimeForOrder(2024, 06, 11, 12, 20);
             _orderSequence = "";
 
             CallStockBrokerClient();
 
-            var time = GetDateTime(2024, 06, 11, 12, 20);
-            var summary = time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 0.00, Sell: \u20ac 0.00";
+            var summary = "6/11/2024 12:20 PM Buy: \u20ac 0.00, Sell: \u20ac 0.00";
             _notifier.Received(1).Notify(summary);
         }
 
         [Test]
         public void With_a_Buy_order_with_one_quantity()
         {
-            GetDateTimeForOrder(GetDateTime(2022, 05, 14, 13, 54));
+            GetDateTimeForOrder(2022, 05, 14, 13, 54);
             _orderSequence = "GOOG 1 10.00 B";
 
             CallStockBrokerClient();
 
-            var time = GetDateTime(2022, 05, 14, 13, 54);
-            var summary = time.ToString("g", new CultureInfo("en-US")) + " Buy: \u20ac 10.00, Sell: \u20ac 0.00";
+            var summary = "5/14/2022 1:54 PM Buy: \u20ac 10.00, Sell: \u20ac 0.00";
             _notifier.Received(1).Notify(summary);
         }
 
-        private void GetDateTimeForOrder(DateTime time)
+        private void GetDateTimeForOrder(int year, int month, int day, int hour, int minute)
         {
-            _dateTimeProvider.GetDateTime().Returns(time);
+            _dateTimeProvider.GetDateTime().Returns(new DateTime(year, month, day, hour, minute, 00));
         }
 
         private DateTime GetDateTime(int year, int month, int day, int hour, int minute)
