@@ -43,6 +43,16 @@ namespace StockBroker.Tests
             _notifier.Received(1).Notify(summary);
         }
 
+        [Test]
+        public void Place_a_Buy_order_for_two_stock() {
+            GetDateTimeForOrder(2015, 5, 3, 5, 07);
+
+            PlaceOrdersSequence("KO 2 10.00 B");
+
+            var summary = "5/3/2015 5:07 AM Buy: € 20.00, Sell: € 0.00";
+            _notifier.Received(1).Notify(summary);
+        }
+
         [Ignore("")]
         [Test]
         public void Place_a_Sell_order_for_one_stock() {
