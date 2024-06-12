@@ -11,7 +11,6 @@ namespace StockBroker.Tests
         private Notifier _notifier;
         private StockBrokerService _stockBrokerService;
         private StockBrokerClient _stockBrokerClient;
-        private string _orderSequence;
 
         [SetUp]
         public void Setup()
@@ -22,26 +21,36 @@ namespace StockBroker.Tests
             _stockBrokerClient = new StockBrokerClient(_dateTimeProvider, _notifier, _stockBrokerService);
         }
         [Test]
-        public void With_a_empty_order()
+        public void Place_an_empty_order()
         {
             GetDateTimeForOrder(2024, 06, 11, 12, 20);
-            _orderSequence = "";
 
-            CallStockBrokerClient();
+            PlaceOrdersSequence("");
 
-            var summary = "6/11/2024 12:20 PM Buy: \u20ac 0.00, Sell: \u20ac 0.00";
+            var summary = "6/11/2024 12:20 PM Buy: € 0.00, Sell: € 0.00";
             _notifier.Received(1).Notify(summary);
         }
 
-        [Test]
-        public void With_a_Buy_order_with_one_quantity()
+        [TestCase(10.00)]
+        [TestCase(58.00)]
+        public void Place_a_Buy_order_for_one_stock(decimal price)
         {
             GetDateTimeForOrder(2022, 05, 14, 13, 54);
-            _orderSequence = "GOOG 1 10.00 B";
 
-            CallStockBrokerClient();
+            PlaceOrdersSequence($"GOOG 1 {price} B");
 
-            var summary = "5/14/2022 1:54 PM Buy: \u20ac 10.00, Sell: \u20ac 0.00";
+            var summary = $"5/14/2022 1:54 PM Buy: € {FormatDecimal(price)}, Sell: € 0.00";
+            _notifier.Received(1).Notify(summary);
+        }
+
+        [Ignore("")]
+        [Test]
+        public void Place_a_Sell_order_for_one_stock() {
+            GetDateTimeForOrder(2023, 12, 31, 23, 54);
+
+            PlaceOrdersSequence("AAPL 1 10.00 S");
+
+            var summary = "12/31/2023 11:54 PM Buy: € 0.00, Sell: € 10.00";
             _notifier.Received(1).Notify(summary);
         }
 
@@ -50,14 +59,14 @@ namespace StockBroker.Tests
             _dateTimeProvider.GetDateTime().Returns(new DateTime(year, month, day, hour, minute, 00));
         }
 
-        private DateTime GetDateTime(int year, int month, int day, int hour, int minute)
+        private void PlaceOrdersSequence(string ordersSequence)
         {
-            return new DateTime(year, month, day, hour, minute, 00);
+            _stockBrokerClient.PlaceOrder(ordersSequence);
         }
 
-        private void CallStockBrokerClient()
+        private static string FormatDecimal(decimal price)
         {
-            _stockBrokerClient.PlaceOrder(_orderSequence);
+            return price.ToString("F2", new CultureInfo("en-US"));
         }
     }
 }
