@@ -36,4 +36,14 @@ public class Order
 
         return 0.0;
     }
+
+    public int GetQuantity()
+    {
+        return _quantity;
+    }
+
+    public string GetSymbol()
+    {
+        return _symbol;
+    }
 }

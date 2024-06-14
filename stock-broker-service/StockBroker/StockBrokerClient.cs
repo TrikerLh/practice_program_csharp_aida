@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Microsoft.VisualBasic;
 
 namespace StockBroker;
 
@@ -22,7 +23,13 @@ public class StockBrokerClient
     {
         var time = _dateTimeProvider.GetDateTime();
         var order = GetOrder(orderSequence);
-        var summary = GetFormatSummary(time, order);
+        var exitPlace = _stockBrokerService.Place(new OrderDTO(order.GetSymbol(), order.GetQuantity()));
+        var orderFail = "";
+        if (!exitPlace)
+        {
+            orderFail = order.GetSymbol();
+        }
+        var summary = GetFormatSummary(time, order, orderFail);
         _notifier.Notify(summary);
     }
     private Order GetOrder(string orderSequence) {
@@ -39,17 +46,34 @@ public class StockBrokerClient
 
     //TODO: es static, podría ir en una clase formater?
 
-    private static string GetFormatSummary(DateTime time, Order order)
+    private static string GetFormatSummary(DateTime time, Order order, string orderFail)
     {
         var timeFormated = time.ToString("g", _cultureInfo);
         if (order.IsEmptyOrder())
         {
             return timeFormated + " Buy: € 0.00, Sell: € 0.00";
         }
-        return timeFormated + $" Buy: {FormatAmount(order.GetBuyAmount())}, Sell: {FormatAmount(order.GetSellAmount())}";
+
+        if (string.IsNullOrEmpty(orderFail))
+        {
+            return timeFormated + $" Buy: {FormatAmount(order.GetBuyAmount())}, Sell: {FormatAmount(order.GetSellAmount())}";
+        }
+        return timeFormated + " Buy: € 0.00, Sell: € 0.00, Failed: " + orderFail;
     }
 
     private static string FormatAmount(double amount) {
         return "€ " + amount.ToString("F2", _cultureInfo);
+    }
+}
+
+public record OrderDTO
+{
+    private readonly string _symbol;
+    private readonly int _quantity;
+
+    public OrderDTO(string symbol, int quantity)
+    {
+        _symbol = symbol;
+        _quantity = quantity;
     }
 }
