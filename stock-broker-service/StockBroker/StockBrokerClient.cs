@@ -21,15 +21,12 @@ public class StockBrokerClient
     public void PlaceOrder(string orderSequence)
     {
         var time = _dateTimeProvider.GetDateTime();
-        Order order = GetOrder(orderSequence);
+        var order = GetOrder(orderSequence);
         var summary = GetFormatSummary(time, order);
         _notifier.Notify(summary);
     }
-
-    private Order GetOrder(string orderSequence)
-    {
-        if (string.IsNullOrEmpty(orderSequence))
-        {
+    private Order GetOrder(string orderSequence) {
+        if (string.IsNullOrEmpty(orderSequence)) {
             return new Order("", 0, 0.0, "");
         }
         var symbol = orderSequence.Split(" ")[0];
@@ -41,6 +38,7 @@ public class StockBrokerClient
     }
 
     //TODO: es static, podría ir en una clase formater?
+
     private static string GetFormatSummary(DateTime time, Order order)
     {
         var timeFormated = time.ToString("g", _cultureInfo);
@@ -48,51 +46,10 @@ public class StockBrokerClient
         {
             return timeFormated + " Buy: € 0.00, Sell: € 0.00";
         }
-        var buyAmount = 0.0;
-        var sellAmount = 0.0;
-        if (order.IsBuy())
-        {
-            buyAmount = order.GetAmount();
-        }
-        else
-        {
-            sellAmount = order.GetAmount();
-        }
-        return timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}";
+        return timeFormated + $" Buy: {FormatAmount(order.GetBuyAmount())}, Sell: {FormatAmount(order.GetSellAmount())}";
     }
 
     private static string FormatAmount(double amount) {
         return "€ " + amount.ToString("F2", _cultureInfo);
-    }
-}
-
-public class Order
-{
-    private readonly string _symbol;
-    private readonly int _quantity;
-    private readonly double _price;
-    private readonly string _type;
-
-    public Order(string symbol, int quantity, double price, string type)
-    {
-        _symbol = symbol;
-        _quantity = quantity;
-        _price = price;
-        _type = type;
-    }
-
-    public bool IsBuy()
-    {
-        return _type == "B";
-    }
-
-    public double GetAmount()
-    {
-        return _quantity * _price;
-    }
-
-    public bool IsEmptyOrder()
-    {
-        return _symbol == "" && _quantity == 0 && _price == 0 && _type == "";
     }
 }
