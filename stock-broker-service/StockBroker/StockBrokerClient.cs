@@ -66,14 +66,5 @@ public class StockBrokerClient
     }
 }
 
-public record OrderDTO
-{
-    private readonly string _symbol;
-    private readonly int _quantity;
-
-    public OrderDTO(string symbol, int quantity)
-    {
-        _symbol = symbol;
-        _quantity = quantity;
-    }
+public record OrderDTO(string symbol, int quantity) {
 }
