@@ -30,7 +30,7 @@ namespace StockBroker.Tests
             PlaceOrdersSequence("");
 
             var summary = "6/11/2024 12:20 PM Buy: € 0.00, Sell: € 0.00";
-            _notifier.Received(1).Notify(summary);
+            SpyMessage(summary);
         }
 
         [TestCase(10.00)]
@@ -42,7 +42,7 @@ namespace StockBroker.Tests
             PlaceOrdersSequence($"GOOG 1 {price} B");
 
             var summary = $"5/14/2022 1:54 PM Buy: € {FormatDecimal(price)}, Sell: € 0.00";
-            _notifier.Received(1).Notify(summary);
+            SpyMessage(summary);
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace StockBroker.Tests
             PlaceOrdersSequence("KO 2 10.00 B");
 
             var summary = "5/3/2015 5:07 AM Buy: € 20.00, Sell: € 0.00";
-            _notifier.Received(1).Notify(summary);
+            SpyMessage(summary);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace StockBroker.Tests
             PlaceOrdersSequence("AAPL 4 10.00 S");
 
             var summary = "12/31/2023 11:54 PM Buy: € 0.00, Sell: € 40.00";
-            _notifier.Received(1).Notify(summary);
+            SpyMessage(summary);
         }
 
         [Test]
@@ -74,6 +74,11 @@ namespace StockBroker.Tests
             PlaceOrdersSequence("IBE 4 58.63 B");
 
             var summary = "4/6/2020 5:24 PM Buy: € 0.00, Sell: € 0.00, Failed: IBE";
+            SpyMessage(summary);
+        }
+
+        private void SpyMessage(string summary)
+        {
             _notifier.Received(1).Notify(summary);
         }
 
