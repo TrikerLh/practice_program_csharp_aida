@@ -65,6 +65,3 @@ public class StockBrokerClient
         return "€ " + amount.ToString("F2", _cultureInfo);
     }
 }
-
-public record OrderDTO(string symbol, int quantity) {
-}
