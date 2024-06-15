@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace StockBroker;
 
@@ -22,7 +22,7 @@ public class StockBrokerClient
     public void PlaceOrder(string orderSequence)
     {
         var time = _dateTimeProvider.GetDateTime();
-        var orders = GetOrder(orderSequence);
+        var orders = GetOrders(orderSequence);
         var orderFail = "";
         foreach (var order in orders)
         {
@@ -34,53 +34,23 @@ public class StockBrokerClient
         var summary = _summaryFormatter.GetFormatSummary(time, orders, orderFail);
         _notifier.Notify(summary);
     }
-    private List<Order> GetOrder(string orderSequence) {
+    private List<Order> GetOrders(string orderSequence) {
         var orders = new List<Order>();
         if (string.IsNullOrEmpty(orderSequence)) {
             orders.Add(new Order("", 0, 0.0, ""));
             return orders;
         }
         var ordersSplit = orderSequence.Split(',');
-        foreach (var order in ordersSplit)
-        {
-            var symbol = order.Split(" ")[0];
-            var quantity = int.Parse(order.Split(" ")[1]);
-            var price = double.Parse(order.Split(" ")[2], CultureInfo.InvariantCulture);
-            var type = order.Split(" ")[3];
-            orders.Add(new Order(symbol, quantity, price, type));
-        }
+        orders.AddRange(
+            ordersSplit.Select(
+                order => new Order(
+                    order.Split(" ")[0], 
+                    int.Parse(order.Split(" ")[1]), 
+                    double.Parse(order.Split(" ")[2], CultureInfo.InvariantCulture), 
+                    order.Split(" ")[3]
+                    )
+                )
+            );
         return orders;
-    }
-}
-
-internal class SummaryFormatter
-{
-    private readonly CultureInfo _cultureInfo;
-
-    public SummaryFormatter(CultureInfo cultureInfo)
-    {
-        _cultureInfo = cultureInfo;
-    }
-
-    internal string GetFormatSummary(DateTime time, IList<Order> orders, string orderFail) {
-        var timeFormated = time.ToString("g", _cultureInfo);
-        if (orders.Count == 0) {
-            return timeFormated + " Buy: € 0.00, Sell: € 0.00";
-        }
-
-        if (string.IsNullOrEmpty(orderFail)) {
-            var buyAmount = 0.0;
-            var sellAmount = 0.0;
-            foreach (var order in orders) {
-                buyAmount += order.GetBuyAmount();
-                sellAmount += order.GetSellAmount();
-            }
-            return timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}";
-        }
-        return timeFormated + " Buy: € 0.00, Sell: € 0.00, Failed: " + orderFail;
-    }
-
-    private string FormatAmount(double amount) {
-        return "€ " + amount.ToString("F2", _cultureInfo);
     }
 }
