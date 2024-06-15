@@ -118,6 +118,18 @@ namespace StockBroker.Tests
             SpyMessage(summary);
         }
 
+        [Ignore("refactor")]
+        [Test]
+        public void Place_two_Buy_orders_with_one_error() {
+            GetDateTimeForOrder(2024, 5, 11, 17, 35);
+            _stockBrokerService.Place(Arg.Any<OrderDTO>()).Returns(false, true);
+
+            PlaceOrdersSequence("POPP 3 5.00 B,DAI 10 23.00 B");
+
+            var summary = "5/11/2024 5:35 PM Buy: € 0.00, Sell: € 230.00, Failed: POPP";
+            SpyMessage(summary);
+        }
+
         private void SpyMessage(string summary)
         {
             _notifier.Received(1).Notify(summary);

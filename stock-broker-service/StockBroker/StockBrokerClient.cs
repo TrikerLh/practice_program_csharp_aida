@@ -23,22 +23,15 @@ public class StockBrokerClient
     {
         var time = _dateTimeProvider.GetDateTime();
         var orders = GetOrders(orderSequence);
-        var orderFail = "";
+        var orderFails = new List<string>();
         foreach (var order in orders)
         {
             var exitPlace = _stockBrokerService.Place(new OrderDTO(order.GetSymbol(), order.GetQuantity()));
             if (!exitPlace) {
-                if (string.IsNullOrEmpty(orderFail))
-                {
-                    orderFail += order.GetSymbol();
-                }
-                else
-                {
-                    orderFail += ", " + order.GetSymbol();
-                }
+                orderFails.Add(order.GetSymbol());
             }
         }
-        var summary = _summaryFormatter.GetFormatSummary(time, orders, orderFail);
+        var summary = _summaryFormatter.GetFormatSummary(time, orders, orderFails);
         _notifier.Notify(summary);
     }
     private List<Order> GetOrders(string orderSequence) {
