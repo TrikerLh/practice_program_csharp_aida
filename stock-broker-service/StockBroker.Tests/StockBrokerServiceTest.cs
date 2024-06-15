@@ -77,6 +77,16 @@ namespace StockBroker.Tests
             SpyMessage(summary);
         }
 
+        [Test]
+        public void Place_two_Buy_orders() {
+            GetDateTimeForOrder(2024, 5, 11, 17, 35);
+
+            PlaceOrdersSequence("BROP 2 15.00 B,BULL 5 50.00 B");
+
+            var summary = "5/11/2024 5:35 PM Buy: € 280.00, Sell: € 0.00";
+            SpyMessage(summary);
+        }
+
         private void SpyMessage(string summary)
         {
             _notifier.Received(1).Notify(summary);
