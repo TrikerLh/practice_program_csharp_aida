@@ -16,11 +16,6 @@ public class Order
         _type = type;
         _success = true;
     }
-    public bool IsEmptyOrder()
-    {
-        return _symbol == "" && _quantity == 0 && _price == 0 && _type == "";
-    }
-
     public double GetBuyAmount()
     {
         if (_type == "B")
@@ -49,11 +44,11 @@ public class Order
         return _symbol;
     }
 
-    public void SetSuccess(bool success)
+    public void ToFail()
     {
-        _success = success;
+        _success = false;
     }
-    public bool GetSuccess() {
+    public bool IsSuccess() {
         return _success;
     }
 }

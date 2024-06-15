@@ -13,29 +13,25 @@ internal class SummaryFormatter
         _cultureInfo = cultureInfo;
     }
 
-    internal string GetFormatSummary(DateTime time, IList<Order> orders, List<string> orderFails) {
+    internal string GetFormatSummary(DateTime time, IList<Order> orders, List<string> ordersSymbolFail) {
         var timeFormated = time.ToString("g", _cultureInfo);
         if (orders.Count == 0) {
             return timeFormated + " Buy: € 0.00, Sell: € 0.00";
         }
 
-        if (orderFails.Count == 0) {
-            
-        }
-
         var buyAmount = 0.0;
         var sellAmount = 0.0;
         foreach (var order in orders) {
-            if (order.GetSuccess())
+            if (order.IsSuccess())
             {
                 buyAmount += order.GetBuyAmount();
                 sellAmount += order.GetSellAmount();
             }
         }
-        return timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}" + GetFailsFormatter(orderFails);
+        return timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}" + GetSymbolsFailFormatter(ordersSymbolFail);
     }
 
-    private string GetFailsFormatter(List<string> orderFails)
+    private string GetSymbolsFailFormatter(List<string> orderFails)
     {
         var fails = "";
         for (var i = 0; i < orderFails.Count; i++)
