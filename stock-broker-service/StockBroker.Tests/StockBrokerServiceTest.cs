@@ -87,6 +87,37 @@ namespace StockBroker.Tests
             SpyMessage(summary);
         }
 
+        [Test]
+        public void Place_two_Sell_orders() {
+            GetDateTimeForOrder(2024, 5, 11, 17, 35);
+
+            PlaceOrdersSequence("POPP 3 5.00 S,DAI 10 23.00 S");
+
+            var summary = "5/11/2024 5:35 PM Buy: € 0.00, Sell: € 245.00";
+            SpyMessage(summary);
+        }
+
+        [Test]
+        public void Place_one_Buy_order_and_one_Sell_order() {
+            GetDateTimeForOrder(2024, 5, 11, 17, 35);
+
+            PlaceOrdersSequence("POPP 3 5.00 B,DAI 10 23.00 S");
+
+            var summary = "5/11/2024 5:35 PM Buy: € 15.00, Sell: € 230.00";
+            SpyMessage(summary);
+        }
+
+        [Test]
+        public void Place_two_Buy_orders_with_two_errors() {
+            GetDateTimeForOrder(2024, 5, 11, 17, 35);
+            _stockBrokerService.Place(Arg.Any<OrderDTO>()).Returns(false);
+
+            PlaceOrdersSequence("POPP 3 5.00 B,DAI 10 23.00 B");
+
+            var summary = "5/11/2024 5:35 PM Buy: € 0.00, Sell: € 0.00, Failed: POPP, DAI";
+            SpyMessage(summary);
+        }
+
         private void SpyMessage(string summary)
         {
             _notifier.Received(1).Notify(summary);
