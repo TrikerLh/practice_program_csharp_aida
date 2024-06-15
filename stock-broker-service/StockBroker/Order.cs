@@ -6,6 +6,7 @@ public class Order
     private readonly int _quantity;
     private readonly double _price;
     private readonly string _type;
+    private bool _success;
 
     public Order(string symbol, int quantity, double price, string type)
     {
@@ -13,6 +14,7 @@ public class Order
         _quantity = quantity;
         _price = price;
         _type = type;
+        _success = true;
     }
     public bool IsEmptyOrder()
     {
@@ -45,5 +47,13 @@ public class Order
     public string GetSymbol()
     {
         return _symbol;
+    }
+
+    public void SetSuccess(bool success)
+    {
+        _success = success;
+    }
+    public bool GetSuccess() {
+        return _success;
     }
 }

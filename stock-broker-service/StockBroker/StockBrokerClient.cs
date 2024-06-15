@@ -29,6 +29,7 @@ public class StockBrokerClient
             var exitPlace = _stockBrokerService.Place(new OrderDTO(order.GetSymbol(), order.GetQuantity()));
             if (!exitPlace) {
                 orderFails.Add(order.GetSymbol());
+                order.SetSuccess(false);
             }
         }
         var summary = _summaryFormatter.GetFormatSummary(time, orders, orderFails);

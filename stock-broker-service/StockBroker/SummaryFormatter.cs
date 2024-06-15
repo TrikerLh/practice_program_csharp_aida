@@ -20,15 +20,19 @@ internal class SummaryFormatter
         }
 
         if (orderFails.Count == 0) {
-            var buyAmount = 0.0;
-            var sellAmount = 0.0;
-            foreach (var order in orders) {
+            
+        }
+
+        var buyAmount = 0.0;
+        var sellAmount = 0.0;
+        foreach (var order in orders) {
+            if (order.GetSuccess())
+            {
                 buyAmount += order.GetBuyAmount();
                 sellAmount += order.GetSellAmount();
             }
-            return timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}";
         }
-        return timeFormated + " Buy: € 0.00, Sell: € 0.00, Failed: " + GetFailsFormatter(orderFails);
+        return timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}" + GetFailsFormatter(orderFails);
     }
 
     private string GetFailsFormatter(List<string> orderFails)
@@ -39,7 +43,7 @@ internal class SummaryFormatter
             var orderFail = orderFails[i];
             if (i == 0)
             {
-                fails += orderFail;
+                fails += ", Failed: " + orderFail;
             }
             else {
                 fails += ", " + orderFail;

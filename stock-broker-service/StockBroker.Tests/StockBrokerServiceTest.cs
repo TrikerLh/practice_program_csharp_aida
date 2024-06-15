@@ -118,7 +118,6 @@ namespace StockBroker.Tests
             SpyMessage(summary);
         }
 
-        [Ignore("refactor")]
         [Test]
         public void Place_two_Buy_orders_with_one_error() {
             GetDateTimeForOrder(2024, 5, 11, 17, 35);
@@ -126,7 +125,7 @@ namespace StockBroker.Tests
 
             PlaceOrdersSequence("POPP 3 5.00 B,DAI 10 23.00 B");
 
-            var summary = "5/11/2024 5:35 PM Buy: € 0.00, Sell: € 230.00, Failed: POPP";
+            var summary = "5/11/2024 5:35 PM Buy: € 230.00, Sell: € 0.00, Failed: POPP";
             SpyMessage(summary);
         }
 
