@@ -85,7 +85,16 @@ namespace StockBroker.Tests
 
             var summary = "1/23/2021 11:30 PM Buy: € 250.00, Sell: € 0.00";
             _notifier.Received(1).Notify(summary);
+        }
 
+        [Test]
+        public void Place_one_buy_order_and_one_sell_order() {
+            GetDateTimeForOrder(2023, 11, 2, 21, 45);
+
+            PlaceOrdersSequence("LTC 100 5.00 B,RCC 25 25.00 S");
+
+            var summary = "11/2/2023 9:45 PM Buy: € 500.00, Sell: € 625.00";
+            _notifier.Received(1).Notify(summary);
         }
 
         private void GetDateTimeForOrder(int year, int month, int day, int hour, int minute)
