@@ -97,6 +97,17 @@ namespace StockBroker.Tests
             _notifier.Received(1).Notify(summary);
         }
 
+        [Test]
+        public void Place_one_buy_order_and_one_sell_order_with_one_fail() {
+            GetDateTimeForOrder(2024, 06, 17, 22, 00);
+            _stockBrokerService.Place(new OrderDTO("AIDA", 852)).Returns(false);
+
+            PlaceOrdersSequence("AIDA 852 54.25 B,DAG 250 30.00 S");
+
+            var summary = "6/17/2024 10:00 PM Buy: € 0.00, Sell: € 7500.00, Failed: AIDA";
+            _notifier.Received(1).Notify(summary);
+        }
+
         private void GetDateTimeForOrder(int year, int month, int day, int hour, int minute)
         {
             _dateTimeProvider.GetDateTime().Returns(new DateTime(year, month, day, hour, minute, 00));

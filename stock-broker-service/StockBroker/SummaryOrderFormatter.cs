@@ -25,6 +25,7 @@ internal class SummaryOrderFormatter
 
         var buyAmount = 0.0;
         var sellAmount = 0.0;
+        var summaryFail = "";
         foreach (var order in orders)
         {
             if (order.IsSuccess())
@@ -34,11 +35,15 @@ internal class SummaryOrderFormatter
             }
             else
             {
-                return timeFormated + " Buy: € 0.00, Sell: € 0.00, Failed: " + order.GetSymbol();
+                summaryFail += ", Failed: " + order.GetSymbol();
             }
         }
-
-        return timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}";
+        var summary = timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}";
+        if (!string.IsNullOrEmpty(summaryFail))
+        {
+            summary += summaryFail;
+        }
+        return summary;
     }
 
     private string FormatAmount(double amount) {
