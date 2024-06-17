@@ -16,7 +16,7 @@ public class StockBrokerClient {
     }
 
     public void PlaceOrder(string orderSequence) {
-        var orders = GetOrder(orderSequence);
+        var orders = Order.GetOrders(orderSequence);
         foreach (var order in orders) {
             var success = _stockBrokerService.Place(new OrderDTO(order.GetSymbol(), order.GetQuantity()));
             if (!success) {
@@ -26,22 +26,5 @@ public class StockBrokerClient {
 
         var summary = _summaOrderFormatter.GetFormatSummary(orders);
         _notifier.Notify(summary);
-    }
-    private List<Order> GetOrder(string orderSequence) {
-        var orders = new List<Order>();
-        if (string.IsNullOrEmpty(orderSequence)) {
-            orders.Add(new Order("", 0, 0.0, ""));
-            return orders;
-        }
-        var ordersSequence = orderSequence.Split(',');
-        foreach (var order in ordersSequence) {
-            var symbol = order.Split(" ")[0];
-            var quantity = int.Parse(order.Split(" ")[1]);
-            var price = double.Parse(order.Split(" ")[2], CultureInfo.InvariantCulture);
-            var type = order.Split(" ")[3];
-            orders.Add(new Order(symbol, quantity, price, type));
-        }
-
-        return orders;
     }
 }

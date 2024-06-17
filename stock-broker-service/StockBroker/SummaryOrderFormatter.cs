@@ -16,7 +16,8 @@ internal class SummaryOrderFormatter
 
     internal string GetFormatSummary(List<Order> orders)
     {
-        var timeFormated = FormatTime();
+        var time = _dateTimeProvider.GetDateTime();
+        var timeFormated = time.ToString("g", _cultureInfo);
         if (orders.Count == 0)
         {
             return timeFormated + " Buy: € 0.00, Sell: € 0.00";
@@ -64,12 +65,6 @@ internal class SummaryOrderFormatter
         }
 
         return summary;
-    }
-
-    private string FormatTime()
-    {
-        var time = _dateTimeProvider.GetDateTime();
-        return time.ToString("g", _cultureInfo);
     }
 
     private string FormatAmount(double amount) {
