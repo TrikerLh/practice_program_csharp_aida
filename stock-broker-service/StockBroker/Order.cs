@@ -16,10 +16,6 @@ public class Order
         _type = type;
         _success = true;
     }
-    public bool IsEmptyOrder()
-    {
-        return _symbol == "" && _quantity == 0 && _price == 0 && _type == "";
-    }
 
     public double GetBuyAmount()
     {
