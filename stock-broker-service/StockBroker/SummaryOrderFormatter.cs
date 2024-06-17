@@ -34,19 +34,25 @@ internal class SummaryOrderFormatter
             }
             else
             {
-                if (string.IsNullOrEmpty(summaryFail))
-                {
-                    summaryFail += ", Failed: " + order.GetSymbol();
-                }
-                else
-                {
-                    summaryFail += ", " + order.GetSymbol();
-                }
-                
+                summaryFail = CreateSummaryFail(summaryFail, order);
             }
         }
         var summary = CreateSummaryMessage(timeFormated, buyAmount, sellAmount, summaryFail);
         return summary;
+    }
+
+    private string CreateSummaryFail(string summaryFail, Order order)
+    {
+        if (string.IsNullOrEmpty(summaryFail))
+        {
+            summaryFail += ", Failed: " + order.GetSymbol();
+        }
+        else
+        {
+            summaryFail += ", " + order.GetSymbol();
+        }
+
+        return summaryFail;
     }
 
     private string CreateSummaryMessage(string timeFormated, double buyAmount, double sellAmount, string summaryFail)
