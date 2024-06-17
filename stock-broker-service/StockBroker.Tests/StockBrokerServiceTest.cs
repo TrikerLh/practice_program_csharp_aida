@@ -108,6 +108,17 @@ namespace StockBroker.Tests
             _notifier.Received(1).Notify(summary);
         }
 
+        [Test]
+        public void Place_one_buy_order_and_one_sell_order_with_two_fails() {
+            GetDateTimeForOrder(2024, 06, 17, 22, 00);
+            _stockBrokerService.Place(Arg.Any<OrderDTO>()).Returns(false);
+
+            PlaceOrdersSequence("TYUR 852 54.25 B,PDER 250 30.00 S");
+
+            var summary = "6/17/2024 10:00 PM Buy: € 0.00, Sell: € 0.00, Failed: TYUR, PDER";
+            _notifier.Received(1).Notify(summary);
+        }
+
         private void GetDateTimeForOrder(int year, int month, int day, int hour, int minute)
         {
             _dateTimeProvider.GetDateTime().Returns(new DateTime(year, month, day, hour, minute, 00));

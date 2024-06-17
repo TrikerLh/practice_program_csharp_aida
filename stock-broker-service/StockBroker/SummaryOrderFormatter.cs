@@ -34,7 +34,15 @@ internal class SummaryOrderFormatter
             }
             else
             {
-                summaryFail += ", Failed: " + order.GetSymbol();
+                if (string.IsNullOrEmpty(summaryFail))
+                {
+                    summaryFail += ", Failed: " + order.GetSymbol();
+                }
+                else
+                {
+                    summaryFail += ", " + order.GetSymbol();
+                }
+                
             }
         }
         var summary = CreateSummaryMessage(timeFormated, buyAmount, sellAmount, summaryFail);
