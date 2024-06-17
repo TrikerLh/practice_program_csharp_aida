@@ -76,6 +76,18 @@ namespace StockBroker.Tests
             _notifier.Received(1).Notify(summary);
         }
 
+        [Test]
+        public void Place_two_Buy_orders()
+        {
+            GetDateTimeForOrder(2021, 01, 23, 23, 30);
+
+            PlaceOrdersSequence("NTC 15 10.00 B,OTM 5 20.00 B");
+
+            var summary = "1/23/2021 11:30 PM Buy: € 250.00, Sell: € 0.00";
+            _notifier.Received(1).Notify(summary);
+
+        }
+
         private void GetDateTimeForOrder(int year, int month, int day, int hour, int minute)
         {
             _dateTimeProvider.GetDateTime().Returns(new DateTime(year, month, day, hour, minute, 00));
