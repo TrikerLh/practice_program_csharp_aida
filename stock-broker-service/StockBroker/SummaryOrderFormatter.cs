@@ -18,10 +18,6 @@ internal class SummaryOrderFormatter
     {
         var time = _dateTimeProvider.GetDateTime();
         var timeFormated = time.ToString("g", _cultureInfo);
-        if (orders.Count == 0)
-        {
-            return timeFormated + " Buy: € 0.00, Sell: € 0.00";
-        }
 
         var buyAmount = 0.0;
         var sellAmount = 0.0;
