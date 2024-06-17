@@ -1,7 +1,7 @@
-using System;
 using System.Globalization;
 using NSubstitute;
 using NUnit.Framework;
+
 
 namespace StockBroker.Tests
 {
@@ -18,6 +18,7 @@ namespace StockBroker.Tests
             _dateTimeProvider = Substitute.For<DateTimeProvider>();
             _notifier = Substitute.For<Notifier>();
             _stockBrokerService = Substitute.For<StockBrokerService>();
+            _stockBrokerService.Place(Arg.Any<OrderDTO>()).Returns(true);
             _stockBrokerClient = new StockBrokerClient(_dateTimeProvider, _notifier, _stockBrokerService);
         }
         [Test]
@@ -60,6 +61,18 @@ namespace StockBroker.Tests
             PlaceOrdersSequence("AAPL 4 10.00 S");
 
             var summary = "12/31/2023 11:54 PM Buy: € 0.00, Sell: € 40.00";
+            _notifier.Received(1).Notify(summary);
+        }
+
+        [Test]
+        public void Place_a_Buy_order_with_error()
+        {
+            GetDateTimeForOrder(2000, 01, 01, 00, 01);
+            _stockBrokerService.Place(Arg.Any<OrderDTO>()).Returns(false);
+
+            PlaceOrdersSequence("DBZ 15 28.25 B");
+
+            var summary = "1/1/2000 12:01 AM Buy: € 0.00, Sell: € 0.00, Failed: DBZ";
             _notifier.Received(1).Notify(summary);
         }
 

@@ -21,6 +21,11 @@ internal class SummaryOrderFormatter
         {
             return timeFormated + " Buy: € 0.00, Sell: € 0.00";
         }
+
+        if (!order.IsSuccess())
+        {
+            return timeFormated + " Buy: € 0.00, Sell: € 0.00, Failed: " + order.GetSymbol();
+        }
         return timeFormated + $" Buy: {FormatAmount(order.GetBuyAmount())}, Sell: {FormatAmount(order.GetSellAmount())}";
     }
 

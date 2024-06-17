@@ -19,6 +19,12 @@ public class StockBrokerClient
     public void PlaceOrder(string orderSequence)
     {
         var order = GetOrder(orderSequence);
+        var success = _stockBrokerService.Place(new OrderDTO(order.GetSymbol(), order.GetQuantity()));
+        if (!success)
+        {
+            order.ToFail();
+        }
+
         var summary = _summaOrderFormatter.GetFormatSummary(order);
         _notifier.Notify(summary);
     }
