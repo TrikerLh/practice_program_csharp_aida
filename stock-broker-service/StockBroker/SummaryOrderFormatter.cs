@@ -16,8 +16,7 @@ internal class SummaryOrderFormatter
 
     internal string GetFormatSummary(List<Order> orders)
     {
-        var time = _dateTimeProvider.GetDateTime();
-        var timeFormated = time.ToString("g", _cultureInfo);
+        var timeFormated = FormatTime();
         if (orders.Count == 0)
         {
             return timeFormated + " Buy: € 0.00, Sell: € 0.00";
@@ -38,12 +37,25 @@ internal class SummaryOrderFormatter
                 summaryFail += ", Failed: " + order.GetSymbol();
             }
         }
+        var summary = CreateSummaryMessage(timeFormated, buyAmount, sellAmount, summaryFail);
+        return summary;
+    }
+
+    private string CreateSummaryMessage(string timeFormated, double buyAmount, double sellAmount, string summaryFail)
+    {
         var summary = timeFormated + $" Buy: {FormatAmount(buyAmount)}, Sell: {FormatAmount(sellAmount)}";
         if (!string.IsNullOrEmpty(summaryFail))
         {
             summary += summaryFail;
         }
+
         return summary;
+    }
+
+    private string FormatTime()
+    {
+        var time = _dateTimeProvider.GetDateTime();
+        return time.ToString("g", _cultureInfo);
     }
 
     private string FormatAmount(double amount) {

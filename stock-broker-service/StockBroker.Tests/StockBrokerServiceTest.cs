@@ -124,18 +124,3 @@ namespace StockBroker.Tests
         }
     }
 }
-
-
-/* Lista de ejemplos ordenados (0 - one - many - ooops)
- * Ejemplo 5: input: "" output: 8/15/2019 2:45 PM Buy: € 0.00, Sell: € 0.00 OK
- * Ejemplo 1: input: "GOOG 1 10.00 B" output: 7/25/2008 3:45 PM Buy: € 10.00, Sell: € 0.00
- *            input: "GOOG 1 10.00 S" output: 7/25/2008 3:45 PM Buy: € 0.00, Sell: € 10.00
- *            input: "GOOG 2 10.00 B" output: 7/25/2008 3:45 PM Buy: € 20.00, Sell: € 0.00
- *            input: "GOOG 2 10.00 S" output: 7/25/2008 3:45 PM Buy: € 0.00, Sell: € 20.00
- * Ejemplo 2: input: "ZNGA 1 10.00 B,AAPL 1 10.00 S" output: 6/15/2009 1:45 PM Buy: € 10.00, Sell: € 10.00
- *            input: "ZNGA 1 10.00 B,AAPL 1 10.00 B" output: 6/15/2009 1:45 PM Buy: € 20.00, Sell: € 0.00
- *            input: "ZNGA 1 10.00 S,AAPL 1 10.00 S" output: 6/15/2009 1:45 PM Buy: € 00.00, Sell: € 20.00
- * Si acabo sigo con más, tenemos que meter también el ooops con 1 y con many.
- * Los códigos y las fechas se pueden ir cambiando.
- * ÁNIMO!
- */
