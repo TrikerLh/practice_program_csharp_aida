@@ -14,11 +14,16 @@ public class MarketingCampaign
 
     private long MilliSeconds()
     {
-        return (long)DateTime.Now.TimeOfDay.TotalMilliseconds;
+        return (long)GetDateTime().TimeOfDay.TotalMilliseconds;
     }
 
     private DayOfWeek DayOfTheWeek()
     {
-        return DateTime.Now.DayOfWeek;
+        return GetDateTime().DayOfWeek;
+    }
+
+    protected virtual DateTime GetDateTime()
+    {
+        return DateTime.Now;
     }
 }
