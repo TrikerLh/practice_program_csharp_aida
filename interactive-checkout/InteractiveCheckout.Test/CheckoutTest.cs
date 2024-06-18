@@ -4,22 +4,30 @@ namespace InteractiveCheckout.Test;
 
 public class CheckoutTest
 {
+    private IEmailService _emailService;
+    private Product _polkaDotSocks;
+    private CheckoutForTest _checkoutForTest;
+    private UserConfirmation _newLetterSubscriberSubstitute;
+    private UserConfirmation _termsAndConditionsAcceptedSubstitute;
+
+    [SetUp]
+    public void SetUp()
+    {
+        _emailService = Substitute.For<IEmailService>();
+        _polkaDotSocks = new Product("Polka-dot Socks");
+        _checkoutForTest = new CheckoutForTest(_polkaDotSocks, _emailService);
+        _newLetterSubscriberSubstitute = _checkoutForTest.UserConfirmations.First().Value;
+        _termsAndConditionsAcceptedSubstitute = _checkoutForTest.UserConfirmations.Last().Value;
+    }
+
     [Test]
     public void User_Not_Accept_Terms()
     {
-        var emailService = Substitute.For<IEmailService>();
-        var polkaDotSocks = new Product("Polka-dot Socks");
-
-        var checkout = new CheckoutForTest(polkaDotSocks, emailService);
-        var newLetterSubscriberSubstitute = checkout.UserConfirmations.First().Value;
-        var termsAndConditionsAcceptedSubstitute = checkout.UserConfirmations.Last().Value;
-
-        newLetterSubscriberSubstitute.WasAccepted().Returns(true);
-        termsAndConditionsAcceptedSubstitute.WasAccepted().Returns(false);
-        Assert.Throws<OrderCancelledException>(() => checkout.ConfirmOrder());
+        _termsAndConditionsAcceptedSubstitute.WasAccepted().Returns(false);
+        Assert.Throws<OrderCancelledException>(() => _checkoutForTest.ConfirmOrder());
     }
 
-    public class CheckoutForTest : Checkout
+    private class CheckoutForTest : Checkout
     {
         public Dictionary<string, UserConfirmation> UserConfirmations { get; set; } = new Dictionary<string, UserConfirmation>();
         public CheckoutForTest(Product product, IEmailService emailService) : base(product, emailService)
