@@ -6,10 +6,15 @@ public class Checkout
     {
         var vat = amount.Percentage(20);
 
-        var receipt = new Receipt(amount, vat, amount.Add(vat));
+        var receipt = Receipt.CreateReceipt(amount);
 
-        ReceiptRepository.Store(receipt);
+        StoreReceipt(receipt);
 
         return receipt;
+    }
+
+    protected virtual void StoreReceipt(Receipt receipt)
+    {
+        ReceiptRepository.Store(receipt);
     }
 }
