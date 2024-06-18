@@ -9,13 +9,11 @@ public class CheckoutTest
     {
         var checkout = new CheckoutForTest();
 
-        var amount = new Money(12);
-        var receipt = checkout.CreateReceipt(amount);
+        var receipt = checkout.CreateReceipt(new Money(12));
 
-        CheckReceipt(receipt, 12, 2.4m, 14.4m);
-
+        CheckReceipt(receipt, amount: 12, tax: 2.4m, total: 14.4m);
         Assert.That(1, Is.EqualTo(checkout.StoredReceipts.Count));
-        CheckReceipt(checkout.StoredReceipts[0], 12, 2.4m, 14.4m);
+        CheckReceipt(checkout.StoredReceipts[0], amount: 12, tax: 2.4m, total: 14.4m);
     }
 
     private static void CheckReceipt(Receipt receipt, decimal amount, decimal tax, decimal total)
