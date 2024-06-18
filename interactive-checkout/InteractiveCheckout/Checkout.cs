@@ -13,10 +13,15 @@ public class Checkout
     {
         _product = product;
         _emailService = emailService;
-        _newsLetterSubscribed = new UserConfirmation("Subscribe to our product " + product + " newsletter?");
-        _termsAndConditionsAccepted = new UserConfirmation(
+        _newsLetterSubscribed = CreateUserConfirmation("Subscribe to our product " + product + " newsletter?");
+        _termsAndConditionsAccepted = CreateUserConfirmation(
             "Accept our terms and conditions?\n" + //
             "(Mandatory to place order for " + product + ")");
+    }
+
+    protected virtual UserConfirmation CreateUserConfirmation(string message)
+    {
+        return new UserConfirmation(message);
     }
 
     public virtual void ConfirmOrder()
