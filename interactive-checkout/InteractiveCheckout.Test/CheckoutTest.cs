@@ -27,6 +27,15 @@ public class CheckoutTest
         Assert.Throws<OrderCancelledException>(() => _checkoutForTest.ConfirmOrder());
     }
 
+    [Test]
+    public void User_Accept_Terms_And_Decline_News_Letter()
+    {
+        _termsAndConditionsAcceptedSubstitute.WasAccepted().Returns(true);
+        _newLetterSubscriberSubstitute.WasAccepted().Returns(false);
+        _emailService.DidNotReceive().SubscribeUserFor(Arg.Any<Product>());
+    }
+
+
     private class CheckoutForTest : Checkout
     {
         public Dictionary<string, UserConfirmation> UserConfirmations { get; set; } = new Dictionary<string, UserConfirmation>();
