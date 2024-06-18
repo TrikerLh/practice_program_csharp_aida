@@ -1,4 +1,5 @@
 using NSubstitute;
+using NSubstitute.Core;
 
 namespace InteractiveCheckout.Test;
 
@@ -26,17 +27,17 @@ public class CheckoutTest
     [Test]
     public void User_Accept_Terms_And_Decline_News_Letter()
     {
-        _checkoutForTest.TermsAndConditionConfirmation.WasAccepted().Returns(true);
-        _checkoutForTest.NewsLetterConfirmation.WasAccepted().Returns(false);
+        UserAcceptedTermsAndConditions(true);
+        UserAcceptedNewsLetter(false);
         _emailService.DidNotReceive().SubscribeUserFor(Arg.Any<Product>());
     }
 
 
     private class CheckoutForTest : Checkout
     {
-        private Dictionary<string, UserConfirmation> UserConfirmations { get; } = new Dictionary<string, UserConfirmation>();
-        public UserConfirmation NewsLetterConfirmation => UserConfirmations.First().Value;
-        public UserConfirmation TermsAndConditionConfirmation => UserConfirmations.Last().Value;
+        private IList<UserConfirmation> UserConfirmations { get; } = new List<UserConfirmation>();
+        public UserConfirmation NewsLetterConfirmation => UserConfirmations.First();
+        public UserConfirmation TermsAndConditionConfirmation => UserConfirmations.Last();
         public CheckoutForTest(Product product, IEmailService emailService) : base(product, emailService)
         {
             
@@ -46,8 +47,18 @@ public class CheckoutTest
         {
 
             UserConfirmation _userconfirmation = Substitute.For<UserConfirmation>();
-            UserConfirmations.Add(message, _userconfirmation);
+            UserConfirmations.Add(_userconfirmation);
             return _userconfirmation;
         }
+    }
+
+    private ConfiguredCall UserAcceptedNewsLetter(bool accept)
+    {
+        return _checkoutForTest.NewsLetterConfirmation.WasAccepted().Returns(accept);
+    }
+
+    private ConfiguredCall UserAcceptedTermsAndConditions(bool accept)
+    {
+        return _checkoutForTest.TermsAndConditionConfirmation.WasAccepted().Returns(accept);
     }
 }
