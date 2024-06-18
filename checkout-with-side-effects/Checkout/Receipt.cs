@@ -9,9 +9,9 @@ public class Receipt
         Total = total;
     }
 
-    public static Receipt CreateReceipt(Money amount)
+    public static Receipt CreateReceipt(Money amount, int taxPercentage)
     {
-        var vat = amount.Percentage(20);
+        var vat = amount.Percentage(taxPercentage);
 
         return new Receipt(amount, vat, amount.Add(vat));
     }
