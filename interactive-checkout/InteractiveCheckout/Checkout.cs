@@ -19,11 +19,6 @@ public class Checkout
             "(Mandatory to place order for " + product + ")");
     }
 
-    protected virtual UserConfirmation CreateUserConfirmation(string message)
-    {
-        return new UserConfirmation(message);
-    }
-
     public void ConfirmOrder()
     {
         if (!_termsAndConditionsAccepted.WasAccepted()) throw new OrderCancelledException(_product);
