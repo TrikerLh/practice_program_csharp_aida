@@ -2,7 +2,7 @@
 
 public class Receipt
 {
-    public Receipt(Money amount, Money tax, Money total)
+    private Receipt(Money amount, Money tax, Money total)
     {
         Amount = amount;
         Tax = tax;
