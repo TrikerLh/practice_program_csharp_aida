@@ -24,7 +24,7 @@ public class Checkout
         return new UserConfirmation(message);
     }
 
-    public virtual void ConfirmOrder()
+    public void ConfirmOrder()
     {
         if (!_termsAndConditionsAccepted.WasAccepted()) throw new OrderCancelledException(_product);
         if (_newsLetterSubscribed.WasAccepted()) _emailService.SubscribeUserFor(_product);
