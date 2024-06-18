@@ -7,22 +7,24 @@ internal class SummaryOrderFormatter
 {
     private readonly DateTimeProvider _dateTimeProvider;
     private readonly CultureInfo _cultureInfo;
+    private readonly List<Order> _orders;
 
-    public SummaryOrderFormatter(DateTimeProvider dateTimeProvider, CultureInfo cultureInfo)
+    public SummaryOrderFormatter(DateTimeProvider dateTimeProvider, CultureInfo cultureInfo, List<Order> orders)
     {
         _dateTimeProvider = dateTimeProvider;
         _cultureInfo = cultureInfo;
+        _orders = orders;
     }
 
-    internal string GetFormatSummary(List<Order> orders)
+    internal string GetFormatSummary()
     {
         var time = _dateTimeProvider.GetDateTime();
         var timeFormated = time.ToString("g", _cultureInfo);
 
         var buyAmount = 0.0;
         var sellAmount = 0.0;
-        var summaryFail = "";
-        foreach (var order in orders)
+        var summaryFail = new List<string>();
+        foreach (var order in _orders)
         {
             if (order.IsSuccess())
             {
@@ -31,25 +33,21 @@ internal class SummaryOrderFormatter
             }
             else
             {
-                summaryFail = CreateSummaryFail(summaryFail, order);
+                summaryFail.Add(order.GetSymbol());
             }
         }
-        var summary = CreateSummaryMessage(timeFormated, buyAmount, sellAmount, summaryFail);
+        var summary = CreateSummaryMessage(timeFormated, buyAmount, sellAmount, CreateSummaryFail(summaryFail));
         return summary;
     }
 
-    private string CreateSummaryFail(string summaryFail, Order order)
+    private string CreateSummaryFail(List<string> summaryFail)
     {
-        if (string.IsNullOrEmpty(summaryFail))
+        if (summaryFail.Count == 0)
         {
-            summaryFail += ", Failed: " + order.GetSymbol();
-        }
-        else
-        {
-            summaryFail += ", " + order.GetSymbol();
+            return "";
         }
 
-        return summaryFail;
+        return ", Failed: " + string.Join(", ", summaryFail);
     }
 
     private string CreateSummaryMessage(string timeFormated, double buyAmount, double sellAmount, string summaryFail)

@@ -5,14 +5,15 @@ using System.Globalization;
 namespace StockBroker;
 
 public class StockBrokerClient {
+    private readonly DateTimeProvider _dateTimeProvider;
     private readonly Notifier _notifier;
     private readonly StockBrokerService _stockBrokerService;
-    private readonly SummaryOrderFormatter _summaOrderFormatter;
+    private SummaryOrderFormatter _summaOrderFormatter;
 
     public StockBrokerClient(DateTimeProvider dateTimeProvider, Notifier notifier, StockBrokerService stockBrokerService) {
+        _dateTimeProvider = dateTimeProvider;
         _notifier = notifier;
         _stockBrokerService = stockBrokerService;
-        _summaOrderFormatter = new SummaryOrderFormatter(dateTimeProvider, new CultureInfo("en-US"));
     }
 
     public void PlaceOrder(string orderSequence) {
@@ -23,8 +24,8 @@ public class StockBrokerClient {
                 order.ToFail();
             }
         }
-
-        var summary = _summaOrderFormatter.GetFormatSummary(orders);
+        _summaOrderFormatter = new SummaryOrderFormatter(_dateTimeProvider, new CultureInfo("en-US"), orders);
+        var summary = _summaOrderFormatter.GetFormatSummary();
         _notifier.Notify(summary);
     }
 }
