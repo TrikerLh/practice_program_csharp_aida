@@ -27,9 +27,23 @@ public class CheckoutTest
     [Test]
     public void User_Accept_Terms_And_Decline_News_Letter()
     {
-        UserAcceptedTermsAndConditions(true);
-        UserAcceptedNewsLetter(false);
+        UserAcceptTermsAndConditions(true);
+        UserAcceptNewsLetter(false);
+
+        _checkoutForTest.ConfirmOrder();
+
         _emailService.DidNotReceive().SubscribeUserFor(Arg.Any<Product>());
+    }
+
+    [Test]
+    public void User_Accept_Terms_And_Accept_News_Letter()
+    {
+        UserAcceptTermsAndConditions(true);
+        UserAcceptNewsLetter(true);
+
+        _checkoutForTest.ConfirmOrder();
+
+        _emailService.Received(1).SubscribeUserFor(_polkaDotSocks);
     }
 
 
@@ -52,12 +66,12 @@ public class CheckoutTest
         }
     }
 
-    private ConfiguredCall UserAcceptedNewsLetter(bool accept)
+    private ConfiguredCall UserAcceptNewsLetter(bool accept)
     {
         return _checkoutForTest.NewsLetterConfirmation.WasAccepted().Returns(accept);
     }
 
-    private ConfiguredCall UserAcceptedTermsAndConditions(bool accept)
+    private ConfiguredCall UserAcceptTermsAndConditions(bool accept)
     {
         return _checkoutForTest.TermsAndConditionConfirmation.WasAccepted().Returns(accept);
     }
