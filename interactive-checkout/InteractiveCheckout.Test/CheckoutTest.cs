@@ -7,8 +7,6 @@ public class CheckoutTest
     private IEmailService _emailService;
     private Product _polkaDotSocks;
     private CheckoutForTest _checkoutForTest;
-    private UserConfirmation _newLetterSubscriberSubstitute;
-    private UserConfirmation _termsAndConditionsAcceptedSubstitute;
 
     [SetUp]
     public void SetUp()
@@ -16,29 +14,29 @@ public class CheckoutTest
         _emailService = Substitute.For<IEmailService>();
         _polkaDotSocks = new Product("Polka-dot Socks");
         _checkoutForTest = new CheckoutForTest(_polkaDotSocks, _emailService);
-        _newLetterSubscriberSubstitute = _checkoutForTest.UserConfirmations.First().Value;
-        _termsAndConditionsAcceptedSubstitute = _checkoutForTest.UserConfirmations.Last().Value;
     }
 
     [Test]
     public void User_Not_Accept_Terms()
     {
-        _termsAndConditionsAcceptedSubstitute.WasAccepted().Returns(false);
+        _checkoutForTest.TermsAndConditionConfirmation.WasAccepted().Returns(false);
         Assert.Throws<OrderCancelledException>(() => _checkoutForTest.ConfirmOrder());
     }
 
     [Test]
     public void User_Accept_Terms_And_Decline_News_Letter()
     {
-        _termsAndConditionsAcceptedSubstitute.WasAccepted().Returns(true);
-        _newLetterSubscriberSubstitute.WasAccepted().Returns(false);
+        _checkoutForTest.TermsAndConditionConfirmation.WasAccepted().Returns(true);
+        _checkoutForTest.NewsLetterConfirmation.WasAccepted().Returns(false);
         _emailService.DidNotReceive().SubscribeUserFor(Arg.Any<Product>());
     }
 
 
     private class CheckoutForTest : Checkout
     {
-        public Dictionary<string, UserConfirmation> UserConfirmations { get; set; } = new Dictionary<string, UserConfirmation>();
+        private Dictionary<string, UserConfirmation> UserConfirmations { get; } = new Dictionary<string, UserConfirmation>();
+        public UserConfirmation NewsLetterConfirmation => UserConfirmations.First().Value;
+        public UserConfirmation TermsAndConditionConfirmation => UserConfirmations.Last().Value;
         public CheckoutForTest(Product product, IEmailService emailService) : base(product, emailService)
         {
             
