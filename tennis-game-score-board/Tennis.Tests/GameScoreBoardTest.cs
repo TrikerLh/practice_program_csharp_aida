@@ -46,4 +46,17 @@ public class GameScoreBoardTest
         _outputMessage.Received(1).Send("It was a nice game.");
         _outputMessage.Received(1).Send("Bye now!");
     }
+
+    [Test]
+    public void match_with_deuce() {
+        _inputScore.ReadScore().Returns("score 2", "score 1", "score 2", "score 1", "score 2", "score 1");
+
+        _gameScoreBoard.StartGame();
+
+        _outputMessage.Received(1).Send("Love Fifteen");
+        _outputMessage.Received(1).Send("Fifteen Fifteen");
+        _outputMessage.Received(1).Send("Fifteen Thirty");
+        _outputMessage.Received(1).Send("Thirty Forty");
+        _outputMessage.Received(1).Send("Deuce");
+    }
 }

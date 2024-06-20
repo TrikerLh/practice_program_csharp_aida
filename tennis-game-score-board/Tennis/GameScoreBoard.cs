@@ -26,7 +26,17 @@ public class GameScoreBoard
 
     private void PrintCurrentScore()
     {
-        _outputMessage.Send($"{_playerOne.GetMessagePoint()} {_playerTwo.GetMessagePoint()}");
+        var message = CreateScoreMessage();
+        _outputMessage.Send(message);
+    }
+
+    private string CreateScoreMessage()
+    {
+        if (_playerOne.GetMessagePoint() == "Forty" && _playerTwo.GetMessagePoint() == "Forty")
+        {
+            return "Deuce";
+        }
+        return $"{_playerOne.GetMessagePoint()} {_playerTwo.GetMessagePoint()}";
     }
 
     private void AddPointToPlayer()
@@ -73,32 +83,5 @@ public class GameScoreBoard
     private bool PlayerOneScores(string input)
     {
         return input == "score 1";
-    }
-}
-
-public class Player
-{
-    private int _point;
-
-    public void AddPoint()
-    {
-        _point++;
-    }
-
-    public string GetMessagePoint()
-    {
-        return _point switch
-        {
-            0 => "Love",
-            1 => "Fifteen",
-            2 => "Thirty",
-            3 => "Forty",
-            _ => ""
-        };
-    }
-
-    public bool HasWon()
-    {
-        return _point == 4;
     }
 }

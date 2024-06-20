@@ -19,7 +19,7 @@ public class MarketingCampaignTests
     [Test]
     public void MarketingCampaign_Is_Active()
     {
-        var dateTimePairMilliseconds = new DateTime(2024, 06, 14, 00, 00, 00);
+        var dateTimePairMilliseconds = new DateTime(2024, 06, 14, 00, 00, 00).AddMilliseconds(24);
         var campaign = new MarketingCampaignForTest(dateTimePairMilliseconds);
 
         var isActive = campaign.IsActive();
@@ -39,7 +39,7 @@ public class MarketingCampaignTests
 
     [Test]
     public void MarketingCampaign_Is_Not_Active() {
-        var dateTimeOddsMilliseconds = new DateTime(2024, 06, 14, 00, 00, 00).AddMilliseconds(1);
+        var dateTimeOddsMilliseconds = new DateTime(2024, 06, 14, 00, 00, 42).AddMilliseconds(1);
         var campaign = new MarketingCampaignForTest(dateTimeOddsMilliseconds);
 
         var isActive = campaign.IsActive();
