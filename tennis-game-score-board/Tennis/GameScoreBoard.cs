@@ -32,7 +32,7 @@ public class GameScoreBoard
 
     private string CreateScoreMessage()
     {
-        if (_playerOne.GetMessagePoint() == "Forty" && _playerTwo.GetMessagePoint() == "Forty")
+        if (_playerOne.IsDeuce(_playerTwo))
         {
             return "Deuce";
         }

@@ -25,4 +25,9 @@ public class Player
     {
         return _point == 4;
     }
+
+    public bool IsDeuce(Player playerTwo)
+    {
+        return _point == 3 && playerTwo._point == 3;
+    }
 }
