@@ -30,4 +30,10 @@ public class Player
     {
         return _point == 3 && playerTwo._point == 3;
     }
+
+    public bool HasAdvantage(Player playerTwo)
+    {
+        if (this._point > playerTwo._point) return true;
+        return false;
+    }
 }

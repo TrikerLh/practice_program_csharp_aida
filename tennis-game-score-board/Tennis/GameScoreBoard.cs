@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace Tennis;
 
 public class GameScoreBoard
@@ -6,6 +8,7 @@ public class GameScoreBoard
     private readonly OutputMessage _outputMessage;
     private Player _playerOne = new Player();
     private Player _playerTwo = new Player();
+    private bool _gameDeuce = false;
 
     public GameScoreBoard(InputScore inputScore, OutputMessage outputMessage)
     {
@@ -28,18 +31,28 @@ public class GameScoreBoard
     {
         var message = CreateScoreMessage();
         _outputMessage.Send(message);
-        if (message == "Deuce")
-        {
-            var playerNumber = "2";
-            _outputMessage.Send($"Advantage player {playerNumber}");
-        }
     }
 
     private string CreateScoreMessage()
     {
         if (_playerOne.IsDeuce(_playerTwo))
         {
+            _gameDeuce = true;
             return "Deuce";
+        }
+
+        if (_gameDeuce)
+        {
+            if (_playerOne.HasAdvantage(_playerTwo))
+            {
+                _gameDeuce = false;
+                return "Advantage player 1";
+            }
+            else
+            {
+                _gameDeuce = false;
+                return "Advantage player 2";
+            }
         }
         return $"{_playerOne.GetMessagePoint()} {_playerTwo.GetMessagePoint()}";
     }
