@@ -2,84 +2,57 @@ using System.Numerics;
 
 namespace Tennis;
 
-public class GameScoreBoard
-{
+public class GameScoreBoard {
     private readonly InputScore _inputScore;
     private readonly OutputMessage _outputMessage;
-    private Player _playerOne = new Player();
-    private Player _playerTwo = new Player();
     private bool _gameDeuce = false;
+    private Game _game = new Game();
 
-    public GameScoreBoard(InputScore inputScore, OutputMessage outputMessage)
-    {
+    public GameScoreBoard(InputScore inputScore, OutputMessage outputMessage) {
         _inputScore = inputScore;
         _outputMessage = outputMessage;
     }
 
-    public void StartGame()
-    {
-        do
-        {
-            AddPointToPlayer();
+    public void StartGame() {
+        do {
+            var readScore = _inputScore.ReadScore();    
+            _game.AddPointToPlayer(readScore);
             PrintCurrentScore();
         } while (!IsGameOver());
 
         PrintGameOverMessage();
     }
 
-    private void PrintCurrentScore()
-    {
+    private void PrintCurrentScore() {
         var message = CreateScoreMessage();
         _outputMessage.Send(message);
     }
 
-    private string CreateScoreMessage()
-    {
-        if (_playerOne.IsDeuce(_playerTwo))
-        {
+    private string CreateScoreMessage() {
+        if (_game._playerOne.IsDeuce(_game._playerTwo)) {
             _gameDeuce = true;
             return "Deuce";
         }
 
-        if (_gameDeuce)
-        {
-            if (_playerOne.HasAdvantage(_playerTwo))
-            {
-                _gameDeuce = false;
+        if (_gameDeuce) {
+            _gameDeuce = false;
+            if (_game._playerOne.HasAdvantage(_game._playerTwo)) {
+
                 return "Advantage player 1";
             }
-            else
-            {
-                _gameDeuce = false;
-                return "Advantage player 2";
-            }
+            return "Advantage player 2";
+
         }
-        return $"{_playerOne.GetMessagePoint()} {_playerTwo.GetMessagePoint()}";
+        return $"{_game._playerOne.GetMessagePoint()} {_game._playerTwo.GetMessagePoint()}";
     }
 
-    private void AddPointToPlayer()
-    {
-        var score = _inputScore.ReadScore();
 
-        if (PlayerOneScores(score))
-        {
-            _playerOne.AddPoint();
-        }
-        else if(PlayerTwoScores(score))
-        {
-            _playerTwo.AddPoint();
-        }
-    }
-
-    private void PrintGameOverMessage()
-    {
+    public void PrintGameOverMessage() {
         int playerNumber;
-        if (_playerOne.HasWon())
-        {
+        if (_game._playerOne.HasWon()) {
             playerNumber = 1;
         }
-        else
-        {
+        else {
             playerNumber = 2;
         }
 
@@ -88,18 +61,29 @@ public class GameScoreBoard
         _outputMessage.Send("Bye now!");
     }
 
-    private bool IsGameOver()
-    {
-        return _playerOne.HasWon() || _playerTwo.HasWon();
+    private bool IsGameOver() {
+        return _game._playerOne.HasWon() || _game._playerTwo.HasWon();
     }
+}
 
-    private bool PlayerTwoScores(string input)
-    {
+public class Game
+{
+    public Player _playerOne = new Player();
+    public Player _playerTwo = new Player();
+
+    public void AddPointToPlayer(string readScore) {
+        if (PlayerOneScores(readScore)) {
+            _playerOne.AddPoint();
+        }
+        else if (PlayerTwoScores(readScore)) {
+            _playerTwo.AddPoint();
+        }
+    }
+    private bool PlayerTwoScores(string input) {
         return input == "score 2";
     }
 
-    private bool PlayerOneScores(string input)
-    {
+    private bool PlayerOneScores(string input) {
         return input == "score 1";
     }
 }
