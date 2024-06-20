@@ -6,8 +6,8 @@ namespace Tennis;
 public class GameScoreBoard {
     private readonly InputScore _inputScore;
     private readonly OutputMessage _outputMessage;
-    public Player _playerOne = new Player();
-    public Player _playerTwo = new Player();
+    private readonly Player _playerOne = new Player();
+    private readonly Player _playerTwo = new Player();
     private bool _wasDeuce = false;
 
     public GameScoreBoard(InputScore inputScore, OutputMessage outputMessage) {

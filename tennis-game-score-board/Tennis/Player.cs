@@ -28,7 +28,17 @@ public class Player
 
     public bool IsDeuce(Player playerTwo)
     {
-        return _point == 3 && playerTwo._point == 3;
+        return BothPlayersHasAlmostThreePoints(playerTwo) && BothPlayersHasSamePoints(playerTwo);
+    }
+
+    private bool BothPlayersHasSamePoints(Player playerTwo)
+    {
+        return _point == playerTwo._point;
+    }
+
+    private bool BothPlayersHasAlmostThreePoints(Player playerTwo)
+    {
+        return _point >= 3 && playerTwo._point >= 3;
     }
 
     public bool HasAdvantage(Player playerTwo)
