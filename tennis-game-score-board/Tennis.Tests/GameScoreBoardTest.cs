@@ -26,4 +26,15 @@ public class GameScoreBoardTest
 
         _outputMessage.Received(1).Send("Fifteen Love");
     }
+
+    [Test]
+    public void player_two_score()
+    {
+        _inputScore.ReadScore().Returns("score 2");
+
+        _gameScoreBoard.StartGame();
+
+        _outputMessage.Received(1).Send("Love Fifteen");
+    }
+
 }

@@ -13,6 +13,15 @@ public class GameScoreBoard
 
     public void StartGame()
     {
-        _outputMessage.Send("Fifteen Love");
+        var input = _inputScore.ReadScore();
+
+        if (input == "score 1")
+        {
+            _outputMessage.Send("Fifteen Love");
+        }
+        else
+        {
+            _outputMessage.Send("Love Fifteen");
+        }
     }
 }
