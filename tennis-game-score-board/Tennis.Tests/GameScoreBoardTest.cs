@@ -18,23 +18,32 @@ public class GameScoreBoardTest
     }
 
     [Test]
-    public void player_one_score()
+    public void player_one_wins_the_game()
     {
-        _inputScore.ReadScore().Returns("score 1");
+        _inputScore.ReadScore().Returns("score 1", "score 1", "score 1", "score 1");
 
         _gameScoreBoard.StartGame();
 
         _outputMessage.Received(1).Send("Fifteen Love");
+        _outputMessage.Received(1).Send("Thirty Love");
+        _outputMessage.Received(1).Send("Forty Love");
+        _outputMessage.Received(1).Send("Player 1 has won!!");
+        _outputMessage.Received(1).Send("It was a nice game.");
+        _outputMessage.Received(1).Send("Bye now!");
     }
 
     [Test]
-    public void player_two_score()
+    public void player_two_wins_the_game()
     {
-        _inputScore.ReadScore().Returns("score 2");
+        _inputScore.ReadScore().Returns("score 2", "score 2", "score 2", "score 2");
 
         _gameScoreBoard.StartGame();
 
         _outputMessage.Received(1).Send("Love Fifteen");
+        _outputMessage.Received(1).Send("Love Thirty");
+        _outputMessage.Received(1).Send("Love Forty");
+        _outputMessage.Received(1).Send("Player 2 has won!!");
+        _outputMessage.Received(1).Send("It was a nice game.");
+        _outputMessage.Received(1).Send("Bye now!");
     }
-
 }
