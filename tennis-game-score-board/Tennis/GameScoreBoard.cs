@@ -28,6 +28,11 @@ public class GameScoreBoard
     {
         var message = CreateScoreMessage();
         _outputMessage.Send(message);
+        if (message == "Deuce")
+        {
+            var playerNumber = "2";
+            _outputMessage.Send($"Advantage player {playerNumber}");
+        }
     }
 
     private string CreateScoreMessage()

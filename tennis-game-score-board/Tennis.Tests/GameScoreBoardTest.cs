@@ -60,7 +60,7 @@ public class GameScoreBoardTest
         _outputMessage.Received(1).Send("Deuce");
     }
 
-    [Ignore("")]
+
     [Test]
     public void player_two_wins_the_game_with_advantage() {
         _inputScore.ReadScore().Returns("score 2", "score 1", "score 2", "score 1", "score 2", "score 1", "score 2", "score 2");
