@@ -1,12 +1,14 @@
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace Tennis;
 
 public class GameScoreBoard {
     private readonly InputScore _inputScore;
     private readonly OutputMessage _outputMessage;
-    private bool _gameDeuce = false;
-    private Game _game = new Game();
+    public Player _playerOne = new Player();
+    public Player _playerTwo = new Player();
+    private bool _wasDeuce = false;
 
     public GameScoreBoard(InputScore inputScore, OutputMessage outputMessage) {
         _inputScore = inputScore;
@@ -16,7 +18,7 @@ public class GameScoreBoard {
     public void StartGame() {
         do {
             var readScore = _inputScore.ReadScore();    
-            _game.AddPointToPlayer(readScore);
+            AddPointToPlayer(readScore);
             PrintCurrentScore();
         } while (!IsGameOver());
 
@@ -29,47 +31,23 @@ public class GameScoreBoard {
     }
 
     private string CreateScoreMessage() {
-        if (_game._playerOne.IsDeuce(_game._playerTwo)) {
-            _gameDeuce = true;
+        if (IsDeuce())
+        {
+            _wasDeuce = true;
             return "Deuce";
         }
 
-        if (_gameDeuce) {
-            _gameDeuce = false;
-            if (_game._playerOne.HasAdvantage(_game._playerTwo)) {
+        if (_wasDeuce) {
+            _wasDeuce = false;
+            if (_playerOne.HasAdvantage(_playerTwo)) {
 
                 return "Advantage player 1";
             }
             return "Advantage player 2";
 
         }
-        return $"{_game._playerOne.GetMessagePoint()} {_game._playerTwo.GetMessagePoint()}";
+        return $"{_playerOne.GetMessagePoint()} {_playerTwo.GetMessagePoint()}";
     }
-
-
-    public void PrintGameOverMessage() {
-        int playerNumber;
-        if (_game._playerOne.HasWon()) {
-            playerNumber = 1;
-        }
-        else {
-            playerNumber = 2;
-        }
-
-        _outputMessage.Send($"Player {playerNumber} has won!!");
-        _outputMessage.Send("It was a nice game.");
-        _outputMessage.Send("Bye now!");
-    }
-
-    private bool IsGameOver() {
-        return _game._playerOne.HasWon() || _game._playerTwo.HasWon();
-    }
-}
-
-public class Game
-{
-    public Player _playerOne = new Player();
-    public Player _playerTwo = new Player();
 
     public void AddPointToPlayer(string readScore) {
         if (PlayerOneScores(readScore)) {
@@ -85,5 +63,28 @@ public class Game
 
     private bool PlayerOneScores(string input) {
         return input == "score 1";
+    }
+
+
+    public void PrintGameOverMessage() {
+        int playerNumber;
+        if (_playerOne.HasWon()) {
+            playerNumber = 1;
+        }
+        else {
+            playerNumber = 2;
+        }
+
+        _outputMessage.Send($"Player {playerNumber} has won!!");
+        _outputMessage.Send("It was a nice game.");
+        _outputMessage.Send("Bye now!");
+    }
+
+    public bool IsGameOver() {
+        return this._playerOne.HasWon() || this._playerTwo.HasWon();
+    }
+
+    public bool IsDeuce() {
+        return _playerOne.IsDeuce(_playerTwo);
     }
 }
