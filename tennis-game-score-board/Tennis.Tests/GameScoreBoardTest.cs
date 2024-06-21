@@ -65,7 +65,11 @@ public class GameScoreBoardTest
 
         LoveFifteen();
         FifteenFifteen();
+<<<<<<< HEAD
         FifteenThirty();
+=======
+        FiftennTherty();
+>>>>>>> b6fb6ddf27aec1928b44f1e50d605f0ba2897262
         ThirtyThirty();
         ThirtyForty();
         Deuce(1);
@@ -112,6 +116,7 @@ public class GameScoreBoardTest
     {
         _outputMessage.Received(1).Send("Thirty Forty");
     }
+
 
     private void FifteenThirty()
     {
