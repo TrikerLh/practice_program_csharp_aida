@@ -21,24 +21,19 @@ public class Player
         };
     }
 
-    public bool HasWon()
+    public int Points()
     {
-        return _point == 4;
+        return _point;
     }
 
     public bool IsDeuce(Player playerTwo)
     {
-        return BothPlayersHasAlmostThreePoints(playerTwo) && BothPlayersHasSamePoints(playerTwo);
+        return _point >= 3 && BothPlayersHasSamePoints(playerTwo);
     }
 
     private bool BothPlayersHasSamePoints(Player playerTwo)
     {
         return _point == playerTwo._point;
-    }
-
-    private bool BothPlayersHasAlmostThreePoints(Player playerTwo)
-    {
-        return _point >= 3 && playerTwo._point >= 3;
     }
 
     public bool HasAdvantage(Player playerTwo)

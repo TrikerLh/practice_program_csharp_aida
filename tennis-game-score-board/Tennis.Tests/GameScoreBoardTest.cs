@@ -96,5 +96,25 @@ public class GameScoreBoardTest
         _outputMessage.Received(1).Send("Player 1 has won!!");
         _outputMessage.Received(1).Send("It was a nice game.");
         _outputMessage.Received(1).Send("Bye now!");
+        _outputMessage.Received(10).Send(Arg.Any<string>());
+    }
+
+    [Test]
+    public void player_one_wins_the_game_with_advantageXXX() {
+        _inputScore.ReadScore().Returns("score 1", "score 2", "score 1", "score 2", "score 1", "score 2", "score 1", "score 2", "score 1", "score 2", "score 1", "score 1");
+
+        _gameScoreBoard.StartGame();
+
+        _outputMessage.Received(1).Send("Fifteen Love");
+        _outputMessage.Received(1).Send("Fifteen Fifteen");
+        _outputMessage.Received(1).Send("Thirty Fifteen");
+        _outputMessage.Received(1).Send("Thirty Thirty");
+        _outputMessage.Received(1).Send("Forty Thirty");
+        _outputMessage.Received(3).Send("Deuce");
+        _outputMessage.Received(3).Send("Advantage player 1");
+        _outputMessage.Received(1).Send("Player 1 has won!!");
+        _outputMessage.Received(1).Send("It was a nice game.");
+        _outputMessage.Received(1).Send("Bye now!");
+        _outputMessage.Received(14).Send(Arg.Any<string>());
     }
 }

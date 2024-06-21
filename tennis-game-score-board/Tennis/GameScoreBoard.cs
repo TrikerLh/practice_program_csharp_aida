@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Xml.Linq;
+using Microsoft.VisualBasic;
 
 namespace Tennis;
 
@@ -17,9 +18,11 @@ public class GameScoreBoard {
 
     public void StartGame() {
         do {
-            var readScore = _inputScore.ReadScore();    
+            var readScore = _inputScore.ReadScore();
             AddPointToPlayer(readScore);
-            PrintCurrentScore();
+            if (!IsGameOver()) {
+                PrintCurrentScore();
+            }
         } while (!IsGameOver());
 
         PrintGameOverMessage();
@@ -31,21 +34,20 @@ public class GameScoreBoard {
     }
 
     private string CreateScoreMessage() {
-        if (IsDeuce())
-        {
+        if (IsDeuce()) {
             _wasDeuce = true;
             return "Deuce";
         }
 
         if (_wasDeuce) {
-            _wasDeuce = false;
             if (_playerOne.HasAdvantage(_playerTwo)) {
-
+                _wasDeuce = false;
                 return "Advantage player 1";
             }
             return "Advantage player 2";
 
         }
+
         return $"{_playerOne.GetMessagePoint()} {_playerTwo.GetMessagePoint()}";
     }
 
@@ -68,12 +70,7 @@ public class GameScoreBoard {
 
     public void PrintGameOverMessage() {
         int playerNumber;
-        if (_playerOne.HasWon()) {
-            playerNumber = 1;
-        }
-        else {
-            playerNumber = 2;
-        }
+        playerNumber = _playerOne.Points() > _playerTwo.Points() ? 1 : 2;
 
         _outputMessage.Send($"Player {playerNumber} has won!!");
         _outputMessage.Send("It was a nice game.");
@@ -81,7 +78,18 @@ public class GameScoreBoard {
     }
 
     public bool IsGameOver() {
-        return this._playerOne.HasWon() || this._playerTwo.HasWon();
+        if (_playerOne.Points() > _playerTwo.Points()) {
+            if (_playerOne.Points() > 3 && (_playerOne.Points() - _playerTwo.Points() > 1)) {
+                return true;
+            }
+        }
+
+        if (_playerTwo.Points() > _playerOne.Points()) {
+            if (_playerTwo.Points() > 3 && (_playerTwo.Points() - _playerOne.Points() > 1)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public bool IsDeuce() {
