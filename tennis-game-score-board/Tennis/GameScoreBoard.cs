@@ -78,18 +78,17 @@ public class GameScoreBoard {
     }
 
     public bool IsGameOver() {
-        if (_playerOne.Points() > _playerTwo.Points()) {
-            if (_playerOne.Points() > 3 && (_playerOne.Points() - _playerTwo.Points() > 1)) {
-                return true;
-            }
-        }
+        return IsPlayerOneWinner() || IsPlayerTwoWinner();
+    }
 
-        if (_playerTwo.Points() > _playerOne.Points()) {
-            if (_playerTwo.Points() > 3 && (_playerTwo.Points() - _playerOne.Points() > 1)) {
-                return true;
-            }
-        }
-        return false;
+    private bool IsPlayerTwoWinner()
+    {
+        return _playerTwo.Points() > _playerOne.Points() && _playerTwo.Points() > 3 && _playerTwo.Points() - _playerOne.Points() > 1;
+    }
+
+    private bool IsPlayerOneWinner()
+    {
+        return _playerOne.Points() > _playerTwo.Points() && _playerOne.Points() > 3 && _playerOne.Points() - _playerTwo.Points() > 1;
     }
 
     public bool IsDeuce() {
