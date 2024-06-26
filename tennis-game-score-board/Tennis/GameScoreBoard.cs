@@ -1,21 +1,11 @@
-using System.Buffers.Text;
-using System.Numerics;
-using System.Runtime.Serialization.Formatters;
-using System.Xml.Linq;
-using Microsoft.VisualBasic;
-
 namespace Tennis;
 
 public class GameScoreBoard {
     private readonly InputScore _inputScore;
-    private readonly OutputMessage _outputMessage;
-    private readonly Player _playerOne = new Player();
-    private readonly Player _playerTwo = new Player();
     private GameState _gameState;
 
     public GameScoreBoard(InputScore inputScore, OutputMessage outputMessage) {
         _inputScore = inputScore;
-        _outputMessage = outputMessage;
         _gameState = new InitialGameState(new Player(), new Player(), outputMessage);
     }
 
@@ -33,11 +23,9 @@ public class GameScoreBoard {
 
     public void AddPointToPlayer(string readScore) {
         if (PlayerOneScores(readScore)) {
-            _playerOne.AddPoint();
             _gameState = _gameState.ScorePlayerOne();
         }
         else if (PlayerTwoScores(readScore)) {
-            _playerTwo.AddPoint();
             _gameState = _gameState.ScorePlayerTwo();
         }
     }
