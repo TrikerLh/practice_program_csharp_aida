@@ -9,20 +9,28 @@ public class Player
         _point++;
     }
 
-    public string GetMessagePoint()
-    {
-        return _point switch
-        {
-            0 => "Love",
-            1 => "Fifteen",
-            2 => "Thirty",
-            3 => "Forty",
-            _ => ""
-        };
-    }
-
     public int Points()
     {
         return _point;
+    }
+
+    public bool IsTiedWith(Player other)
+    {
+        return _point == other._point;
+    }
+
+    public bool HasMorePointsThan(Player other)
+    {
+        return _point > other._point;
+    }
+
+    public bool HasMoreThanFortyPoints()
+    {
+        return _point > 3;
+    }
+
+    public bool HasFortyPoints()
+    {
+        return _point == 3;
     }
 }

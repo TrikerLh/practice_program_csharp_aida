@@ -6,7 +6,7 @@ public class GameScoreBoard {
 
     public GameScoreBoard(InputScore inputScore, OutputMessage outputMessage) {
         _inputScore = inputScore;
-        _gameState = new InitialGameState(new Player(), new Player(), outputMessage);
+        _gameState = GameState.Initial(outputMessage);
     }
 
     public void StartGame() {

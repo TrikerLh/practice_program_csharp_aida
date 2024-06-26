@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tennis {
+﻿namespace Tennis {
     public abstract class GameState {
         protected readonly Player _playerTwo;
         protected readonly OutputMessage _outputMessage;
@@ -14,6 +8,11 @@ namespace Tennis {
             _playerOne = playerOne;
             _playerTwo = playerTwo;
             _outputMessage = outputMessage;
+        }
+
+        public static GameState Initial(OutputMessage outputMessage)
+        {
+            return new InitialGameState(new Player(), new Player(), outputMessage);
         }
 
         public virtual GameState ScorePlayerOne() {
@@ -32,7 +31,7 @@ namespace Tennis {
             return false;
         }
     }
-    public class InitialGameState : GameState {
+    internal class InitialGameState : GameState {
         public InitialGameState(Player playerOne, Player playerTwo, OutputMessage outputMessage) : base(playerOne, playerTwo, outputMessage) {
 
         }
@@ -47,24 +46,47 @@ namespace Tennis {
         }
 
         public override void Display() {
-            _outputMessage.Send($"{_playerOne.GetMessagePoint()} {_playerTwo.GetMessagePoint()}");
+            _outputMessage.Send($"{FormatPoints(_playerOne.Points())} {FormatPoints(_playerTwo.Points())}");
+        }
+
+        private string FormatPoints(int points)
+        {
+            if (points == 0)
+                return "Love";
+            if (points == 1)
+                return "Fifteen";
+            if (points == 2)
+                return "Thirty";
+
+            return "Forty";
         }
 
         private GameState NextState() {
-            if (_playerOne.Points() == _playerTwo.Points() && _playerOne.Points() == 3) {
+            if (IsDeuce()) {
                 return new DeuceGameState(_playerOne, _playerTwo, _outputMessage);
             }
 
-            if (_playerOne.Points() > _playerTwo.Points() && _playerOne.Points() > 3)
+            if (HasWonPlayerOne() || HasWonPlayerTwo())
             {
                 return new GameOverGameState(_playerOne, _playerTwo, _outputMessage);
             }
 
-            if (_playerTwo.Points() > _playerOne.Points() && _playerTwo.Points() > 3) {
-                return new GameOverGameState(_playerOne, _playerTwo, _outputMessage);
-            }
-
             return this;
+        }
+
+        private bool IsDeuce()
+        {
+            return _playerOne.IsTiedWith(_playerTwo) && _playerOne.HasFortyPoints();
+        }
+
+        private bool HasWonPlayerTwo()
+        {
+            return _playerTwo.HasMorePointsThan(_playerOne) && _playerTwo.HasMoreThanFortyPoints();
+        }
+
+        private bool HasWonPlayerOne()
+        {
+            return _playerOne.HasMorePointsThan(_playerTwo) && _playerOne.HasMoreThanFortyPoints();
         }
     }
 
@@ -75,11 +97,17 @@ namespace Tennis {
 
         public override GameState ScorePlayerOne() {
             _playerOne.AddPoint();
-            return new AdvantageGameState(_playerOne, _playerTwo, _outputMessage);
+            return NextState();
         }
 
-        public override GameState ScorePlayerTwo() {
+        public override GameState ScorePlayerTwo()
+        {
             _playerTwo.AddPoint();
+            return NextState();
+        }
+
+        private GameState NextState()
+        {
             return new AdvantageGameState(_playerOne, _playerTwo, _outputMessage);
         }
 
@@ -93,7 +121,7 @@ namespace Tennis {
         }
 
         private string CreateScoreMessage() {
-            if (_playerOne.Points() > _playerTwo.Points()) {
+            if (_playerOne.HasMorePointsThan(_playerTwo)) {
                 return "Advantage player 1";
             }
 
@@ -111,7 +139,7 @@ namespace Tennis {
         }
 
         private GameState NextState() {
-            if (_playerOne.Points() == _playerTwo.Points()) {
+            if (_playerOne.IsTiedWith(_playerTwo)) {
                 return new DeuceGameState(_playerOne, _playerTwo, _outputMessage);
             }
 
@@ -131,14 +159,10 @@ namespace Tennis {
 
         public override void Display()
         {
-            _outputMessage.Send($"Player {GetWinnerNumber()} has won!!");
+            var winnerNumber = (_playerOne.HasMorePointsThan(_playerTwo) ? 1 : 2);
+            _outputMessage.Send($"Player {winnerNumber} has won!!");
             _outputMessage.Send("It was a nice game.");
             _outputMessage.Send("Bye now!");
-        }
-
-        private int GetWinnerNumber()
-        {
-            return _playerOne.Points() > _playerTwo.Points() ? 1 : 2;
         }
 
         public override bool IsOver() {
