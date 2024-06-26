@@ -1,4 +1,6 @@
+using System.Buffers.Text;
 using System.Numerics;
+using System.Runtime.Serialization.Formatters;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
 
@@ -9,54 +11,34 @@ public class GameScoreBoard {
     private readonly OutputMessage _outputMessage;
     private readonly Player _playerOne = new Player();
     private readonly Player _playerTwo = new Player();
-    private bool _wasDeuce = false;
+    private GameState _gameState;
 
     public GameScoreBoard(InputScore inputScore, OutputMessage outputMessage) {
         _inputScore = inputScore;
         _outputMessage = outputMessage;
+        _gameState = new InitialGameState(new Player(), new Player(), outputMessage);
     }
 
     public void StartGame() {
         do {
             var readScore = _inputScore.ReadScore();
             AddPointToPlayer(readScore);
-            if (!IsGameOver()) {
-                PrintCurrentScore();
+            if (!_gameState.IsOver()) {
+                _gameState.Display();
             }
-        } while (!IsGameOver());
+        } while (!_gameState.IsOver());
 
-        PrintGameOverMessage();
-    }
-
-    private void PrintCurrentScore() {
-        var message = CreateScoreMessage();
-        _outputMessage.Send(message);
-    }
-
-    private string CreateScoreMessage() {
-        if (IsDeuce()) {
-            _wasDeuce = true;
-            return "Deuce";
-        }
-
-        if (_wasDeuce) {
-            if (_playerOne.HasAdvantage(_playerTwo)) {
-                _wasDeuce = false;
-                return "Advantage player 1";
-            }
-            return "Advantage player 2";
-
-        }
-
-        return $"{_playerOne.GetMessagePoint()} {_playerTwo.GetMessagePoint()}";
+        _gameState.Display();
     }
 
     public void AddPointToPlayer(string readScore) {
         if (PlayerOneScores(readScore)) {
             _playerOne.AddPoint();
+            _gameState = _gameState.ScorePlayerOne();
         }
         else if (PlayerTwoScores(readScore)) {
             _playerTwo.AddPoint();
+            _gameState = _gameState.ScorePlayerTwo();
         }
     }
     private bool PlayerTwoScores(string input) {
@@ -66,32 +48,5 @@ public class GameScoreBoard {
     private bool PlayerOneScores(string input) {
         return input == "score 1";
     }
-
-
-    public void PrintGameOverMessage() {
-        int playerNumber;
-        playerNumber = _playerOne.Points() > _playerTwo.Points() ? 1 : 2;
-
-        _outputMessage.Send($"Player {playerNumber} has won!!");
-        _outputMessage.Send("It was a nice game.");
-        _outputMessage.Send("Bye now!");
-    }
-
-    public bool IsGameOver() {
-        return IsPlayerOneWinner() || IsPlayerTwoWinner();
-    }
-
-    private bool IsPlayerTwoWinner()
-    {
-        return _playerTwo.Points() > _playerOne.Points() && _playerTwo.Points() > 3 && _playerTwo.Points() - _playerOne.Points() > 1;
-    }
-
-    private bool IsPlayerOneWinner()
-    {
-        return _playerOne.Points() > _playerTwo.Points() && _playerOne.Points() > 3 && _playerOne.Points() - _playerTwo.Points() > 1;
-    }
-
-    public bool IsDeuce() {
-        return _playerOne.IsDeuce(_playerTwo);
-    }
 }
+

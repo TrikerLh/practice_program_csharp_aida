@@ -25,20 +25,4 @@ public class Player
     {
         return _point;
     }
-
-    public bool IsDeuce(Player playerTwo)
-    {
-        return _point >= 3 && BothPlayersHasSamePoints(playerTwo);
-    }
-
-    private bool BothPlayersHasSamePoints(Player playerTwo)
-    {
-        return _point == playerTwo._point;
-    }
-
-    public bool HasAdvantage(Player playerTwo)
-    {
-        if (this._point > playerTwo._point) return true;
-        return false;
-    }
 }
