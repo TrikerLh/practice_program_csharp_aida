@@ -61,8 +61,3 @@ namespace InspirationOfTheDay.Tests
         }
     }
 }
-
-/* LISTA DE EJEMPLOS
- * 1 - Escribir una palabra y que te devuelva una frase con dicha palabra de una lista.
- * 3 - Enviar la frase a un empleado aleatorio de una lista de emepleados.
- */

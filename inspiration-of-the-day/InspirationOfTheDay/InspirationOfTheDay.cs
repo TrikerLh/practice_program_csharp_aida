@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace InspirationOfTheDay;
 
 public class InspirationOfTheDay
@@ -19,8 +21,13 @@ public class InspirationOfTheDay
     {
         var quotes = _quotesService.GetQuotes(word);
         var employees = _employeeRepository.GetEmployees();
-        var numRandomQuote = _randomNumbersGenerator.Get(quotes.Count - 1);
-        var numRandomEmployee = _randomNumbersGenerator.Get(employees.Count - 1);
+        var numRandomQuote = _randomNumbersGenerator.Get(GetMaxNumber(quotes));
+        var numRandomEmployee = _randomNumbersGenerator.Get(GetMaxNumber(employees));
         _sendService.Send(quotes[numRandomQuote], employees[numRandomEmployee]);
+    }
+
+    private static int GetMaxNumber<T>(IList<T> list)
+    {
+        return list.Count - 1;
     }
 }
