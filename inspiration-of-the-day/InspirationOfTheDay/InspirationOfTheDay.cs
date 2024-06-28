@@ -23,7 +23,14 @@ public class InspirationOfTheDay
         var employees = _employeeRepository.GetEmployees();
         var numRandomQuote = _randomNumbersGenerator.Get(GetMaxNumber(quotes));
         var numRandomEmployee = _randomNumbersGenerator.Get(GetMaxNumber(employees));
-        _sendService.Send(quotes[numRandomQuote], employees[numRandomEmployee]);
+        var quoteDto = new QuoteDTO(quotes[numRandomQuote].Text);
+        var employeeWhatsAppConstactDto = GetEmployeeWhatsAppConstactDto(employees[numRandomEmployee]);
+        _sendService.Send(quoteDto, employeeWhatsAppConstactDto);
+    }
+
+    private static EmployeeConstactDTO GetEmployeeWhatsAppConstactDto(Employee employee)
+    {
+        return new EmployeeConstactDTO(employee.Name, employee.ContactData.Tlf);
     }
 
     private static int GetMaxNumber<T>(IList<T> list)
