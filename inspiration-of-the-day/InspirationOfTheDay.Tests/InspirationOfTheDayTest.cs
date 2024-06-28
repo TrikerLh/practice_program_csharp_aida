@@ -38,13 +38,26 @@ namespace InspirationOfTheDay.Tests
         public void Send_random_quote_to_employee() {
             _quotesService.GetQuotes("avanzar").Returns(new List<Quote> { new Quote("Frase 1 con la palabra: avanzar"), new Quote("Frase 2 con la palabra: avanzar") });
             _employeeRepository.GetEmployees().Returns(new List<Employee> { new Employee("Carmen", new ContactData("email", "tlf")) });
-            _randomNumbersGenerator.Get(Arg.Any<int>()).Returns(1);
+            _randomNumbersGenerator.Get(Arg.Any<int>()).Returns(1, 0);
             var inspirationOfTheDay = new InspirationOfTheDay(_quotesService, _employeeRepository, _randomNumbersGenerator, _sendService);
 
             inspirationOfTheDay.InspireSomeone("avanzar");
 
             _sendService.Received(1).Send(Arg.Is<Quote>(q => q.Text == "Frase 2 con la palabra: avanzar"),
                 Arg.Is<Employee>(e => e.Name == "Carmen"));
+        }
+
+        [Test]
+        public void Send_random_quote_to_random_employee() {
+            _quotesService.GetQuotes("futuro").Returns(new List<Quote> { new Quote("Frase 1 con la palabra: futuro"), new Quote("Frase 2 con la palabra: futuro") });
+            _employeeRepository.GetEmployees().Returns(new List<Employee> { new Employee("Carlos", new ContactData("email", "tlf")), new Employee("Luis", new ContactData("email", "tlf")) });
+            _randomNumbersGenerator.Get(Arg.Any<int>()).Returns(1, 1);
+            var inspirationOfTheDay = new InspirationOfTheDay(_quotesService, _employeeRepository, _randomNumbersGenerator, _sendService);
+
+            inspirationOfTheDay.InspireSomeone("futuro");
+
+            _sendService.Received(1).Send(Arg.Is<Quote>(q => q.Text == "Frase 2 con la palabra: futuro"),
+                Arg.Is<Employee>(e => e.Name == "Luis"));
         }
     }
 }

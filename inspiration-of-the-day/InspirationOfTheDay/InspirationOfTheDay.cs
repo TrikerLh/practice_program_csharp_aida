@@ -20,6 +20,7 @@ public class InspirationOfTheDay
         var quotes = _quotesService.GetQuotes(word);
         var employees = _employeeRepository.GetEmployees();
         var numRandomQuote = _randomNumbersGenerator.Get(quotes.Count - 1);
-        _sendService.Send(quotes[numRandomQuote], employees[0]);
+        var numRandomEmployee = _randomNumbersGenerator.Get(employees.Count - 1);
+        _sendService.Send(quotes[numRandomQuote], employees[numRandomEmployee]);
     }
 }
